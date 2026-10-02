@@ -140,6 +140,61 @@ it('duplica y borra el campo seleccionado', function () {
     expect($this->section->fields()->pluck('key')->all())->toBe(['numero']);
 });
 
+it('pinta un botón de borrar en cada campo y sección del lienzo', function () {
+    $b = builder()->call('addField', 'number');
+    $id = $b->get('selectedId');
+
+    $b->assertSeeHtml("wire:click.stop=\"delete('field', {$id})\"")
+        ->assertSeeHtml("wire:click=\"delete('section', {$this->section->id})\"");
+});
+
+it('borra desde el lienzo un campo que no está seleccionado sin perder la selección', function () {
+    $b = builder()->call('addField', 'number');
+    $first = $b->get('selectedId');
+    $b->call('addField', 'text');
+    $second = $b->get('selectedId');
+
+    $b->call('delete', 'field', $first)
+        ->assertSet('selection', 'field')
+        ->assertSet('selectedId', $second);
+
+    expect($this->section->fields()->pluck('key')->all())->toBe(['texto_corto']);
+});
+
+it('al borrar una sección vuelve a la plantilla si lo seleccionado vivía dentro', function () {
+    $b = builder()->call('addField', 'number');
+
+    $b->call('delete', 'section', $this->section->id)->assertSet('selection', 'template');
+
+    expect(TemplateField::where('template_id', $this->template->id)->count())->toBe(0);
+});
+
+it('borra pestañas desde el lienzo, salvo la última, que no ofrece el botón', function () {
+    $first = $this->template->tabs()->first()->id;
+    $b = builder()->assertDontSeeHtml("delete('tab', {$first})");
+
+    $b->call('addTab');
+    $second = $this->template->tabs()->where('id', '!=', $first)->value('id');
+    $b->assertSeeHtml("wire:click.stop=\"delete('tab', {$first})\"")
+        ->call('selectTab', $second)
+        ->call('delete', 'tab', $second)
+        ->assertSet('tabId', $first)
+        ->assertSet('selection', 'template')
+        ->assertDontSeeHtml("delete('tab', {$first})");
+
+    $b->call('delete', 'tab', $first)->assertSet('notice.type', 'error');
+    expect($this->template->tabs()->count())->toBe(1);
+});
+
+it('no borra un campo de otra plantilla', function () {
+    $other = app(TemplateEditor::class)->create(User::factory()->create(), 'Ajena');
+    $field = app(TemplateEditor::class)->addField($other, $other->tabs()->first()->sections()->first()->id, 'number');
+
+    builder()->call('delete', 'field', $field->id)->assertSet('notice.type', 'error');
+
+    expect(TemplateField::find($field->id))->not->toBeNull();
+});
+
 // ----------------------------------------------------------- estructura
 
 it('añade pestañas y secciones y reordena los tres niveles', function () {

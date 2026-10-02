@@ -170,19 +170,31 @@ class Builder extends Component
 
     public function deleteSelected(): void
     {
-        $this->mutate(function (TemplateEditor $editor, Template $template) {
-            match ($this->selection) {
-                'field' => $editor->deleteField($template, (int) $this->selectedId),
-                'section' => $editor->deleteSection($template, (int) $this->selectedId),
-                'tab' => $editor->deleteTab($template, (int) $this->selectedId),
+        $this->delete($this->selection, (int) $this->selectedId);
+    }
+
+    /**
+     * Borra un campo, sección o pestaña, esté seleccionado o no: el lienzo
+     * tiene un botón de borrar en cada tarjeta. Si lo seleccionado desaparece
+     * con él (era eso, o vivía dentro), el inspector vuelve a la plantilla.
+     */
+    public function delete(string $kind, int $id): void
+    {
+        $this->mutate(function (TemplateEditor $editor, Template $template) use ($kind, $id) {
+            match ($kind) {
+                'field' => $editor->deleteField($template, $id),
+                'section' => $editor->deleteSection($template, $id),
+                'tab' => $editor->deleteTab($template, $id),
                 default => throw new BuilderException('Selecciona antes qué borrar.'),
             };
 
-            if ($this->selection === 'tab') {
+            if (! $template->tabs()->whereKey($this->tabId)->exists()) {
                 $this->tabId = $template->tabs()->value('id');
             }
 
-            $this->select('template');
+            if (! $this->selectionExists($template)) {
+                $this->select('template');
+            }
         });
     }
 
@@ -320,6 +332,17 @@ class Builder extends Component
 
         $this->templateCache = null;
         $this->dispatch('template-changed')->to(Preview::class);
+    }
+
+    private function selectionExists(Template $template): bool
+    {
+        return match ($this->selection) {
+            'field' => $template->fields()->whereKey($this->selectedId)->exists(),
+            'section' => TemplateSection::whereKey($this->selectedId)
+                ->whereIn('template_tab_id', $template->tabs()->select('id'))->exists(),
+            'tab' => $template->tabs()->whereKey($this->selectedId)->exists(),
+            default => true,
+        };
     }
 
     private function currentTabId(): int

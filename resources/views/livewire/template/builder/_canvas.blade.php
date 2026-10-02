@@ -7,6 +7,9 @@
       · campos, dentro de su sección o hacia otra de la misma pestaña.
     Para llevar una sección o un campo a OTRA pestaña, el inspector tiene un
     selector «Pestaña» / «Sección».
+
+    Cada sección y cada campo llevan su botón de borrar (× en el campo). Los
+    botones no inician arrastre: el filtro por defecto de x-sortable los excluye.
 --}}
 @php
     // Literales para que Tailwind los genere (ver livewire/sheet/_body).
@@ -26,15 +29,25 @@
              x-sortable="{ group: 'tabs', item: 'tab', container: 0, filter: '.pg-no-drag',
                            move: (id, to, index) => $wire.moveTab(id, index) }">
             @foreach ($template->tabs as $tab)
-                <button type="button" data-tab-id="{{ $tab->id }}" wire:key="tab-{{ $tab->id }}"
-                        wire:click="selectTab({{ $tab->id }})"
-                        class="-mb-px cursor-grab border-b-2 px-3 py-2 text-sm
-                               {{ $currentTab?->id === $tab->id
-                                  ? 'border-[var(--pg-accent)] font-semibold text-[var(--pg-accent)]'
-                                  : 'border-transparent text-[var(--pg-muted)] hover:text-[var(--pg-ink)]' }}
-                               {{ $selected('tab', $tab->id) ? 'bg-[var(--pg-shade)]' : '' }}">
-                    {{ $tab->label }}
-                </button>
+                <div data-tab-id="{{ $tab->id }}" wire:key="tab-{{ $tab->id }}"
+                     class="-mb-px flex items-center border-b-2
+                            {{ $currentTab?->id === $tab->id ? 'border-[var(--pg-accent)]' : 'border-transparent' }}
+                            {{ $selected('tab', $tab->id) ? 'bg-[var(--pg-shade)]' : '' }}">
+                    <button type="button" wire:click="selectTab({{ $tab->id }})"
+                            class="cursor-grab py-2 pl-3 text-sm {{ $template->tabs->count() > 1 ? 'pr-1' : 'pr-3' }}
+                                   {{ $currentTab?->id === $tab->id
+                                      ? 'font-semibold text-[var(--pg-accent)]'
+                                      : 'text-[var(--pg-muted)] hover:text-[var(--pg-ink)]' }}">
+                        {{ $tab->label }}
+                    </button>
+                    {{-- La última pestaña no se puede borrar: no se ofrece. --}}
+                    @if ($template->tabs->count() > 1)
+                        <button type="button" wire:click.stop="delete('tab', {{ $tab->id }})"
+                                wire:confirm="¿Borrar la pestaña «{{ $tab->label }}» con todas sus secciones y campos?"
+                                class="pg-no-drag mr-1 shrink-0 cursor-pointer rounded px-1 leading-none text-[var(--pg-muted)] hover:bg-[var(--pg-shade)] hover:text-[var(--pg-accent)]"
+                                title="Borrar la pestaña" aria-label="Borrar la pestaña {{ $tab->label }}">&times;</button>
+                    @endif
+                </div>
             @endforeach
         </nav>
         <button type="button" wire:click="addTab" class="mb-1 ml-1 rounded px-2 py-1 text-sm text-[var(--pg-muted)] hover:text-[var(--pg-accent)]">+ Pestaña</button>
@@ -60,6 +73,12 @@
                         @if ($section->visible_if)
                             <span class="rounded bg-[var(--pg-shade)] px-1 text-[0.6rem] text-[var(--pg-muted)]" title="{{ $section->visible_if }}">condicional</span>
                         @endif
+                        <button type="button" wire:click="delete('section', {{ $section->id }})"
+                                wire:confirm="¿Borrar la sección «{{ $section->label ?: $section->key }}» con todos sus campos?"
+                                class="ml-auto rounded px-1.5 text-xs text-[var(--pg-muted)] hover:bg-[var(--pg-shade)] hover:text-[var(--pg-accent)]"
+                                title="Borrar la sección" aria-label="Borrar la sección {{ $section->label ?: $section->key }}">
+                            Borrar sección
+                        </button>
                     </div>
 
                     <div class="grid min-h-14 grid-cols-12 gap-2 rounded border border-dashed border-transparent"
@@ -72,9 +91,13 @@
                                  wire:click="select('field', {{ $field->id }})"
                                  class="col-span-12 {{ $spans[min(12, max(1, $field->col_span))] }} cursor-grab select-none rounded border bg-[var(--pg-bg)] px-2 py-1.5
                                         {{ $selected('field', $field->id) ? 'border-[var(--pg-accent)] ring-2 ring-[var(--pg-accent)]/30' : 'border-[var(--pg-border)] hover:border-[var(--pg-muted)]' }}">
-                                <div class="flex items-baseline justify-between gap-1">
-                                    <span class="truncate text-sm font-semibold">{{ $field->label }}</span>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="flex-1 truncate text-sm font-semibold">{{ $field->label }}</span>
                                     <span class="shrink-0 text-[0.6rem] uppercase text-[var(--pg-muted)]">{{ $field->definition()?->label() ?? $field->type }}</span>
+                                    <button type="button" wire:click.stop="delete('field', {{ $field->id }})"
+                                            wire:confirm="¿Borrar el campo «{{ $field->label }}»?"
+                                            class="-mr-1 shrink-0 cursor-pointer rounded px-1 leading-none text-[var(--pg-muted)] hover:bg-[var(--pg-shade)] hover:text-[var(--pg-accent)]"
+                                            title="Borrar el campo" aria-label="Borrar el campo {{ $field->label }}">&times;</button>
                                 </div>
                                 <div class="truncate font-mono text-[0.65rem] text-[var(--pg-muted)]">
                                     {{ '@'.$field->key }}

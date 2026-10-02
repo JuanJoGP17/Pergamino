@@ -72,6 +72,15 @@
     font-size: 0.875rem;
 }
 
+.pg-btn-danger {
+    border-radius: 0.375rem;
+    border: 1px solid var(--pg-accent);
+    color: var(--pg-accent);
+    padding: 0.4rem 0.9rem;
+    font-size: 0.875rem;
+}
+.pg-btn-danger:hover { background: var(--pg-accent); color: #fff; }
+
 /* Alpine: lo marcado con x-cloak no parpadea antes de que Alpine arranque. */
 [x-cloak] { display: none !important; }
 

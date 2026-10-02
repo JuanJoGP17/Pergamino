@@ -99,7 +99,11 @@
     @elseif ($selection === 'field')
         <div class="flex items-center justify-between gap-2">
             <h2 class="font-serif font-bold text-[var(--pg-accent)]">Campo</h2>
-            <button type="button" wire:click="duplicateField({{ $selectedId }})" class="text-xs text-[var(--pg-muted)] hover:text-[var(--pg-accent)]">Duplicar</button>
+            <div class="flex gap-3">
+                <button type="button" wire:click="duplicateField({{ $selectedId }})" class="text-xs text-[var(--pg-muted)] hover:text-[var(--pg-accent)]">Duplicar</button>
+                <button type="button" wire:click="deleteSelected" wire:confirm="¿Borrar el campo?"
+                        class="text-xs text-[var(--pg-muted)] hover:text-[var(--pg-accent)]">Borrar</button>
+            </div>
         </div>
 
         @include('livewire.template.builder._input', ['name' => 'label', 'label' => 'Etiqueta'])
