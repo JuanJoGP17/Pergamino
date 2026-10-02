@@ -1,9 +1,73 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+/*
+ * Paleta "pergamino" como variables CSS.
+ *
+ * En la Fase 5, el editor de apariencia sobrescribe estas mismas variables por
+ * plantilla / mesa / hoja, inyectando un <style> con ámbito [data-sheet="uuid"].
+ * Por eso todo el layout usa var(--pg-*) y no colores literales de Tailwind:
+ * cambiar el tema no tendrá que tocar ni una plantilla Blade.
+ */
+:root {
+    --pg-bg:      #f4ecd8;
+    --pg-surface: #fffdf5;
+    --pg-ink:     #2b2118;
+    --pg-accent:  #8b2e1f;
+    --pg-muted:   #7a6a55;
+    --pg-border:  #d9c9a8;
+    --pg-shade:   #efe6d0;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --pg-bg:      #1b1713;
+        --pg-surface: #262019;
+        --pg-ink:     #ece2d0;
+        --pg-accent:  #d98b6a;
+        --pg-muted:   #9b8b74;
+        --pg-border:  #3d342a;
+        --pg-shade:   #2f2820;
+    }
+}
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: "Cambria", "Georgia", serif;
+}
+
+/* Controles de formulario: un solo sitio donde tocar el estilo de los inputs. */
+.pg-input {
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid var(--pg-border);
+    background: var(--pg-surface);
+    color: var(--pg-ink);
+    padding: 0.4rem 0.6rem;
+    font-size: 0.875rem;
+}
+.pg-input:focus {
+    outline: 2px solid var(--pg-accent);
+    outline-offset: -1px;
+}
+.pg-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--pg-muted);
+    margin-bottom: 0.2rem;
+}
+.pg-btn {
+    border-radius: 0.375rem;
+    background: var(--pg-accent);
+    color: #fff;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+.pg-btn:hover { filter: brightness(1.08); }
+.pg-btn-ghost {
+    border-radius: 0.375rem;
+    border: 1px solid var(--pg-border);
+    padding: 0.45rem 0.9rem;
+    font-size: 0.875rem;
 }

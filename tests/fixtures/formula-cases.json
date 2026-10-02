@@ -1,0 +1,4497 @@
+{
+    "generated_by": "tests/fixtures/build-formula-cases.php",
+    "values": {
+        "nivel": 5,
+        "fuerza": 16,
+        "destreza": 14,
+        "constitucion": 13,
+        "sabiduria": 12,
+        "carisma": 18,
+        "inteligencia": 8,
+        "clase": "Bardo",
+        "escudo": true,
+        "armadura_bonus": 3,
+        "vacio": null,
+        "cero": 0,
+        "texto_cero": "0",
+        "texto_num": "42",
+        "dotes": [
+            "Alerta",
+            "Centinela"
+        ],
+        "sin_dotes": [],
+        "inventario": [
+            {
+                "nombre": "Espada",
+                "peso": 3,
+                "cantidad": 1
+            },
+            {
+                "nombre": "Racion",
+                "peso": 2,
+                "cantidad": 5
+            }
+        ]
+    },
+    "computed": {
+        "fuerza": {
+            "mod": 3
+        },
+        "destreza": {
+            "mod": 2
+        },
+        "constitucion": {
+            "mod": 1
+        },
+        "sabiduria": {
+            "mod": 1
+        },
+        "carisma": {
+            "mod": 4
+        },
+        "inteligencia": {
+            "mod": -1
+        },
+        "competencia": 3
+    },
+    "settings": {
+        "lookups": {
+            "dados_golpe": {
+                "Bardo": 8,
+                "Guerrero": 10,
+                "Mago": 6
+            }
+        }
+    },
+    "cases": [
+        {
+            "group": "aritmética",
+            "formula": "1 + 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "num",
+                    "v": 1
+                },
+                "r": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": 3
+        },
+        {
+            "group": "aritmética",
+            "formula": "10 - 4",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "-",
+                "l": {
+                    "n": "num",
+                    "v": 10
+                },
+                "r": {
+                    "n": "num",
+                    "v": 4
+                }
+            },
+            "expect": 6
+        },
+        {
+            "group": "aritmética",
+            "formula": "3 * 4",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "*",
+                "l": {
+                    "n": "num",
+                    "v": 3
+                },
+                "r": {
+                    "n": "num",
+                    "v": 4
+                }
+            },
+            "expect": 12
+        },
+        {
+            "group": "aritmética",
+            "formula": "10 / 4",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "/",
+                "l": {
+                    "n": "num",
+                    "v": 10
+                },
+                "r": {
+                    "n": "num",
+                    "v": 4
+                }
+            },
+            "expect": 2.5
+        },
+        {
+            "group": "aritmética",
+            "formula": "10 / 5",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "/",
+                "l": {
+                    "n": "num",
+                    "v": 10
+                },
+                "r": {
+                    "n": "num",
+                    "v": 5
+                }
+            },
+            "expect": 2
+        },
+        {
+            "group": "aritmética",
+            "formula": "10 % 3",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "%",
+                "l": {
+                    "n": "num",
+                    "v": 10
+                },
+                "r": {
+                    "n": "num",
+                    "v": 3
+                }
+            },
+            "expect": 1
+        },
+        {
+            "group": "aritmética",
+            "formula": "-7 % 3",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "%",
+                "l": {
+                    "n": "un",
+                    "op": "-",
+                    "x": {
+                        "n": "num",
+                        "v": 7
+                    }
+                },
+                "r": {
+                    "n": "num",
+                    "v": 3
+                }
+            },
+            "expect": -1
+        },
+        {
+            "group": "aritmética",
+            "formula": "2 + 3 * 4",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "num",
+                    "v": 2
+                },
+                "r": {
+                    "n": "bin",
+                    "op": "*",
+                    "l": {
+                        "n": "num",
+                        "v": 3
+                    },
+                    "r": {
+                        "n": "num",
+                        "v": 4
+                    }
+                }
+            },
+            "expect": 14
+        },
+        {
+            "group": "aritmética",
+            "formula": "(2 + 3) * 4",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "*",
+                "l": {
+                    "n": "bin",
+                    "op": "+",
+                    "l": {
+                        "n": "num",
+                        "v": 2
+                    },
+                    "r": {
+                        "n": "num",
+                        "v": 3
+                    }
+                },
+                "r": {
+                    "n": "num",
+                    "v": 4
+                }
+            },
+            "expect": 20
+        },
+        {
+            "group": "aritmética",
+            "formula": "-5 + 3",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "un",
+                    "op": "-",
+                    "x": {
+                        "n": "num",
+                        "v": 5
+                    }
+                },
+                "r": {
+                    "n": "num",
+                    "v": 3
+                }
+            },
+            "expect": -2
+        },
+        {
+            "group": "aritmética",
+            "formula": "- -5",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "-",
+                "x": {
+                    "n": "un",
+                    "op": "-",
+                    "x": {
+                        "n": "num",
+                        "v": 5
+                    }
+                }
+            },
+            "expect": 5
+        },
+        {
+            "group": "aritmética",
+            "formula": "+7",
+            "phase": "evaluate",
+            "ast": {
+                "n": "num",
+                "v": 7
+            },
+            "expect": 7
+        },
+        {
+            "group": "aritmética",
+            "formula": "2 * -3",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "*",
+                "l": {
+                    "n": "num",
+                    "v": 2
+                },
+                "r": {
+                    "n": "un",
+                    "op": "-",
+                    "x": {
+                        "n": "num",
+                        "v": 3
+                    }
+                }
+            },
+            "expect": -6
+        },
+        {
+            "group": "aritmética",
+            "formula": "1.5 + 1.5",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "num",
+                    "v": 1.5
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1.5
+                }
+            },
+            "expect": 3
+        },
+        {
+            "group": "aritmética",
+            "formula": "0.1 + 0.2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "num",
+                    "v": 0.1
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0.2
+                }
+            },
+            "expect": 0.30000000000000004
+        },
+        {
+            "group": "aritmética",
+            "formula": "1 / 0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "/",
+                "l": {
+                    "n": "num",
+                    "v": 1
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "error": true
+        },
+        {
+            "group": "aritmética",
+            "formula": "1 % 0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "%",
+                "l": {
+                    "n": "num",
+                    "v": 1
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "error": true
+        },
+        {
+            "group": "aritmética",
+            "formula": "1 / @cero",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "/",
+                "l": {
+                    "n": "num",
+                    "v": 1
+                },
+                "r": {
+                    "n": "ref",
+                    "key": "cero",
+                    "path": [],
+                    "idx": null
+                }
+            },
+            "error": true
+        },
+        {
+            "group": "comparación",
+            "formula": "3 > 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": ">",
+                "l": {
+                    "n": "num",
+                    "v": 3
+                },
+                "r": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "3 >= 3",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": ">=",
+                "l": {
+                    "n": "num",
+                    "v": 3
+                },
+                "r": {
+                    "n": "num",
+                    "v": 3
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "2 < 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "<",
+                "l": {
+                    "n": "num",
+                    "v": 2
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "comparación",
+            "formula": "2 <= 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "<=",
+                "l": {
+                    "n": "num",
+                    "v": 2
+                },
+                "r": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "2 == 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "num",
+                    "v": 2
+                },
+                "r": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "2 == \"2\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "num",
+                    "v": 2
+                },
+                "r": {
+                    "n": "str",
+                    "v": "2"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "\"a\" == \"a\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "str",
+                    "v": "a"
+                },
+                "r": {
+                    "n": "str",
+                    "v": "a"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "\"a\" == \"b\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "str",
+                    "v": "a"
+                },
+                "r": {
+                    "n": "str",
+                    "v": "b"
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "comparación",
+            "formula": "0 == null",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "num",
+                    "v": 0
+                },
+                "r": {
+                    "n": "null"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "null == null",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "null"
+                },
+                "r": {
+                    "n": "null"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "1 != 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "!=",
+                "l": {
+                    "n": "num",
+                    "v": 1
+                },
+                "r": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "true == 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "bool",
+                    "v": true
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "false == 0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "bool",
+                    "v": false
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "\"10\" > \"9\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": ">",
+                "l": {
+                    "n": "str",
+                    "v": "10"
+                },
+                "r": {
+                    "n": "str",
+                    "v": "9"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "comparación",
+            "formula": "\"b\" > \"a\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": ">",
+                "l": {
+                    "n": "str",
+                    "v": "b"
+                },
+                "r": {
+                    "n": "str",
+                    "v": "a"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "lógica",
+            "formula": "true && false",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "&&",
+                "l": {
+                    "n": "bool",
+                    "v": true
+                },
+                "r": {
+                    "n": "bool",
+                    "v": false
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "lógica",
+            "formula": "true || false",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "||",
+                "l": {
+                    "n": "bool",
+                    "v": true
+                },
+                "r": {
+                    "n": "bool",
+                    "v": false
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "lógica",
+            "formula": "!true",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "!",
+                "x": {
+                    "n": "bool",
+                    "v": true
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "lógica",
+            "formula": "not false",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "!",
+                "x": {
+                    "n": "bool",
+                    "v": false
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "lógica",
+            "formula": "true and true",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "&&",
+                "l": {
+                    "n": "bool",
+                    "v": true
+                },
+                "r": {
+                    "n": "bool",
+                    "v": true
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "lógica",
+            "formula": "false or true",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "||",
+                "l": {
+                    "n": "bool",
+                    "v": false
+                },
+                "r": {
+                    "n": "bool",
+                    "v": true
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "lógica",
+            "formula": "!0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "!",
+                "x": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "lógica",
+            "formula": "!\"\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "!",
+                "x": {
+                    "n": "str",
+                    "v": ""
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "lógica",
+            "formula": "!\"0\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "!",
+                "x": {
+                    "n": "str",
+                    "v": "0"
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "lógica",
+            "formula": "![]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "!",
+                "x": {
+                    "n": "arr",
+                    "items": []
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "lógica",
+            "formula": "@cero != 0 && 10 / @cero > 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "&&",
+                "l": {
+                    "n": "bin",
+                    "op": "!=",
+                    "l": {
+                        "n": "ref",
+                        "key": "cero",
+                        "path": [],
+                        "idx": null
+                    },
+                    "r": {
+                        "n": "num",
+                        "v": 0
+                    }
+                },
+                "r": {
+                    "n": "bin",
+                    "op": ">",
+                    "l": {
+                        "n": "bin",
+                        "op": "/",
+                        "l": {
+                            "n": "num",
+                            "v": 10
+                        },
+                        "r": {
+                            "n": "ref",
+                            "key": "cero",
+                            "path": [],
+                            "idx": null
+                        }
+                    },
+                    "r": {
+                        "n": "num",
+                        "v": 1
+                    }
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "lógica",
+            "formula": "@nivel > 0 || 10 / @cero > 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "||",
+                "l": {
+                    "n": "bin",
+                    "op": ">",
+                    "l": {
+                        "n": "ref",
+                        "key": "nivel",
+                        "path": [],
+                        "idx": null
+                    },
+                    "r": {
+                        "n": "num",
+                        "v": 0
+                    }
+                },
+                "r": {
+                    "n": "bin",
+                    "op": ">",
+                    "l": {
+                        "n": "bin",
+                        "op": "/",
+                        "l": {
+                            "n": "num",
+                            "v": 10
+                        },
+                        "r": {
+                            "n": "ref",
+                            "key": "cero",
+                            "path": [],
+                            "idx": null
+                        }
+                    },
+                    "r": {
+                        "n": "num",
+                        "v": 1
+                    }
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "ternario",
+            "formula": "true ? 1 : 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ter",
+                "c": {
+                    "n": "bool",
+                    "v": true
+                },
+                "a": {
+                    "n": "num",
+                    "v": 1
+                },
+                "b": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": 1
+        },
+        {
+            "group": "ternario",
+            "formula": "false ? 1 : 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ter",
+                "c": {
+                    "n": "bool",
+                    "v": false
+                },
+                "a": {
+                    "n": "num",
+                    "v": 1
+                },
+                "b": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": 2
+        },
+        {
+            "group": "ternario",
+            "formula": "@nivel > 3 ? \"alto\" : \"bajo\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ter",
+                "c": {
+                    "n": "bin",
+                    "op": ">",
+                    "l": {
+                        "n": "ref",
+                        "key": "nivel",
+                        "path": [],
+                        "idx": null
+                    },
+                    "r": {
+                        "n": "num",
+                        "v": 3
+                    }
+                },
+                "a": {
+                    "n": "str",
+                    "v": "alto"
+                },
+                "b": {
+                    "n": "str",
+                    "v": "bajo"
+                }
+            },
+            "expect": "alto"
+        },
+        {
+            "group": "ternario",
+            "formula": "@cero ? 1 : 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ter",
+                "c": {
+                    "n": "ref",
+                    "key": "cero",
+                    "path": [],
+                    "idx": null
+                },
+                "a": {
+                    "n": "num",
+                    "v": 1
+                },
+                "b": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": 2
+        },
+        {
+            "group": "ternario",
+            "formula": "1 > 0 ? (2 > 1 ? \"a\" : \"b\") : \"c\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ter",
+                "c": {
+                    "n": "bin",
+                    "op": ">",
+                    "l": {
+                        "n": "num",
+                        "v": 1
+                    },
+                    "r": {
+                        "n": "num",
+                        "v": 0
+                    }
+                },
+                "a": {
+                    "n": "ter",
+                    "c": {
+                        "n": "bin",
+                        "op": ">",
+                        "l": {
+                            "n": "num",
+                            "v": 2
+                        },
+                        "r": {
+                            "n": "num",
+                            "v": 1
+                        }
+                    },
+                    "a": {
+                        "n": "str",
+                        "v": "a"
+                    },
+                    "b": {
+                        "n": "str",
+                        "v": "b"
+                    }
+                },
+                "b": {
+                    "n": "str",
+                    "v": "c"
+                }
+            },
+            "expect": "a"
+        },
+        {
+            "group": "referencias",
+            "formula": "@fuerza",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "fuerza",
+                "path": [],
+                "idx": null
+            },
+            "expect": 16
+        },
+        {
+            "group": "referencias",
+            "formula": "@self.nivel",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "self",
+                "path": [
+                    "nivel"
+                ],
+                "idx": null
+            },
+            "expect": 5
+        },
+        {
+            "group": "referencias",
+            "formula": "@self.fuerza + 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "ref",
+                    "key": "self",
+                    "path": [
+                        "fuerza"
+                    ],
+                    "idx": null
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": 17
+        },
+        {
+            "group": "referencias",
+            "formula": "@self",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "self",
+                "path": [],
+                "idx": null
+            },
+            "expect": null
+        },
+        {
+            "group": "referencias",
+            "formula": "@fuerza.mod",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "fuerza",
+                "path": [
+                    "mod"
+                ],
+                "idx": null
+            },
+            "expect": 3
+        },
+        {
+            "group": "referencias",
+            "formula": "@inteligencia.mod",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inteligencia",
+                "path": [
+                    "mod"
+                ],
+                "idx": null
+            },
+            "expect": -1
+        },
+        {
+            "group": "referencias",
+            "formula": "@competencia",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "competencia",
+                "path": [],
+                "idx": null
+            },
+            "expect": 3
+        },
+        {
+            "group": "referencias",
+            "formula": "@vacio",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "vacio",
+                "path": [],
+                "idx": null
+            },
+            "expect": null
+        },
+        {
+            "group": "referencias",
+            "formula": "@vacio + 5",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "ref",
+                    "key": "vacio",
+                    "path": [],
+                    "idx": null
+                },
+                "r": {
+                    "n": "num",
+                    "v": 5
+                }
+            },
+            "expect": 5
+        },
+        {
+            "group": "referencias",
+            "formula": "@no_existe_en_contexto",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "no_existe_en_contexto",
+                "path": [],
+                "idx": null
+            },
+            "expect": null
+        },
+        {
+            "group": "referencias",
+            "formula": "@fuerza.no_existe",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "fuerza",
+                "path": [
+                    "no_existe"
+                ],
+                "idx": null
+            },
+            "expect": null
+        },
+        {
+            "group": "referencias",
+            "formula": "@inventario[0].nombre",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inventario",
+                "path": [
+                    "nombre"
+                ],
+                "idx": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": "Espada"
+        },
+        {
+            "group": "referencias",
+            "formula": "@inventario[1].peso",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inventario",
+                "path": [
+                    "peso"
+                ],
+                "idx": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": 2
+        },
+        {
+            "group": "referencias",
+            "formula": "@inventario[9].peso",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inventario",
+                "path": [
+                    "peso"
+                ],
+                "idx": {
+                    "n": "num",
+                    "v": 9
+                }
+            },
+            "expect": null
+        },
+        {
+            "group": "referencias",
+            "formula": "@inventario[*].peso",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inventario",
+                "path": [
+                    "peso"
+                ],
+                "idx": "*"
+            },
+            "expect": [
+                3,
+                2
+            ]
+        },
+        {
+            "group": "referencias",
+            "formula": "sum(@inventario[*].peso)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sum",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "inventario",
+                        "path": [
+                            "peso"
+                        ],
+                        "idx": "*"
+                    }
+                ]
+            },
+            "expect": 5
+        },
+        {
+            "group": "referencias",
+            "formula": "count(@inventario)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "count",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "inventario",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": 2
+        },
+        {
+            "group": "texto",
+            "formula": "\"hola\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "str",
+                "v": "hola"
+            },
+            "expect": "hola"
+        },
+        {
+            "group": "texto",
+            "formula": "'hola'",
+            "phase": "evaluate",
+            "ast": {
+                "n": "str",
+                "v": "hola"
+            },
+            "expect": "hola"
+        },
+        {
+            "group": "texto",
+            "formula": "\"hola\" + \" mundo\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "str",
+                    "v": "hola"
+                },
+                "r": {
+                    "n": "str",
+                    "v": " mundo"
+                }
+            },
+            "expect": "hola mundo"
+        },
+        {
+            "group": "texto",
+            "formula": "\"nivel \" + @nivel",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "str",
+                    "v": "nivel "
+                },
+                "r": {
+                    "n": "ref",
+                    "key": "nivel",
+                    "path": [],
+                    "idx": null
+                }
+            },
+            "expect": "nivel 5"
+        },
+        {
+            "group": "texto",
+            "formula": "concat(\"a\", \"b\", @nivel)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "concat",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "a"
+                    },
+                    {
+                        "n": "str",
+                        "v": "b"
+                    },
+                    {
+                        "n": "ref",
+                        "key": "nivel",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": "ab5"
+        },
+        {
+            "group": "texto",
+            "formula": "upper(\"abc\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "upper",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "abc"
+                    }
+                ]
+            },
+            "expect": "ABC"
+        },
+        {
+            "group": "texto",
+            "formula": "lower(\"ABC\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "lower",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "ABC"
+                    }
+                ]
+            },
+            "expect": "abc"
+        },
+        {
+            "group": "texto",
+            "formula": "len(\"hola\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "len",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "hola"
+                    }
+                ]
+            },
+            "expect": 4
+        },
+        {
+            "group": "texto",
+            "formula": "len(@dotes)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "len",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "dotes",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": 2
+        },
+        {
+            "group": "texto",
+            "formula": "\"1\" + \"2\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "str",
+                    "v": "1"
+                },
+                "r": {
+                    "n": "str",
+                    "v": "2"
+                }
+            },
+            "expect": 3
+        },
+        {
+            "group": "texto",
+            "formula": "\"a\" + 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "str",
+                    "v": "a"
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": "a1"
+        },
+        {
+            "group": "texto",
+            "formula": "@texto_num + 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "ref",
+                    "key": "texto_num",
+                    "path": [],
+                    "idx": null
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": 43
+        },
+        {
+            "group": "funciones",
+            "formula": "floor(3.7)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "floor",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 3.7
+                    }
+                ]
+            },
+            "expect": 3
+        },
+        {
+            "group": "funciones",
+            "formula": "floor(-3.2)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "floor",
+                "args": [
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 3.2
+                        }
+                    }
+                ]
+            },
+            "expect": -4
+        },
+        {
+            "group": "funciones",
+            "formula": "ceil(3.2)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "ceil",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 3.2
+                    }
+                ]
+            },
+            "expect": 4
+        },
+        {
+            "group": "funciones",
+            "formula": "ceil(-3.7)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "ceil",
+                "args": [
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 3.7
+                        }
+                    }
+                ]
+            },
+            "expect": -3
+        },
+        {
+            "group": "funciones",
+            "formula": "round(3.5)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "round",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 3.5
+                    }
+                ]
+            },
+            "expect": 4
+        },
+        {
+            "group": "funciones",
+            "formula": "round(-3.5)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "round",
+                "args": [
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 3.5
+                        }
+                    }
+                ]
+            },
+            "expect": -4
+        },
+        {
+            "group": "funciones",
+            "formula": "round(2.4)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "round",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 2.4
+                    }
+                ]
+            },
+            "expect": 2
+        },
+        {
+            "group": "funciones",
+            "formula": "round(3.14159, 2)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "round",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 3.14159
+                    },
+                    {
+                        "n": "num",
+                        "v": 2
+                    }
+                ]
+            },
+            "expect": 3.14
+        },
+        {
+            "group": "funciones",
+            "formula": "abs(-5)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "abs",
+                "args": [
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 5
+                        }
+                    }
+                ]
+            },
+            "expect": 5
+        },
+        {
+            "group": "funciones",
+            "formula": "sign(-3)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sign",
+                "args": [
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 3
+                        }
+                    }
+                ]
+            },
+            "expect": -1
+        },
+        {
+            "group": "funciones",
+            "formula": "sign(0)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sign",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 0
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "funciones",
+            "formula": "sqrt(16)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sqrt",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 16
+                    }
+                ]
+            },
+            "expect": 4
+        },
+        {
+            "group": "funciones",
+            "formula": "sqrt(-1)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sqrt",
+                "args": [
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 1
+                        }
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "funciones",
+            "formula": "pow(2, 10)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "pow",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 2
+                    },
+                    {
+                        "n": "num",
+                        "v": 10
+                    }
+                ]
+            },
+            "expect": 1024
+        },
+        {
+            "group": "funciones",
+            "formula": "min(3, 1, 2)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "min",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 3
+                    },
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "num",
+                        "v": 2
+                    }
+                ]
+            },
+            "expect": 1
+        },
+        {
+            "group": "funciones",
+            "formula": "max(3, 1, 2)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "max",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 3
+                    },
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "num",
+                        "v": 2
+                    }
+                ]
+            },
+            "expect": 3
+        },
+        {
+            "group": "funciones",
+            "formula": "min([\"Alerta\", \"Centinela\"])",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "min",
+                "args": [
+                    {
+                        "n": "arr",
+                        "items": [
+                            {
+                                "n": "str",
+                                "v": "Alerta"
+                            },
+                            {
+                                "n": "str",
+                                "v": "Centinela"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "funciones",
+            "formula": "max([3, \"7\", true])",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "max",
+                "args": [
+                    {
+                        "n": "arr",
+                        "items": [
+                            {
+                                "n": "num",
+                                "v": 3
+                            },
+                            {
+                                "n": "str",
+                                "v": "7"
+                            },
+                            {
+                                "n": "bool",
+                                "v": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            "expect": 7
+        },
+        {
+            "group": "funciones",
+            "formula": "clamp(15, 1, 10)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "clamp",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 15
+                    },
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "num",
+                        "v": 10
+                    }
+                ]
+            },
+            "expect": 10
+        },
+        {
+            "group": "funciones",
+            "formula": "clamp(-5, 1, 10)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "clamp",
+                "args": [
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 5
+                        }
+                    },
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "num",
+                        "v": 10
+                    }
+                ]
+            },
+            "expect": 1
+        },
+        {
+            "group": "funciones",
+            "formula": "clamp(5, 1, 10)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "clamp",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 5
+                    },
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "num",
+                        "v": 10
+                    }
+                ]
+            },
+            "expect": 5
+        },
+        {
+            "group": "funciones",
+            "formula": "sum(1, 2, 3)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sum",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "num",
+                        "v": 2
+                    },
+                    {
+                        "n": "num",
+                        "v": 3
+                    }
+                ]
+            },
+            "expect": 6
+        },
+        {
+            "group": "funciones",
+            "formula": "sum(@inventario[*].cantidad)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sum",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "inventario",
+                        "path": [
+                            "cantidad"
+                        ],
+                        "idx": "*"
+                    }
+                ]
+            },
+            "expect": 6
+        },
+        {
+            "group": "funciones",
+            "formula": "avg(2, 4, 6)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "avg",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 2
+                    },
+                    {
+                        "n": "num",
+                        "v": 4
+                    },
+                    {
+                        "n": "num",
+                        "v": 6
+                    }
+                ]
+            },
+            "expect": 4
+        },
+        {
+            "group": "funciones",
+            "formula": "avg(1, 2)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "avg",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "num",
+                        "v": 2
+                    }
+                ]
+            },
+            "expect": 1.5
+        },
+        {
+            "group": "funciones",
+            "formula": "count(@sin_dotes)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "count",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "sin_dotes",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "funciones",
+            "formula": "any(@dotes)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "any",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "dotes",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": true
+        },
+        {
+            "group": "funciones",
+            "formula": "any(@sin_dotes)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "any",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "sin_dotes",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": false
+        },
+        {
+            "group": "funciones",
+            "formula": "all(@dotes)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "all",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "dotes",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": true
+        },
+        {
+            "group": "funciones",
+            "formula": "if(true, \"sí\", \"no\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "if",
+                "args": [
+                    {
+                        "n": "bool",
+                        "v": true
+                    },
+                    {
+                        "n": "str",
+                        "v": "sí"
+                    },
+                    {
+                        "n": "str",
+                        "v": "no"
+                    }
+                ]
+            },
+            "expect": "sí"
+        },
+        {
+            "group": "funciones",
+            "formula": "if(@nivel > 10, \"alto\", \"bajo\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "if",
+                "args": [
+                    {
+                        "n": "bin",
+                        "op": ">",
+                        "l": {
+                            "n": "ref",
+                            "key": "nivel",
+                            "path": [],
+                            "idx": null
+                        },
+                        "r": {
+                            "n": "num",
+                            "v": 10
+                        }
+                    },
+                    {
+                        "n": "str",
+                        "v": "alto"
+                    },
+                    {
+                        "n": "str",
+                        "v": "bajo"
+                    }
+                ]
+            },
+            "expect": "bajo"
+        },
+        {
+            "group": "funciones",
+            "formula": "if(@cero == 0, 0, 100 / @cero)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "if",
+                "args": [
+                    {
+                        "n": "bin",
+                        "op": "==",
+                        "l": {
+                            "n": "ref",
+                            "key": "cero",
+                            "path": [],
+                            "idx": null
+                        },
+                        "r": {
+                            "n": "num",
+                            "v": 0
+                        }
+                    },
+                    {
+                        "n": "num",
+                        "v": 0
+                    },
+                    {
+                        "n": "bin",
+                        "op": "/",
+                        "l": {
+                            "n": "num",
+                            "v": 100
+                        },
+                        "r": {
+                            "n": "ref",
+                            "key": "cero",
+                            "path": [],
+                            "idx": null
+                        }
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "funciones",
+            "formula": "coalesce(@vacio, @nivel)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "coalesce",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "vacio",
+                        "path": [],
+                        "idx": null
+                    },
+                    {
+                        "n": "ref",
+                        "key": "nivel",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": 5
+        },
+        {
+            "group": "funciones",
+            "formula": "coalesce(@vacio, \"\", 7)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "coalesce",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "vacio",
+                        "path": [],
+                        "idx": null
+                    },
+                    {
+                        "n": "str",
+                        "v": ""
+                    },
+                    {
+                        "n": "num",
+                        "v": 7
+                    }
+                ]
+            },
+            "expect": 7
+        },
+        {
+            "group": "funciones",
+            "formula": "switch(@clase, \"Mago\", 6, \"Bardo\", 8, 10)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "switch",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "clase",
+                        "path": [],
+                        "idx": null
+                    },
+                    {
+                        "n": "str",
+                        "v": "Mago"
+                    },
+                    {
+                        "n": "num",
+                        "v": 6
+                    },
+                    {
+                        "n": "str",
+                        "v": "Bardo"
+                    },
+                    {
+                        "n": "num",
+                        "v": 8
+                    },
+                    {
+                        "n": "num",
+                        "v": 10
+                    }
+                ]
+            },
+            "expect": 8
+        },
+        {
+            "group": "funciones",
+            "formula": "switch(\"Pícaro\", \"Mago\", 6, \"Bardo\", 8, 10)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "switch",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "Pícaro"
+                    },
+                    {
+                        "n": "str",
+                        "v": "Mago"
+                    },
+                    {
+                        "n": "num",
+                        "v": 6
+                    },
+                    {
+                        "n": "str",
+                        "v": "Bardo"
+                    },
+                    {
+                        "n": "num",
+                        "v": 8
+                    },
+                    {
+                        "n": "num",
+                        "v": 10
+                    }
+                ]
+            },
+            "expect": 10
+        },
+        {
+            "group": "funciones",
+            "formula": "switch(\"Pícaro\", \"Mago\", 6, \"Bardo\", 8)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "switch",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "Pícaro"
+                    },
+                    {
+                        "n": "str",
+                        "v": "Mago"
+                    },
+                    {
+                        "n": "num",
+                        "v": 6
+                    },
+                    {
+                        "n": "str",
+                        "v": "Bardo"
+                    },
+                    {
+                        "n": "num",
+                        "v": 8
+                    }
+                ]
+            },
+            "expect": null
+        },
+        {
+            "group": "funciones",
+            "formula": "tier(7, [5, 10, 15])",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "tier",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 7
+                    },
+                    {
+                        "n": "arr",
+                        "items": [
+                            {
+                                "n": "num",
+                                "v": 5
+                            },
+                            {
+                                "n": "num",
+                                "v": 10
+                            },
+                            {
+                                "n": "num",
+                                "v": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            "expect": 1
+        },
+        {
+            "group": "funciones",
+            "formula": "tier(20, [5, 10, 15])",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "tier",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 20
+                    },
+                    {
+                        "n": "arr",
+                        "items": [
+                            {
+                                "n": "num",
+                                "v": 5
+                            },
+                            {
+                                "n": "num",
+                                "v": 10
+                            },
+                            {
+                                "n": "num",
+                                "v": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            "expect": 3
+        },
+        {
+            "group": "funciones",
+            "formula": "tier(1, [5, 10, 15])",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "tier",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "arr",
+                        "items": [
+                            {
+                                "n": "num",
+                                "v": 5
+                            },
+                            {
+                                "n": "num",
+                                "v": 10
+                            },
+                            {
+                                "n": "num",
+                                "v": 15
+                            }
+                        ]
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "funciones",
+            "formula": "lookup(\"dados_golpe\", @clase)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "lookup",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "dados_golpe"
+                    },
+                    {
+                        "n": "ref",
+                        "key": "clase",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": 8
+        },
+        {
+            "group": "funciones",
+            "formula": "lookup(\"dados_golpe\", \"Ninguna\", 4)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "lookup",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "dados_golpe"
+                    },
+                    {
+                        "n": "str",
+                        "v": "Ninguna"
+                    },
+                    {
+                        "n": "num",
+                        "v": 4
+                    }
+                ]
+            },
+            "expect": 4
+        },
+        {
+            "group": "funciones",
+            "formula": "lookup(\"tabla_inexistente\", \"x\", 99)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "lookup",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "tabla_inexistente"
+                    },
+                    {
+                        "n": "str",
+                        "v": "x"
+                    },
+                    {
+                        "n": "num",
+                        "v": 99
+                    }
+                ]
+            },
+            "expect": 99
+        },
+        {
+            "group": "funciones",
+            "formula": "avg_of(\"2d6+3\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "avg_of",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "2d6+3"
+                    }
+                ]
+            },
+            "expect": 10
+        },
+        {
+            "group": "funciones",
+            "formula": "avg_of(\"1d20\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "avg_of",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "1d20"
+                    }
+                ]
+            },
+            "expect": 10.5
+        },
+        {
+            "group": "funciones",
+            "formula": "avg_of(\"4d6\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "avg_of",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "4d6"
+                    }
+                ]
+            },
+            "expect": 14
+        },
+        {
+            "group": "funciones",
+            "formula": "floor()",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "floor",
+                "args": []
+            },
+            "error": true
+        },
+        {
+            "group": "funciones",
+            "formula": "floor(1, 2)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "floor",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "num",
+                        "v": 2
+                    }
+                ]
+            },
+            "error": true
+        },
+        {
+            "group": "funciones",
+            "formula": "no_existe(1)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "no_existe",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 1
+                    }
+                ]
+            },
+            "error": true
+        },
+        {
+            "group": "rol",
+            "formula": "mod(16)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "mod",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 16
+                    }
+                ]
+            },
+            "expect": 3
+        },
+        {
+            "group": "rol",
+            "formula": "mod(10)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "mod",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 10
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "rol",
+            "formula": "mod(8)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "mod",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 8
+                    }
+                ]
+            },
+            "expect": -1
+        },
+        {
+            "group": "rol",
+            "formula": "mod(7)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "mod",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 7
+                    }
+                ]
+            },
+            "expect": -2
+        },
+        {
+            "group": "rol",
+            "formula": "mod(1)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "mod",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 1
+                    }
+                ]
+            },
+            "expect": -5
+        },
+        {
+            "group": "rol",
+            "formula": "mod(@fuerza)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "mod",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "fuerza",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": 3
+        },
+        {
+            "group": "rol",
+            "formula": "prof(1)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "prof",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 1
+                    }
+                ]
+            },
+            "expect": 2
+        },
+        {
+            "group": "rol",
+            "formula": "prof(4)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "prof",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 4
+                    }
+                ]
+            },
+            "expect": 2
+        },
+        {
+            "group": "rol",
+            "formula": "prof(5)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "prof",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 5
+                    }
+                ]
+            },
+            "expect": 3
+        },
+        {
+            "group": "rol",
+            "formula": "prof(20)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "prof",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 20
+                    }
+                ]
+            },
+            "expect": 6
+        },
+        {
+            "group": "rol",
+            "formula": "prof(@nivel)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "prof",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "nivel",
+                        "path": [],
+                        "idx": null
+                    }
+                ]
+            },
+            "expect": 3
+        },
+        {
+            "group": "listas",
+            "formula": "[1, 2, 3]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "arr",
+                "items": [
+                    {
+                        "n": "num",
+                        "v": 1
+                    },
+                    {
+                        "n": "num",
+                        "v": 2
+                    },
+                    {
+                        "n": "num",
+                        "v": 3
+                    }
+                ]
+            },
+            "expect": [
+                1,
+                2,
+                3
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "[]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "arr",
+                "items": []
+            },
+            "expect": []
+        },
+        {
+            "group": "listas",
+            "formula": "\"Alerta\" in @dotes",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "in",
+                "l": {
+                    "n": "str",
+                    "v": "Alerta"
+                },
+                "r": {
+                    "n": "ref",
+                    "key": "dotes",
+                    "path": [],
+                    "idx": null
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "listas",
+            "formula": "\"Suerte\" in @dotes",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "in",
+                "l": {
+                    "n": "str",
+                    "v": "Suerte"
+                },
+                "r": {
+                    "n": "ref",
+                    "key": "dotes",
+                    "path": [],
+                    "idx": null
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "listas",
+            "formula": "@dotes contains \"Alerta\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "contains",
+                "l": {
+                    "n": "ref",
+                    "key": "dotes",
+                    "path": [],
+                    "idx": null
+                },
+                "r": {
+                    "n": "str",
+                    "v": "Alerta"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "listas",
+            "formula": "@clase in [\"Mago\", \"Bardo\", \"Brujo\"]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "in",
+                "l": {
+                    "n": "ref",
+                    "key": "clase",
+                    "path": [],
+                    "idx": null
+                },
+                "r": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "str",
+                            "v": "Mago"
+                        },
+                        {
+                            "n": "str",
+                            "v": "Bardo"
+                        },
+                        {
+                            "n": "str",
+                            "v": "Brujo"
+                        }
+                    ]
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "listas",
+            "formula": "@clase in [\"Guerrero\", \"Pícaro\"]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "in",
+                "l": {
+                    "n": "ref",
+                    "key": "clase",
+                    "path": [],
+                    "idx": null
+                },
+                "r": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "str",
+                            "v": "Guerrero"
+                        },
+                        {
+                            "n": "str",
+                            "v": "Pícaro"
+                        }
+                    ]
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "listas",
+            "formula": "\"lert\" in \"Alerta\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "in",
+                "l": {
+                    "n": "str",
+                    "v": "lert"
+                },
+                "r": {
+                    "n": "str",
+                    "v": "Alerta"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "listas",
+            "formula": "sum([1, 2, 3])",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sum",
+                "args": [
+                    {
+                        "n": "arr",
+                        "items": [
+                            {
+                                "n": "num",
+                                "v": 1
+                            },
+                            {
+                                "n": "num",
+                                "v": 2
+                            },
+                            {
+                                "n": "num",
+                                "v": 3
+                            }
+                        ]
+                    }
+                ]
+            },
+            "expect": 6
+        },
+        {
+            "group": "listas",
+            "formula": "[1, 2] + [10, 20]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 1
+                        },
+                        {
+                            "n": "num",
+                            "v": 2
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 10
+                        },
+                        {
+                            "n": "num",
+                            "v": 20
+                        }
+                    ]
+                }
+            },
+            "expect": [
+                11,
+                22
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "[3, 2] * 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "*",
+                "l": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 3
+                        },
+                        {
+                            "n": "num",
+                            "v": 2
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": [
+                6,
+                4
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "10 - [1, 2]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "-",
+                "l": {
+                    "n": "num",
+                    "v": 10
+                },
+                "r": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 1
+                        },
+                        {
+                            "n": "num",
+                            "v": 2
+                        }
+                    ]
+                }
+            },
+            "expect": [
+                9,
+                8
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "[1, 2, 3] * [2]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "*",
+                "l": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 1
+                        },
+                        {
+                            "n": "num",
+                            "v": 2
+                        },
+                        {
+                            "n": "num",
+                            "v": 3
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 2
+                        }
+                    ]
+                }
+            },
+            "expect": [
+                2,
+                0,
+                0
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "-[1, -2]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "-",
+                "x": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 1
+                        },
+                        {
+                            "n": "un",
+                            "op": "-",
+                            "x": {
+                                "n": "num",
+                                "v": 2
+                            }
+                        }
+                    ]
+                }
+            },
+            "expect": [
+                -1,
+                2
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "[6, 9] / 3",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "/",
+                "l": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 6
+                        },
+                        {
+                            "n": "num",
+                            "v": 9
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "num",
+                    "v": 3
+                }
+            },
+            "expect": [
+                2,
+                3
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "[7, 8] % 3",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "%",
+                "l": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 7
+                        },
+                        {
+                            "n": "num",
+                            "v": 8
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "num",
+                    "v": 3
+                }
+            },
+            "expect": [
+                1,
+                2
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "[\"a\", \"b\"] + \"!\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "str",
+                            "v": "a"
+                        },
+                        {
+                            "n": "str",
+                            "v": "b"
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "str",
+                    "v": "!"
+                }
+            },
+            "expect": [
+                "a!",
+                "b!"
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "@inventario[*].peso * @inventario[*].cantidad",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "*",
+                "l": {
+                    "n": "ref",
+                    "key": "inventario",
+                    "path": [
+                        "peso"
+                    ],
+                    "idx": "*"
+                },
+                "r": {
+                    "n": "ref",
+                    "key": "inventario",
+                    "path": [
+                        "cantidad"
+                    ],
+                    "idx": "*"
+                }
+            },
+            "expect": [
+                3,
+                10
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "sum(@sin_dotes * 2)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sum",
+                "args": [
+                    {
+                        "n": "bin",
+                        "op": "*",
+                        "l": {
+                            "n": "ref",
+                            "key": "sin_dotes",
+                            "path": [],
+                            "idx": null
+                        },
+                        "r": {
+                            "n": "num",
+                            "v": 2
+                        }
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "listas",
+            "formula": "[[1, 2], [3]] * 2",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "*",
+                "l": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "arr",
+                            "items": [
+                                {
+                                    "n": "num",
+                                    "v": 1
+                                },
+                                {
+                                    "n": "num",
+                                    "v": 2
+                                }
+                            ]
+                        },
+                        {
+                            "n": "arr",
+                            "items": [
+                                {
+                                    "n": "num",
+                                    "v": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "num",
+                    "v": 2
+                }
+            },
+            "expect": [
+                [
+                    2,
+                    4
+                ],
+                [
+                    6
+                ]
+            ]
+        },
+        {
+            "group": "listas",
+            "formula": "[1, 2] / [1, 0]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "/",
+                "l": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 1
+                        },
+                        {
+                            "n": "num",
+                            "v": 2
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 1
+                        },
+                        {
+                            "n": "num",
+                            "v": 0
+                        }
+                    ]
+                }
+            },
+            "error": true
+        },
+        {
+            "group": "listas",
+            "formula": "[1, 2] / [1]",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "/",
+                "l": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 1
+                        },
+                        {
+                            "n": "num",
+                            "v": 2
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "arr",
+                    "items": [
+                        {
+                            "n": "num",
+                            "v": 1
+                        }
+                    ]
+                }
+            },
+            "error": true
+        },
+        {
+            "group": "5e real",
+            "formula": "10 + @destreza.mod + @armadura_bonus + if(@escudo, 2, 0)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "bin",
+                    "op": "+",
+                    "l": {
+                        "n": "bin",
+                        "op": "+",
+                        "l": {
+                            "n": "num",
+                            "v": 10
+                        },
+                        "r": {
+                            "n": "ref",
+                            "key": "destreza",
+                            "path": [
+                                "mod"
+                            ],
+                            "idx": null
+                        }
+                    },
+                    "r": {
+                        "n": "ref",
+                        "key": "armadura_bonus",
+                        "path": [],
+                        "idx": null
+                    }
+                },
+                "r": {
+                    "n": "call",
+                    "fn": "if",
+                    "args": [
+                        {
+                            "n": "ref",
+                            "key": "escudo",
+                            "path": [],
+                            "idx": null
+                        },
+                        {
+                            "n": "num",
+                            "v": 2
+                        },
+                        {
+                            "n": "num",
+                            "v": 0
+                        }
+                    ]
+                }
+            },
+            "expect": 17
+        },
+        {
+            "group": "5e real",
+            "formula": "2 + floor((@nivel - 1) / 4)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "num",
+                    "v": 2
+                },
+                "r": {
+                    "n": "call",
+                    "fn": "floor",
+                    "args": [
+                        {
+                            "n": "bin",
+                            "op": "/",
+                            "l": {
+                                "n": "bin",
+                                "op": "-",
+                                "l": {
+                                    "n": "ref",
+                                    "key": "nivel",
+                                    "path": [],
+                                    "idx": null
+                                },
+                                "r": {
+                                    "n": "num",
+                                    "v": 1
+                                }
+                            },
+                            "r": {
+                                "n": "num",
+                                "v": 4
+                            }
+                        }
+                    ]
+                }
+            },
+            "expect": 3
+        },
+        {
+            "group": "5e real",
+            "formula": "8 + @competencia + @carisma.mod",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "bin",
+                    "op": "+",
+                    "l": {
+                        "n": "num",
+                        "v": 8
+                    },
+                    "r": {
+                        "n": "ref",
+                        "key": "competencia",
+                        "path": [],
+                        "idx": null
+                    }
+                },
+                "r": {
+                    "n": "ref",
+                    "key": "carisma",
+                    "path": [
+                        "mod"
+                    ],
+                    "idx": null
+                }
+            },
+            "expect": 15
+        },
+        {
+            "group": "5e real",
+            "formula": "10 + @sabiduria.mod",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "num",
+                    "v": 10
+                },
+                "r": {
+                    "n": "ref",
+                    "key": "sabiduria",
+                    "path": [
+                        "mod"
+                    ],
+                    "idx": null
+                }
+            },
+            "expect": 11
+        },
+        {
+            "group": "5e real",
+            "formula": "@destreza.mod + if(@dotes contains \"Alerta\", 5, 0)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "ref",
+                    "key": "destreza",
+                    "path": [
+                        "mod"
+                    ],
+                    "idx": null
+                },
+                "r": {
+                    "n": "call",
+                    "fn": "if",
+                    "args": [
+                        {
+                            "n": "bin",
+                            "op": "contains",
+                            "l": {
+                                "n": "ref",
+                                "key": "dotes",
+                                "path": [],
+                                "idx": null
+                            },
+                            "r": {
+                                "n": "str",
+                                "v": "Alerta"
+                            }
+                        },
+                        {
+                            "n": "num",
+                            "v": 5
+                        },
+                        {
+                            "n": "num",
+                            "v": 0
+                        }
+                    ]
+                }
+            },
+            "expect": 7
+        },
+        {
+            "group": "5e real",
+            "formula": "sum(@inventario[*].peso * @inventario[*].cantidad)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sum",
+                "args": [
+                    {
+                        "n": "bin",
+                        "op": "*",
+                        "l": {
+                            "n": "ref",
+                            "key": "inventario",
+                            "path": [
+                                "peso"
+                            ],
+                            "idx": "*"
+                        },
+                        "r": {
+                            "n": "ref",
+                            "key": "inventario",
+                            "path": [
+                                "cantidad"
+                            ],
+                            "idx": "*"
+                        }
+                    }
+                ]
+            },
+            "expect": 13
+        },
+        {
+            "group": "5e real",
+            "formula": "@constitucion.mod + if(@nivel >= 5, @competencia, 0)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "ref",
+                    "key": "constitucion",
+                    "path": [
+                        "mod"
+                    ],
+                    "idx": null
+                },
+                "r": {
+                    "n": "call",
+                    "fn": "if",
+                    "args": [
+                        {
+                            "n": "bin",
+                            "op": ">=",
+                            "l": {
+                                "n": "ref",
+                                "key": "nivel",
+                                "path": [],
+                                "idx": null
+                            },
+                            "r": {
+                                "n": "num",
+                                "v": 5
+                            }
+                        },
+                        {
+                            "n": "ref",
+                            "key": "competencia",
+                            "path": [],
+                            "idx": null
+                        },
+                        {
+                            "n": "num",
+                            "v": 0
+                        }
+                    ]
+                }
+            },
+            "expect": 4
+        },
+        {
+            "group": "frontera",
+            "formula": "0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "num",
+                "v": 0
+            },
+            "expect": 0
+        },
+        {
+            "group": "frontera",
+            "formula": "-0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "-",
+                "x": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": 0
+        },
+        {
+            "group": "frontera",
+            "formula": "\"\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "str",
+                "v": ""
+            },
+            "expect": ""
+        },
+        {
+            "group": "frontera",
+            "formula": "null",
+            "phase": "evaluate",
+            "ast": {
+                "n": "null"
+            },
+            "expect": null
+        },
+        {
+            "group": "frontera",
+            "formula": "@texto_cero",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "texto_cero",
+                "path": [],
+                "idx": null
+            },
+            "expect": "0"
+        },
+        {
+            "group": "frontera",
+            "formula": "@texto_cero + 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "ref",
+                    "key": "texto_cero",
+                    "path": [],
+                    "idx": null
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": 1
+        },
+        {
+            "group": "frontera",
+            "formula": "@texto_cero == 0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "ref",
+                    "key": "texto_cero",
+                    "path": [],
+                    "idx": null
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "frontera",
+            "formula": "!@texto_cero",
+            "phase": "evaluate",
+            "ast": {
+                "n": "un",
+                "op": "!",
+                "x": {
+                    "n": "ref",
+                    "key": "texto_cero",
+                    "path": [],
+                    "idx": null
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "frontera",
+            "formula": "@cero == false",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "ref",
+                    "key": "cero",
+                    "path": [],
+                    "idx": null
+                },
+                "r": {
+                    "n": "bool",
+                    "v": false
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "frontera",
+            "formula": "1000000 * 1000000",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "*",
+                "l": {
+                    "n": "num",
+                    "v": 1000000
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1000000
+                }
+            },
+            "expect": 1000000000000
+        },
+        {
+            "group": "frontera",
+            "formula": "1 +",
+            "phase": "compile",
+            "error": true
+        },
+        {
+            "group": "frontera",
+            "formula": "(1 + 2",
+            "phase": "compile",
+            "error": true
+        },
+        {
+            "group": "frontera",
+            "formula": "@",
+            "phase": "compile",
+            "error": true
+        },
+        {
+            "group": "frontera",
+            "formula": "fuerza",
+            "phase": "compile",
+            "error": true
+        },
+        {
+            "group": "frontera",
+            "formula": "1 $ 2",
+            "phase": "compile",
+            "error": true
+        },
+        {
+            "group": "frontera",
+            "formula": "\"sin cerrar",
+            "phase": "compile",
+            "error": true
+        },
+        {
+            "group": "frontera",
+            "formula": "((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((1))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))",
+            "phase": "compile",
+            "error": true
+        },
+        {
+            "group": "frontera",
+            "formula": "max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(max(1)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))",
+            "phase": "compile",
+            "error": true
+        },
+        {
+            "group": "divergencia",
+            "formula": "concat(\"\", 10 / 3)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "concat",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": ""
+                    },
+                    {
+                        "n": "bin",
+                        "op": "/",
+                        "l": {
+                            "n": "num",
+                            "v": 10
+                        },
+                        "r": {
+                            "n": "num",
+                            "v": 3
+                        }
+                    }
+                ]
+            },
+            "expect": "3.3333333333"
+        },
+        {
+            "group": "divergencia",
+            "formula": "concat(\"\", 1 / 3)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "concat",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": ""
+                    },
+                    {
+                        "n": "bin",
+                        "op": "/",
+                        "l": {
+                            "n": "num",
+                            "v": 1
+                        },
+                        "r": {
+                            "n": "num",
+                            "v": 3
+                        }
+                    }
+                ]
+            },
+            "expect": "0.3333333333"
+        },
+        {
+            "group": "divergencia",
+            "formula": "concat(\"\", 2.5)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "concat",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": ""
+                    },
+                    {
+                        "n": "num",
+                        "v": 2.5
+                    }
+                ]
+            },
+            "expect": "2.5"
+        },
+        {
+            "group": "divergencia",
+            "formula": "concat(\"\", -0.0)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "concat",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": ""
+                    },
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 0
+                        }
+                    }
+                ]
+            },
+            "expect": "0"
+        },
+        {
+            "group": "divergencia",
+            "formula": "7 % -3",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "%",
+                "l": {
+                    "n": "num",
+                    "v": 7
+                },
+                "r": {
+                    "n": "un",
+                    "op": "-",
+                    "x": {
+                        "n": "num",
+                        "v": 3
+                    }
+                }
+            },
+            "expect": 1
+        },
+        {
+            "group": "divergencia",
+            "formula": "-7 % -3",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "%",
+                "l": {
+                    "n": "un",
+                    "op": "-",
+                    "x": {
+                        "n": "num",
+                        "v": 7
+                    }
+                },
+                "r": {
+                    "n": "un",
+                    "op": "-",
+                    "x": {
+                        "n": "num",
+                        "v": 3
+                    }
+                }
+            },
+            "expect": -1
+        },
+        {
+            "group": "divergencia",
+            "formula": "round(0.5)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "round",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 0.5
+                    }
+                ]
+            },
+            "expect": 1
+        },
+        {
+            "group": "divergencia",
+            "formula": "round(-0.5)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "round",
+                "args": [
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 0.5
+                        }
+                    }
+                ]
+            },
+            "expect": -1
+        },
+        {
+            "group": "divergencia",
+            "formula": "round(1.005, 2)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "round",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 1.005
+                    },
+                    {
+                        "n": "num",
+                        "v": 2
+                    }
+                ]
+            },
+            "expect": 1
+        },
+        {
+            "group": "divergencia",
+            "formula": "floor(-0.0)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "floor",
+                "args": [
+                    {
+                        "n": "un",
+                        "op": "-",
+                        "x": {
+                            "n": "num",
+                            "v": 0
+                        }
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "divergencia",
+            "formula": "len(\"ñandú\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "len",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "ñandú"
+                    }
+                ]
+            },
+            "expect": 5
+        },
+        {
+            "group": "divergencia",
+            "formula": "len(\"🎲🎲\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "len",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "🎲🎲"
+                    }
+                ]
+            },
+            "expect": 2
+        },
+        {
+            "group": "divergencia",
+            "formula": "upper(\"ñandú\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "upper",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "ñandú"
+                    }
+                ]
+            },
+            "expect": "ÑANDÚ"
+        },
+        {
+            "group": "divergencia",
+            "formula": "lower(\"ÁÉÍÓÚ\")",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "lower",
+                "args": [
+                    {
+                        "n": "str",
+                        "v": "ÁÉÍÓÚ"
+                    }
+                ]
+            },
+            "expect": "áéíóú"
+        },
+        {
+            "group": "divergencia",
+            "formula": "\"á\" > \"a\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": ">",
+                "l": {
+                    "n": "str",
+                    "v": "á"
+                },
+                "r": {
+                    "n": "str",
+                    "v": "a"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "divergencia",
+            "formula": "\"z\" < \"á\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "<",
+                "l": {
+                    "n": "str",
+                    "v": "z"
+                },
+                "r": {
+                    "n": "str",
+                    "v": "á"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "divergencia",
+            "formula": "\"10\" == \"1e1\"",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "str",
+                    "v": "10"
+                },
+                "r": {
+                    "n": "str",
+                    "v": "1e1"
+                }
+            },
+            "expect": true
+        },
+        {
+            "group": "divergencia",
+            "formula": "\"0x10\" + 0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "str",
+                    "v": "0x10"
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": "0x100"
+        },
+        {
+            "group": "divergencia",
+            "formula": "\"0b101\" + 0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "str",
+                    "v": "0b101"
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": "0b1010"
+        },
+        {
+            "group": "divergencia",
+            "formula": "\"Infinity\" + 0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "str",
+                    "v": "Infinity"
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": "Infinity0"
+        },
+        {
+            "group": "divergencia",
+            "formula": "\"1e1\" + 0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "str",
+                    "v": "1e1"
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": 10
+        },
+        {
+            "group": "divergencia",
+            "formula": "\"  7  \" + 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "str",
+                    "v": "  7  "
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": 8
+        },
+        {
+            "group": "divergencia",
+            "formula": "\" \" == 0",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "==",
+                "l": {
+                    "n": "str",
+                    "v": " "
+                },
+                "r": {
+                    "n": "num",
+                    "v": 0
+                }
+            },
+            "expect": false
+        },
+        {
+            "group": "divergencia",
+            "formula": "sum([1, \"2\", true, null])",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sum",
+                "args": [
+                    {
+                        "n": "arr",
+                        "items": [
+                            {
+                                "n": "num",
+                                "v": 1
+                            },
+                            {
+                                "n": "str",
+                                "v": "2"
+                            },
+                            {
+                                "n": "bool",
+                                "v": true
+                            },
+                            {
+                                "n": "null"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "expect": 4
+        },
+        {
+            "group": "divergencia",
+            "formula": "avg([])",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "avg",
+                "args": [
+                    {
+                        "n": "arr",
+                        "items": []
+                    }
+                ]
+            },
+            "expect": 0
+        },
+        {
+            "group": "divergencia",
+            "formula": "pow(2, 53)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "pow",
+                "args": [
+                    {
+                        "n": "num",
+                        "v": 2
+                    },
+                    {
+                        "n": "num",
+                        "v": 53
+                    }
+                ]
+            },
+            "expect": 9007199254740992
+        },
+        {
+            "group": "divergencia",
+            "formula": "pow(2, 53) + 1",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "call",
+                    "fn": "pow",
+                    "args": [
+                        {
+                            "n": "num",
+                            "v": 2
+                        },
+                        {
+                            "n": "num",
+                            "v": 53
+                        }
+                    ]
+                },
+                "r": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": 9007199254740992
+        }
+    ]
+}
