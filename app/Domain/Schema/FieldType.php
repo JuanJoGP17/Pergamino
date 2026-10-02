@@ -5,10 +5,9 @@ namespace App\Domain\Schema;
 /**
  * Catálogo de tipos de campo (§4 del plan).
  *
- * La Fase 1 implementa los ocho básicos; los específicos de rol (resource,
- * track, clock, repeater…) están declarados aquí para que el constructor y el
- * validador ya los conozcan, y se van implementando en la Fase 4. `implemented`
- * marca cuáles se pueden usar hoy.
+ * La Fase 1 implementó los ocho básicos y la Fase 4 los de rol. Cómo se guarda
+ * y se sanea el valor de cada uno: App\Domain\Sheet\FieldValue. Qué calcula:
+ * App\Domain\Sheet\FieldDerivation. Cómo se pinta: resources/views/fields.
  */
 enum FieldType: string
 {
@@ -81,12 +80,13 @@ enum FieldType: string
         };
     }
 
+    /**
+     * Todos menos `reference`: enlazar con otra hoja necesita las mesas
+     * (Fase 6) para saber qué hojas puede ver quien la rellena.
+     */
     public function isImplemented(): bool
     {
-        return in_array($this, [
-            self::Heading, self::Text, self::Textarea, self::Number,
-            self::Select, self::Checkbox, self::Attribute, self::Computed,
-        ], true);
+        return $this !== self::Reference;
     }
 
     /** Los decorativos no guardan valor y no pueden usarse en fórmulas. */
@@ -101,29 +101,39 @@ enum FieldType: string
         return $this === self::Computed;
     }
 
-    /** Valor inicial cuando se crea una hoja y el campo no define default. */
+    /**
+     * Valor inicial cuando el campo no define default. Es la materia prima:
+     * CompiledSchema::defaultData() lo pasa por FieldValue::normalize(), que
+     * le da la forma completa según la configuración (las casillas de un
+     * track, las monedas de una bolsa…).
+     */
     public function emptyValue(): mixed
     {
         return match ($this) {
             self::Number, self::Attribute, self::Counter,
             self::Clock, self::Progress => 0,
             self::Checkbox => false,
-            self::Multiselect, self::Tags, self::Repeater, self::Track => [],
+            self::Multiselect, self::Tags, self::Repeater, self::Track,
+            self::Currency, self::DerivedList, self::Proficiency => [],
             self::Resource => ['current' => 0, 'max' => 0, 'temp' => 0],
-            self::Heading, self::DiceButton, self::Computed => null,
+            self::Heading, self::DiceButton, self::Computed,
+            self::Image, self::Portrait => null,
             default => '',
         };
     }
 
     /**
      * Propiedades derivadas que el campo expone a las fórmulas además de su
-     * valor: `@fuerza.mod`, `@pv.actual`…
+     * valor: `@fuerza.mod`, `@pv.current`… Las que no salen del propio valor
+     * las calcula FieldDerivation.
      */
     public function derivedProperties(): array
     {
         return match ($this) {
             self::Attribute => ['mod'],
             self::Resource => ['current', 'max', 'temp', 'pct'],
+            self::Track => ['boxes', 'marked'],
+            self::Progress => ['level', 'next', 'pct'],
             self::Proficiency => ['level', 'misc', 'bonus'],
             self::Currency => ['total'],
             default => [],

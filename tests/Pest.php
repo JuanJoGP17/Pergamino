@@ -1,5 +1,8 @@
 <?php
 
+use App\Domain\Builder\FieldConfig;
+use App\Domain\Schema\FieldType;
+use App\Domain\Schema\PublishTemplate;
 use App\Models\Template;
 use App\Models\TemplateField;
 use App\Models\TemplateSection;
@@ -40,4 +43,19 @@ function makeTemplate(array $fields): Template
     }
 
     return $template->fresh();
+}
+
+/** Plantilla publicada con los campos dados; devuelve [plantilla, esquema]. */
+function publishWith(array $fields): array
+{
+    $template = makeTemplate($fields);
+    $version = (new PublishTemplate)($template);
+
+    return [$template->fresh(), $version->schema()];
+}
+
+/** Configuración tal como queda tras pasar por el inspector. */
+function cfg(string $type, array $config): array
+{
+    return FieldConfig::clean(FieldType::from($type), $config);
 }

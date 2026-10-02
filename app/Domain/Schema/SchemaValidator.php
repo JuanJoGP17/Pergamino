@@ -19,7 +19,7 @@ final class SchemaValidator
 {
     private const KEY_PATTERN = '/^[a-z_][a-z0-9_]*$/';
 
-    private const RESERVED = ['self', 'true', 'false', 'null', 'if', 'and', 'or', 'not'];
+    private const RESERVED = ['self', 'row', 'true', 'false', 'null', 'if', 'and', 'or', 'not'];
 
     /** @return array<int,array{level:string,message:string,field:?string}> */
     public function validate(Template $template): array
@@ -133,12 +133,7 @@ final class SchemaValidator
             );
         }
 
-        if ($type === FieldType::Select) {
-            $options = $field->config['options'] ?? [];
-            if (! is_array($options) || $options === []) {
-                $issues[] = $this->error("La lista «{$key}» no tiene opciones definidas.", $key);
-            }
-        }
+        $issues = array_merge($issues, $this->validateConfig($key, $type, $field->config ?? [], $field));
 
         // Sintaxis, funciones inexistentes, aridad incorrecta y referencias
         // rotas — todo en una pasada, usando el analizador de verdad.
@@ -166,9 +161,46 @@ final class SchemaValidator
             }
         }
 
+        // Fórmulas de la configuración de los tipos de rol. `@row` solo existe
+        // dentro de las columnas calculadas de un repeater.
+        foreach (FieldFormulas::of($type->value, $field->config ?? []) as $slot) {
+            $keys = $slot['row'] ? [...$knownKeys, FieldFormulas::ROW] : $knownKeys;
+
+            foreach (Formula::lint($slot['source'], $keys) as $problem) {
+                $issues[] = $this->error("En {$slot['label']} de «{$key}»: {$problem}.", $key);
+            }
+        }
+
         // La plantilla de tirada es texto con huecos; se valida hueco a hueco.
         foreach ($this->lintRollTemplate($field->roll_expression, $knownKeys) as $problem) {
             $issues[] = $this->error("En la tirada de «{$key}»: {$problem}.", $key);
+        }
+
+        return $issues;
+    }
+
+    /**
+     * Lo que un tipo necesita en su configuración para tener sentido.
+     *
+     * @return array<int,array>
+     */
+    private function validateConfig(string $key, FieldType $type, array $config, $field): array
+    {
+        $empty = fn (string $k) => ! is_array($config[$k] ?? null) || $config[$k] === [];
+
+        $problem = match (true) {
+            in_array($type, [FieldType::Select, FieldType::Multiselect], true) && $empty('options') => "La lista «{$key}» no tiene opciones definidas.",
+            $type === FieldType::Repeater && $empty('columns') => "La tabla «{$key}» no tiene columnas.",
+            $type === FieldType::DerivedList && $empty('items') => "La lista derivada «{$key}» no tiene elementos.",
+            in_array($type, [FieldType::Proficiency, FieldType::DerivedList], true) && $empty('levels') => "«{$key}» no tiene niveles de competencia.",
+            $type === FieldType::Currency && $empty('denominations') => "La bolsa «{$key}» no tiene monedas.",
+            default => null,
+        };
+
+        $issues = $problem === null ? [] : [$this->error($problem, $key)];
+
+        if ($type === FieldType::DiceButton && trim((string) $field->roll_expression) === '') {
+            $issues[] = $this->warning("El botón de tirada «{$key}» no tiene tirada: escríbela en «Tirada».", $key);
         }
 
         return $issues;

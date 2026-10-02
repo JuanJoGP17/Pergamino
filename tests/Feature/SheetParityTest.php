@@ -121,3 +121,75 @@ it('da los números correctos de 5e, no solo los mismos en los dos lados', funct
         ->and($php['sections']['conjuros'])->toBeTrue()
         ->and($php['errors'])->toBe([]);
 });
+
+it('calcula igual en los dos lados los tipos de rol de la Fase 4', function () {
+    [, $schema] = publishWith([
+        ['key' => 'nivel', 'label' => 'Nivel', 'type' => 'number'],
+        ['key' => 'constitucion', 'label' => 'CON', 'type' => 'attribute', 'config' => cfg('attribute', [])],
+        ['key' => 'pv', 'label' => 'PV', 'type' => 'resource', 'config' => cfg('resource', ['max_formula' => '@nivel * 7 + @constitucion.mod'])],
+        ['key' => 'mana', 'label' => 'Maná', 'type' => 'resource', 'config' => cfg('resource', [])],
+        ['key' => 'salud', 'label' => 'Salud', 'type' => 'track', 'config' => cfg('track', ['boxes_formula' => '@constitucion / 3 + 1', 'states' => "Superficial\nAgravado"])],
+        ['key' => 'estres', 'label' => 'Estrés', 'type' => 'track', 'config' => cfg('track', ['boxes' => 4])],
+        ['key' => 'xp', 'label' => 'PX', 'type' => 'progress', 'config' => cfg('progress', ['thresholds' => '0, 300, 900, 2700, 6500'])],
+        ['key' => 'bolsa', 'label' => 'Bolsa', 'type' => 'currency', 'config' => cfg('currency', ['denominations' => "pc | Cobre | 1\npp | Plata | 10\npe | Electro | 0.5"])],
+        ['key' => 'sigilo', 'label' => 'Sigilo', 'type' => 'proficiency', 'config' => cfg('proficiency', [
+            'base' => '@constitucion.mod', 'levels' => "no | — | 0\ncomp | Comp. | prof(@nivel)\nexp | Exp. | prof(@nivel) * 2",
+        ])],
+        ['key' => 'habilidades', 'label' => 'Habilidades', 'type' => 'derived_list', 'config' => cfg('derived_list', [
+            'items' => "atletismo | Atletismo | @constitucion.mod\nhistoria | Historia | 1 / 3",
+            'levels' => "no | — | 0\ncomp | Comp. | prof(@nivel)",
+        ])],
+        ['key' => 'inv', 'label' => 'Inventario', 'type' => 'repeater', 'config' => cfg('repeater', [
+            'columns' => "nombre | Nombre | texto\npeso | Peso | número\ncant | Cant. | número\ntotal | Total | = @row.peso * @row.cant\nmedia | Media | = @row.total / @row.cant",
+        ])],
+        ['key' => 'carga', 'label' => 'Carga', 'type' => 'computed', 'formula' => 'sum(@inv[*].total)'],
+        ['key' => 'primera', 'label' => 'Primera', 'type' => 'computed', 'formula' => 'concat(@inv[0].nombre, ":", @inv[0].total)'],
+        ['key' => 'herido', 'label' => 'Herido', 'type' => 'checkbox', 'visible_if' => '@pv.pct < 50 || @salud.marked > 2'],
+        ['key' => 'golpe', 'label' => 'Golpe', 'type' => 'dice_button', 'roll_expression' => '1d20 + {@habilidades.atletismo.bonus} + {@xp.level}'],
+    ]);
+
+    $cases = [
+        $schema->defaultData(),
+
+        array_merge($schema->defaultData(), [
+            'nivel' => '6', 'constitucion' => '15',
+            'pv' => ['current' => '20', 'max' => 0, 'temp' => 3],
+            'mana' => ['current' => 7, 'max' => 9, 'temp' => 0],
+            'salud' => [1, 2, 2, 0, 1],
+            'estres' => [1, 0, 1, 1],
+            'xp' => '7000',
+            'bolsa' => ['pc' => 7, 'pp' => '3', 'pe' => 3],
+            'sigilo' => ['level' => 'exp', 'misc' => '-1'],
+            'habilidades' => ['atletismo' => ['level' => 'comp', 'misc' => 0], 'historia' => ['level' => 'no', 'misc' => 2]],
+            'inv' => [
+                ['nombre' => 'Cuerda', 'peso' => '1.5', 'cant' => 3],
+                ['nombre' => 'Vacío', 'peso' => 2, 'cant' => 0],   // media: división por cero
+            ],
+        ]),
+
+        // Basura: no debe romper nada, y debe romper igual en los dos.
+        array_merge($schema->defaultData(), [
+            'nivel' => 'abc', 'pv' => 'no-es-un-objeto', 'salud' => null, 'xp' => [1, 2],
+            'bolsa' => [], 'sigilo' => ['level' => 'inventado'], 'habilidades' => 'x',
+            'inv' => [['peso' => 'x'], 'fila-rota', []],
+        ]),
+    ];
+
+    $js = computeWithJs($schema, $cases);
+
+    foreach ($cases as $i => $values) {
+        expect($js[$i])->toBe(computeWithPhp($schema, $values), "caso #{$i}");
+    }
+
+    // Y no es que coincidan por estar vacíos: el caso 1 calcula de verdad.
+    $php = computeWithPhp($schema, $cases[1]);
+    expect($php['computed']['carga'])->toBe(4.5)
+        ->and($php['computed']['pv'])->toBe(['max' => 44, 'pct' => 45])
+        ->and($php['computed']['salud'])->toBe(['boxes' => 6, 'marked' => 4])
+        ->and($php['computed']['bolsa'])->toBe(['total' => 38.5])
+        ->and($php['computed']['sigilo'])->toBe(['bonus' => 7])
+        ->and($php['computed']['primera'])->toBe('Cuerda:4.5')
+        ->and($php['errors']['inv'])->toBe('división por cero')
+        ->and($php['visible']['herido'])->toBeTrue()
+        ->and($php['rolls']['golpe'])->toBe('1d20 + 5 + 5');
+});

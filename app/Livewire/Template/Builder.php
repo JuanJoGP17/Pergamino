@@ -3,8 +3,10 @@
 namespace App\Livewire\Template;
 
 use App\Domain\Builder\BuilderException;
+use App\Domain\Builder\FieldConfig;
 use App\Domain\Builder\TemplateEditor;
 use App\Domain\Formula\Formula;
+use App\Domain\Schema\FieldFormulas;
 use App\Domain\Schema\FieldType;
 use App\Domain\Schema\PublishTemplate;
 use App\Domain\Schema\SchemaCompilationException;
@@ -428,13 +430,8 @@ class Builder extends Component
             return [];
         }
 
-        $config = $field->config ?? [];
-
-        if ($field->type === FieldType::Select->value) {
-            $config['options'] = collect($config['options'] ?? [])
-                ->map(fn ($o) => $o['label'] !== $o['value'] ? "{$o['value']} | {$o['label']}" : $o['value'])
-                ->implode("\n");
-        }
+        // Las listas (opciones, columnas, niveles…) se editan como texto.
+        $config = FieldConfig::toForm(FieldType::from($field->type), $field->config ?? []);
 
         return [
             'key' => $field->key,
@@ -475,6 +472,20 @@ class Builder extends Component
         }
 
         $out['mod_formula'] = Formula::lint($this->form['config']['mod_formula'] ?? null, $knownKeys);
+
+        // Fórmulas de la configuración de los tipos de rol. El inspector las
+        // tiene como texto: se pasan antes por FieldConfig para leerlas igual
+        // que las leerá el compilador.
+        $type = FieldType::tryFrom((string) ($this->form['type'] ?? ''));
+        if ($type) {
+            foreach (FieldFormulas::of($type->value, FieldConfig::clean($type, $this->configFromForm())) as $slot) {
+                $keys = $slot['row'] ? [...$knownKeys, FieldFormulas::ROW] : $knownKeys;
+
+                foreach (Formula::lint($slot['source'], $keys) as $problem) {
+                    $out['config'][] = "En {$slot['label']}: {$problem}";
+                }
+            }
+        }
 
         $out['roll_expression'] = [];
         if (preg_match_all('/\{([^{}]*)\}/', (string) ($this->form['roll_expression'] ?? ''), $m)) {

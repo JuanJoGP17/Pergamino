@@ -84,16 +84,45 @@ final class Evaluator
         if ($idx !== null) {
             $rows = Value::toArray($base);
 
+            // Las columnas calculadas de un repeater viven en computed, fila a
+            // fila, y tienen prioridad igual que las propiedades derivadas.
+            $derivedRows = isset($this->computed[$key]) && is_array($this->computed[$key]) && array_is_list($this->computed[$key])
+                ? $this->computed[$key]
+                : [];
+
             if ($idx === '*') {
                 // La columna de todas las filas.
-                return array_map(fn ($row) => $this->digPath($row, $path), $rows);
+                return array_map(
+                    fn ($row, $i) => $this->digRow($derivedRows[$i] ?? null, $row, $path),
+                    $rows,
+                    array_keys($rows),
+                );
             }
 
             $i = (int) Value::toNumber($this->evaluate($idx));
-            $base = $rows[$i] ?? null;
+
+            return $this->digRow($derivedRows[$i] ?? null, $rows[$i] ?? null, $path);
         }
 
         return $path === [] ? $base : $this->digPath($base, $path);
+    }
+
+    /** Celda de una fila: primero la calculada, si no la guardada. */
+    private function digRow(mixed $derivedRow, mixed $row, array $path): mixed
+    {
+        if ($path === []) {
+            return $row;
+        }
+
+        if (is_array($derivedRow)) {
+            $found = $this->digPath($derivedRow, $path);
+
+            if ($found !== null) {
+                return $found;
+            }
+        }
+
+        return $this->digPath($row, $path);
     }
 
     /** @param array<int,string> $path */

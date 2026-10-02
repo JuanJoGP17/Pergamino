@@ -11,6 +11,7 @@
  *   computeAll(schema, values)   → { fuerza: {mod: 3}, ca: 15, … }
  */
 
+import { deriveField, derives } from './fields.js'
 import { callFunction, checkArity, FormulaRuntimeError } from './functions.js'
 import {
   compare, contains, isNumericString, looseEquals, number,
@@ -77,12 +78,16 @@ class Evaluator {
     if (idx !== null) {
       const rows = toArray(base)
 
+      // Las columnas calculadas de un repeater viven en computed, fila a fila,
+      // y tienen prioridad igual que las propiedades derivadas.
+      const derivedRows = Array.isArray(this.computed[key]) ? this.computed[key] : []
+
       if (idx === '*') {
-        return rows.map((row) => digPath(row, path))
+        return rows.map((row, i) => digRow(derivedRows[i], row, path))
       }
 
       const i = Math.trunc(toNumber(this.evaluate(idx)))
-      base = rows[i] ?? null
+      return digRow(derivedRows[i], rows[i] ?? null, path)
     }
 
     return path.length === 0 ? base : digPath(base, path)
@@ -154,6 +159,16 @@ function digPath(value, path) {
     }
   }
   return current
+}
+
+/** Celda de una fila: primero la calculada, si no la guardada. */
+function digRow(derivedRow, row, path) {
+  if (path.length === 0) return row ?? null
+  if (derivedRow !== null && typeof derivedRow === 'object') {
+    const found = digPath(derivedRow, path)
+    if (found !== null && found !== undefined) return found
+  }
+  return digPath(row ?? null, path)
 }
 
 /**
@@ -258,6 +273,24 @@ export function computeAll(schema, values) {
         computed[key] = { mod: null }
         errors[key] = e instanceof Error ? e.message : String(e)
       }
+    }
+
+    // Tipos de rol: espejo de FieldDerivation (ver fields.js).
+    if (derives(field)) {
+      let error = null
+      const run = (ast, extra = {}) => {
+        if (!ast) return null
+        try {
+          return evaluate(ast, { ...values, ...extra }, computed, settings)
+        } catch (e) {
+          if (error === null) error = e instanceof Error ? e.message : String(e)
+          return null
+        }
+      }
+
+      computed[key] = deriveField(field, values[key] ?? null, run)
+      if (error !== null) errors[key] = error
+      continue
     }
 
     if (!field.ast) continue

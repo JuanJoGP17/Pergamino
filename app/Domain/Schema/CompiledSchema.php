@@ -2,6 +2,8 @@
 
 namespace App\Domain\Schema;
 
+use App\Domain\Sheet\FieldValue;
+
 /**
  * Vista de solo lectura del árbol aplanado de una plantilla.
  *
@@ -173,7 +175,7 @@ final class CompiledSchema
                 continue;
             }
 
-            $out[$key] = $field['default_value'] ?? $type->emptyValue();
+            $out[$key] = FieldValue::normalize($field, $field['default_value'] ?? $type->emptyValue());
         }
 
         return $out;

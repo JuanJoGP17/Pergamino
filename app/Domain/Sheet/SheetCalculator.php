@@ -77,6 +77,18 @@ final class SheetCalculator
                 }
             }
 
+            // Tipos de rol (resource, track, repeater…): sus propiedades
+            // derivadas, con las fórmulas de su configuración.
+            if (FieldDerivation::applies($field)) {
+                [$computed[$key], $error] = FieldDerivation::derive($key, $field, $data, $computed, $settings);
+
+                if ($error !== null) {
+                    $errors[$key] = $error;
+                }
+
+                continue;
+            }
+
             if (empty($field['ast'])) {
                 continue;
             }

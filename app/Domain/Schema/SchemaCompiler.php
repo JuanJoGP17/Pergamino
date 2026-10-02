@@ -5,6 +5,7 @@ namespace App\Domain\Schema;
 use App\Domain\Formula\Ast;
 use App\Domain\Formula\Formula;
 use App\Domain\Formula\Interpolator;
+use App\Domain\Sheet\FieldDerivation;
 use App\Models\Template;
 
 /**
@@ -144,9 +145,47 @@ final class SchemaCompiler
                 ? $compile($config['mod_formula'] ?? null)
                 : null,
 
+            // Tipos de rol: las fórmulas de su configuración, ya analizadas.
+            'derived' => $this->compileDerived($field->type, $config, $compile),
+
             'is_required' => (bool) $field->is_required,
             'is_summary' => (bool) $field->is_summary,
         ];
+    }
+
+    /**
+     * Fórmulas de la configuración de los tipos de rol (ver FieldFormulas),
+     * con la forma que esperan FieldDerivation y su gemelo de JS.
+     *
+     * @param  callable(?string):?array  $compile
+     */
+    private function compileDerived(string $type, array $config, callable $compile): ?array
+    {
+        $levels = fn () => array_map(fn (array $l) => [
+            'key' => (string) ($l['key'] ?? ''),
+            'bonus_ast' => $compile(isset($l['bonus']) ? (string) $l['bonus'] : null),
+        ], array_values(array_filter($config['levels'] ?? [], 'is_array')));
+
+        $derived = match ($type) {
+            FieldType::Resource->value => ['max_ast' => $compile($config['max_formula'] ?? null)],
+            FieldType::Track->value => ['boxes_ast' => $compile($config['boxes_formula'] ?? null)],
+            FieldType::Proficiency->value => ['base_ast' => $compile($config['base'] ?? null), 'levels' => $levels()],
+            FieldType::DerivedList->value => [
+                'items' => array_map(fn (array $item) => [
+                    'key' => (string) ($item['key'] ?? ''),
+                    'base_ast' => $compile($item['base'] ?? null),
+                ], array_values(array_filter($config['items'] ?? [], 'is_array'))),
+                'levels' => $levels(),
+            ],
+            FieldType::Repeater->value => ['columns' => array_values(array_map(
+                fn (array $c) => ['key' => (string) $c['key'], 'ast' => $compile($c['formula'] ?? null)],
+                array_filter($config['columns'] ?? [], fn ($c) => is_array($c) && ($c['type'] ?? null) === 'computed' && isset($c['key'])),
+            ))],
+            default => null,
+        };
+
+        // Sin nulos: el esquema viaja al navegador y cuanto menos, mejor.
+        return $derived === null ? null : array_filter($derived, fn ($v) => $v !== null);
     }
 
     /**
@@ -169,7 +208,7 @@ final class SchemaCompiler
         foreach ($fields as $key => $field) {
             $fieldRefs = FormulaReferences::forField($field);
 
-            if ($fieldRefs !== [] || ! empty($field['ast']) || ! empty($field['mod_ast'])) {
+            if ($fieldRefs !== [] || ! empty($field['ast']) || ! empty($field['mod_ast']) || FieldDerivation::applies($field)) {
                 $refs[$key] = $fieldRefs;
             }
         }

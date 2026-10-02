@@ -61,6 +61,13 @@ final class FormulaReferences
         // de un nodo consigo mismo.
         $refs = array_merge($refs, self::extract($field['config']['mod_formula'] ?? null));
 
+        // Las fórmulas de la configuración de los tipos de rol. En las columnas
+        // de un repeater, `@row` es la fila, no un campo: no es una arista.
+        foreach (FieldFormulas::of((string) ($field['type'] ?? ''), (array) ($field['config'] ?? [])) as $slot) {
+            $found = self::extract($slot['source']);
+            $refs = array_merge($refs, $slot['row'] ? array_diff($found, [FieldFormulas::ROW]) : $found);
+        }
+
         // La plantilla de tirada no es una fórmula, es texto con huecos.
         $roll = $field['roll_expression'] ?? null;
         if ($roll !== null && trim((string) $roll) !== '') {

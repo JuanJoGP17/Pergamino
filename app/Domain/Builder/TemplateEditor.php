@@ -33,7 +33,7 @@ final class TemplateEditor
     private const KEY_MAX = 64;
 
     /** Palabras del motor que no pueden ser clave de campo (ver SchemaValidator). */
-    private const RESERVED = ['self', 'true', 'false', 'null', 'if', 'and', 'or', 'not', 'in', 'contains'];
+    private const RESERVED = ['self', 'row', 'true', 'false', 'null', 'if', 'and', 'or', 'not', 'in', 'contains'];
 
     // ============================================================ plantilla
 
@@ -257,8 +257,8 @@ final class TemplateEditor
                 'label' => $label,
                 'type' => $fieldType->value,
                 'position' => TemplateField::where('template_section_id', $section->id)->count(),
-                'col_span' => $this->defaultSpan($fieldType),
-                'config' => $this->defaultConfig($fieldType) ?: null,
+                'col_span' => FieldConfig::defaultSpan($fieldType),
+                'config' => FieldConfig::defaults($fieldType) ?: null,
                 'formula' => $fieldType === FieldType::Computed ? '0' : null,
             ]);
 
@@ -337,7 +337,7 @@ final class TemplateEditor
             if ($type->value !== $field->type) {
                 // La configuración de un tipo no tiene sentido en otro.
                 $data['type'] = $type->value;
-                $data['config'] = $this->defaultConfig($type) ?: null;
+                $data['config'] = FieldConfig::defaults($type) ?: null;
                 $data['default_value'] = null;
                 $data['formula'] = $type === FieldType::Computed ? ($field->formula ?: '0') : null;
             }
@@ -367,7 +367,7 @@ final class TemplateEditor
         $type = FieldType::from($data['type'] ?? $field->type);
 
         if (array_key_exists('config', $attrs) && is_array($attrs['config'])) {
-            $data['config'] = $this->cleanConfig($type, $attrs['config']) ?: null;
+            $data['config'] = FieldConfig::clean($type, $attrs['config']) ?: null;
         }
 
         if (array_key_exists('default_value', $attrs)) {
@@ -589,91 +589,6 @@ final class TemplateEditor
         return $key;
     }
 
-    private function defaultSpan(FieldType $type): int
-    {
-        return match ($type) {
-            FieldType::Attribute => 2,
-            FieldType::Number, FieldType::Checkbox, FieldType::Computed => 4,
-            FieldType::Text, FieldType::Select => 6,
-            default => 12,
-        };
-    }
-
-    private function defaultConfig(FieldType $type): array
-    {
-        return match ($type) {
-            FieldType::Attribute => ['min' => 1, 'max' => 30, 'show_mod' => true],
-            FieldType::Select => ['allow_empty' => true, 'options' => [
-                ['value' => 'Opción 1', 'label' => 'Opción 1'],
-                ['value' => 'Opción 2', 'label' => 'Opción 2'],
-            ]],
-            FieldType::Textarea => ['rows' => 4],
-            default => [],
-        };
-    }
-
-    /**
-     * Configuración por tipo (§4): solo las claves que el tipo entiende, con
-     * su tipo de dato. Lo que no se reconoce se descarta.
-     */
-    private function cleanConfig(FieldType $type, array $in): array
-    {
-        $num = fn (string $k) => isset($in[$k]) && is_numeric($in[$k]) ? $in[$k] + 0 : null;
-        $str = fn (string $k, int $max = 255) => isset($in[$k]) && trim((string) $in[$k]) !== '' ? mb_substr(trim((string) $in[$k]), 0, $max) : null;
-        $bool = fn (string $k, bool $default) => array_key_exists($k, $in) ? (bool) $in[$k] : $default;
-
-        $out = match ($type) {
-            FieldType::Text => ['maxlength' => $num('maxlength'), 'placeholder' => $str('placeholder')],
-            FieldType::Textarea => ['rows' => $num('rows') === null ? 4 : max(1, min(30, (int) $num('rows')))],
-            FieldType::Number => [
-                'min' => $num('min'), 'max' => $num('max'), 'step' => $num('step'),
-                'prefix' => $str('prefix', 16), 'suffix' => $str('suffix', 16),
-            ],
-            FieldType::Select => ['allow_empty' => $bool('allow_empty', true), 'options' => $this->cleanOptions($in['options'] ?? [])],
-            FieldType::Attribute => [
-                'min' => $num('min'), 'max' => $num('max'),
-                'mod_formula' => $str('mod_formula', 2000), 'show_mod' => $bool('show_mod', true),
-            ],
-            FieldType::Computed => ['format' => in_array($in['format'] ?? null, ['int', 'mod', 'percent', 'text'], true) ? $in['format'] : null],
-            default => [],
-        };
-
-        return array_filter($out, fn ($v) => $v !== null);
-    }
-
-    /**
-     * Opciones de una lista. Llegan como array de {value,label} o como texto,
-     * una por línea, con «valor | etiqueta» opcional.
-     *
-     * @return array<int,array{value:string,label:string}>
-     */
-    private function cleanOptions(mixed $options): array
-    {
-        if (is_string($options)) {
-            $options = array_map(function (string $line) {
-                [$value, $label] = array_pad(array_map('trim', explode('|', $line, 2)), 2, null);
-
-                return ['value' => $value, 'label' => $label ?: $value];
-            }, array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $options))));
-        }
-
-        $out = [];
-        $seen = [];
-
-        foreach (is_array($options) ? $options : [] as $option) {
-            $value = mb_substr(trim((string) ($option['value'] ?? '')), 0, 120);
-
-            if ($value === '' || isset($seen[$value])) {
-                continue;
-            }
-
-            $seen[$value] = true;
-            $out[] = ['value' => $value, 'label' => mb_substr(trim((string) ($option['label'] ?? '')) ?: $value, 0, 120)];
-        }
-
-        return $out;
-    }
-
     /** El valor por defecto se guarda como {"value": …} con el tipo de su campo. */
     private function cleanDefault(FieldType $type, mixed $value): ?array
     {
@@ -682,9 +597,14 @@ final class TemplateEditor
         }
 
         $value = match ($type) {
-            FieldType::Number, FieldType::Attribute => is_numeric($value) ? $value + 0 : null,
+            FieldType::Number, FieldType::Attribute, FieldType::Counter,
+            FieldType::Clock, FieldType::Progress => is_numeric($value) ? $value + 0 : null,
             FieldType::Checkbox => filter_var($value, FILTER_VALIDATE_BOOL),
-            default => mb_substr((string) $value, 0, 2000),
+            FieldType::Color => is_string($value) && preg_match('/^#[0-9a-f]{6}$/i', $value) ? strtolower($value) : null,
+            FieldType::Text, FieldType::Textarea, FieldType::Select => mb_substr((string) $value, 0, 2000),
+            // Los compuestos (recurso, marcas, tablas…) no tienen un valor por
+            // defecto que se pueda escribir en una casilla de texto.
+            default => null,
         };
 
         return $value === null ? null : ['value' => $value];

@@ -68,7 +68,9 @@ it('da a cada tipo una configuración y un ancho de partida', function () {
 });
 
 it('no deja añadir tipos que aún no existen', function () {
-    expect(fn () => $this->editor->addField($this->template, $this->section->id, 'repeater'))
+    expect(fn () => $this->editor->addField($this->template, $this->section->id, 'reference'))
+        ->toThrow(BuilderException::class)
+        ->and(fn () => $this->editor->addField($this->template, $this->section->id, 'inventado'))
         ->toThrow(BuilderException::class);
 });
 
