@@ -1,4 +1,4 @@
-# Puesta en marcha — Fases 0 a 3
+# Puesta en marcha — Fases 0 a 4
 
 ## 1. Esqueleto de Laravel (lo ejecutas tú)
 
@@ -202,17 +202,84 @@ Las versiones publicadas son inmutables y conservan su formato:
 formato y la fecha de publicación, no solo el id, para no servir un esquema
 ajeno cuando un `migrate:fresh` reutiliza ids.
 
+**Fase 4 — tipos de campo avanzados**
+
+Todos los tipos de §4 salvo `reference` (enlazar con otra hoja necesita las
+mesas, Fase 6). Cada uno tiene su saneado (`app/Domain/Sheet/FieldValue.php`),
+lo que calcula (`FieldDerivation.php`, gemelo en `resources/js/formula/fields.js`),
+su configuración en el inspector (`app/Domain/Builder/FieldConfig.php`) y su
+parcial en `resources/views/fields`.
+
+| Tipo | En las fórmulas |
+|---|---|
+| `resource` (PV, maná) — actual / máximo / temporales, barra, −/+ | `@pv.current`, `.max`, `.temp`, `.pct` |
+| `track` (estrés, salud) — casillas con estados: vacía → superficial → agravado | `@salud.marked`, `.boxes` |
+| `clock` — reloj de segmentos | `@reloj` (segmentos llenos) |
+| `counter` — contador con −/+ | `@usos` |
+| `progress` — experiencia con umbrales | `@xp.level`, `.next`, `.pct` |
+| `currency` — monedas con cambio | `@bolsa.po`, `@bolsa.total` |
+| `proficiency` — nivel de competencia + ajuste | `@sigilo.bonus`, `.level` |
+| `derived_list` — lista fija con competencia (las 18 habilidades) | `@habilidades.sigilo.bonus` |
+| `repeater` — tabla de filas con columnas calculadas | `@inv[*].peso`, `sum(@inv[*].total)` |
+| `multiselect`, `tags`, `color`, `dice_button`, `image`, `portrait` | |
+
+- **Fórmulas en la configuración**: el máximo de un recurso
+  (`@nivel * 8 + @constitucion.mod`), las casillas de unas marcas
+  (`@resistencia.marked + 3`), la base y el bonificador de cada nivel de
+  competencia, y las columnas calculadas de una tabla, donde `@row` es la fila
+  (`@row.peso * @row.cantidad`). Se compilan, entran en el orden de cálculo y
+  pasan por el validador como cualquier otra. `row` es palabra reservada.
+- **Las listas se editan como texto** en el inspector, una por línea:
+  `peso | Peso | número`, `total | Total | = @row.peso * 2`,
+  `comp | Competente | @competencia`.
+- **El servidor sanea cada valor** a la forma de su tipo antes de guardar: un
+  recurso siempre es `{current, max, temp}`, una tabla no pasa de `max_rows`
+  ni guarda columnas inventadas, el PV actual no pasa del máximo calculado.
+- **Retratos e imágenes**: el tipo se comprueba por el contenido del archivo;
+  la imagen se reescribe en WebP sin EXIF con Intervention (driver GD) y a
+  1600 px como mucho; se guarda en `storage/app/private` y se sirve por
+  `/media/{id}` con URL firmada. Una hoja solo acepta imágenes de su dueño.
+- **Descansos** corto y largo en la cabecera de la hoja, si algún recurso o
+  contador tiene `reset_on`.
+- **Bloques prefabricados** (§6.2, punto 4) en la paleta: 6 atributos d20,
+  nivel y competencia, PV/CA/iniciativa, las 18 habilidades, conjuros,
+  inventario con peso, reloj, estrés de FATE, salud de Vampiro y estrés de
+  Blades. Si una clave ya existe se renombra y las fórmulas del bloque se
+  reescriben.
+- **Plantillas oficiales** (`php artisan db:seed`): D&D 5e (versión 2.0),
+  FATE Básico, Vampiro V5 y Blades in the Dark. Las que ya existen no se tocan:
+  para ver la nueva de 5e en una base con datos, hace falta borrarla antes o
+  crear la hoja en una base nueva.
+
+### Pruebas en un navegador real
+
+Para probar la aplicación sin tocar `pergamino_db`, usa una base SQLite
+temporal. Ojo: **`php artisan serve` descarta las variables de entorno que
+también están en `.env`**, así que `DB_CONNECTION=sqlite php artisan serve`
+acabaría hablando con PostgreSQL. Usa el servidor de PHP con un router que las
+fije antes de que arranque Laravel (Dotenv no pisa las que ya existen):
+
+```php
+// router.php — php -S 127.0.0.1:8766 router.php   (desde public/)
+foreach (['DB_CONNECTION' => 'sqlite', 'DB_DATABASE' => 'C:/ruta/e2e.sqlite',
+          'SESSION_DRIVER' => 'file', 'APP_ENV' => 'local'] as $k => $v) {
+    putenv("$k=$v"); $_ENV[$k] = $_SERVER[$k] = $v;
+}
+return require __DIR__.'/../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php';
+```
+
 ## Qué NO hay todavía (y es intencionado)
 
-- **Del constructor, lo que el plan deja para después**: bloques prefabricados
-  (Fase 4), importar JSON, historial con diff entre versiones y migración
-  asistida de hojas a una versión nueva (§6.2, puntos 4, 7, 8 y 10). Hoy una
-  hoja se queda en su versión y solo ve el aviso de que hay otra más nueva.
+- **Del constructor, lo que el plan deja para después**: importar JSON,
+  historial con diff entre versiones y migración asistida de hojas a una
+  versión nueva (§6.2, puntos 7, 8 y 10). Hoy una hoja se queda en su versión
+  y solo ve el aviso de que hay otra más nueva.
 - **Renombrar una clave no reescribe las fórmulas que la usan**: el panel de
   validación señala cuáles se rompen.
-- **Tipos de campo avanzados** (Fase 4): `repeater`, `resource`, `track`…
-  Están declarados en `FieldType` y el validador ya los conoce; en la hoja se
-  muestran con un aviso en vez de romper.
+- **`reference`** (enlace a otra hoja): llega con las mesas.
+- **Los botones de tirada muestran la expresión pero no tiran**: el motor de
+  dados es la Fase 6. Una reserva de Vampiro (`{@fuerza.marked + …}d10`) ya
+  se resuelve a `5d10`.
 - **Dados y mesas** (Fase 6). Las tablas ya existen.
 
 ## Dos detalles de diseño que conviene no perder

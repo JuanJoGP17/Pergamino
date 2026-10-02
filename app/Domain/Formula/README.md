@@ -74,6 +74,23 @@ primary  := NUMBER | STRING | "true" | "false" | "null"
   todos los atributos. Se resuelve al compilar (`Ast::bindSelf`): el navegador
   recibe ya `@fuerza` y no necesita conocer la regla.
 
+## `@row` y las columnas calculadas (Fase 4)
+
+En una columna calculada de un `repeater`, `@row` es la fila que se calcula:
+`@row.peso * @row.cantidad`. No es un truco del evaluador: quien calcula la
+tabla (`FieldDerivation` y `fields.js`) evalúa la fórmula con un valor más,
+`row`, y la resolución normal de referencias hace el resto. Por eso `row` es
+palabra reservada y el validador solo la acepta dentro de esas columnas.
+
+Las columnas calculadas viven en `computed`, fila a fila
+(`computed.inventario = [{total: 3}, {total: 10}]`). Al indexar una lista,
+**la celda calculada tiene prioridad** sobre la guardada, igual que
+`@fuerza.mod` tiene prioridad sobre `@fuerza`:
+
+    @inventario[*].total    → [3, 10]        (de computed)
+    @inventario[0].nombre   → "Espada"       (de values: no hay calculada)
+    @inventario[0]          → la fila guardada, sin las calculadas
+
 ## Listas
 
 Las operaciones aritméticas se aplican elemento a elemento si algún operando

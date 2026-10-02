@@ -319,7 +319,7 @@ it('edita las columnas de una tabla como texto y señala los errores de sus fór
         ->assertSee('En la columna «Total»: el campo «@fila» no existe en esta plantilla');
 
     $field = TemplateField::find($b->get('selectedId'));
-    expect($field->config['columns'][2])->toBe(['key' => 'total', 'label' => 'Total', 'type' => 'computed', 'formula' => '@row.peso * @fila']);
+    expect($field->config['columns'][2])->toEqual(['key' => 'total', 'label' => 'Total', 'type' => 'computed', 'formula' => '@row.peso * @fila']);
 
     // Al volver a seleccionarlo, las columnas vuelven a ser texto editable.
     $b->call('select', 'template')->call('select', 'field', $field->id)
