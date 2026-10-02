@@ -89,16 +89,20 @@
                         @foreach ($section->fields as $field)
                             <div data-field-id="{{ $field->id }}" wire:key="field-card-{{ $field->id }}"
                                  wire:click="select('field', {{ $field->id }})"
-                                 class="col-span-12 {{ $spans[min(12, max(1, $field->col_span))] }} cursor-grab select-none rounded border bg-[var(--pg-bg)] px-2 py-1.5
+                                 class="col-span-12 {{ $spans[min(12, max(1, $field->col_span))] }} min-w-0 cursor-grab select-none rounded border bg-[var(--pg-bg)] px-2 py-1.5
                                         {{ $selected('field', $field->id) ? 'border-[var(--pg-accent)] ring-2 ring-[var(--pg-accent)]/30' : 'border-[var(--pg-border)] hover:border-[var(--pg-muted)]' }}">
-                                <div class="flex items-baseline gap-1">
-                                    <span class="flex-1 truncate text-sm font-semibold">{{ $field->label }}</span>
-                                    <span class="shrink-0 text-[0.6rem] uppercase text-[var(--pg-muted)]">{{ $field->definition()?->label() ?? $field->type }}</span>
+                                {{-- min-w-0 en la tarjeta y en el nombre: sin él, un texto largo
+                                     ensancha la columna de la rejilla en vez de recortarse. El tipo
+                                     va en su propia línea porque en tarjetas estrechas no cabe al lado. --}}
+                                <div class="flex items-center gap-1">
+                                    <span class="min-w-0 flex-1 truncate text-sm font-semibold" title="{{ $field->label }}">{{ $field->label }}</span>
                                     <button type="button" wire:click.stop="delete('field', {{ $field->id }})"
                                             wire:confirm="¿Borrar el campo «{{ $field->label }}»?"
                                             class="-mr-1 shrink-0 cursor-pointer rounded px-1 leading-none text-[var(--pg-muted)] hover:bg-[var(--pg-shade)] hover:text-[var(--pg-accent)]"
                                             title="Borrar el campo" aria-label="Borrar el campo {{ $field->label }}">&times;</button>
                                 </div>
+                                @php($typeLabel = $field->definition()?->label() ?? $field->type)
+                                <div class="truncate text-[0.6rem] uppercase text-[var(--pg-muted)]" title="{{ $typeLabel }}">{{ $typeLabel }}</div>
                                 <div class="truncate font-mono text-[0.65rem] text-[var(--pg-muted)]">
                                     {{ '@'.$field->key }}
                                     @if ($field->formula) = {{ $field->formula }} @endif
