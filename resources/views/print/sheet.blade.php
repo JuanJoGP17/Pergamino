@@ -27,6 +27,9 @@
     $bodyFont = $pdf ? $pdfFamily($body) : $fonts::stack($body);
     $transform = ($theme['typography']['heading_transform'] ?? 'none') === 'uppercase' ? 'uppercase' : 'none';
     $templateName = $sheet->schema()->template['name'] ?? '';
+    // Las pilas tipográficas van sin escapar dentro del <style> ({!! !!}): con
+    // {{ }} las comillas saldrían como &quot; y el CSS dejaría de valer. Son
+    // seguras porque salen del catálogo (Fonts), nunca de lo que escribe nadie.
 @endphp
 <!DOCTYPE html>
 <html lang="es">
@@ -39,20 +42,20 @@
     @endunless
     <style>
         @page { margin: 14mm 12mm; }
-        body { margin: 0; background: #fff; color: {{ $c['ink'] }}; font-family: {{ $bodyFont }}; font-size: 10pt; line-height: 1.3; }
+        body { margin: 0; background: #fff; color: {{ $c['ink'] }}; font-family: {!! $bodyFont !!}; font-size: 10pt; line-height: 1.3; }
         .page { max-width: 190mm; margin: 0 auto; }
-        h1 { margin: 0; font-family: {{ $headingFont }}; color: {{ $c['accent'] }}; font-size: 20pt; text-transform: {{ $transform }}; }
+        h1 { margin: 0; font-family: {!! $headingFont !!}; color: {{ $c['accent'] }}; font-size: 20pt; text-transform: {{ $transform }}; }
         .meta { color: {{ $c['muted'] }}; font-size: 8.5pt; margin: 2pt 0 10pt; }
         .tab { page-break-before: always; }
         .tab.first { page-break-before: auto; }
-        h2 { font-family: {{ $headingFont }}; color: {{ $c['accent'] }}; font-size: 13pt; margin: 0 0 6pt; padding-bottom: 2pt;
+        h2 { font-family: {!! $headingFont !!}; color: {{ $c['accent'] }}; font-size: 13pt; margin: 0 0 6pt; padding-bottom: 2pt;
              border-bottom: 2px solid {{ $c['accent'] }}; text-transform: {{ $transform }}; }
         .section { border: 1px solid {{ $c['border'] }}; background: {{ $c['surface'] }}; margin: 0 0 8pt; padding: 5pt 6pt; }
-        h3 { font-family: {{ $headingFont }}; color: {{ $c['accent'] }}; font-size: 10.5pt; margin: 0 0 3pt; text-transform: {{ $transform }}; }
+        h3 { font-family: {!! $headingFont !!}; color: {{ $c['accent'] }}; font-size: 10.5pt; margin: 0 0 3pt; text-transform: {{ $transform }}; }
         .desc { color: {{ $c['muted'] }}; font-size: 8pt; margin: 0 0 3pt; }
-        table.grid { width: 100%; border-collapse: separate; border-spacing: 4pt 3pt; table-layout: fixed; }
+        table.sheet-grid { width: 100%; border-collapse: separate; border-spacing: 4pt 3pt; table-layout: fixed; }
         td.cell { vertical-align: top; padding: 1pt 2pt 3pt; border-bottom: 1px solid {{ $c['border'] }}; }
-        td.heading { border-bottom: 1px solid {{ $c['muted'] }}; padding-top: 4pt; font-family: {{ $headingFont }}; font-weight: bold;
+        td.heading { border-bottom: 1px solid {{ $c['muted'] }}; padding-top: 4pt; font-family: {!! $headingFont !!}; font-weight: bold;
                      text-transform: uppercase; color: {{ $c['muted'] }}; font-size: 8.5pt; }
         .lbl { display: block; font-size: 6.8pt; text-transform: uppercase; letter-spacing: 0.3pt; color: {{ $c['muted'] }}; }
         .val { font-size: 10.5pt; white-space: pre-line; }
@@ -66,7 +69,7 @@
         td.lvl { width: 22%; color: {{ $c['muted'] }}; font-size: 7.5pt; }
         img.media { max-width: 100%; max-height: 55mm; }
         .watermark { position: fixed; top: 38%; left: 0; right: 0; text-align: center; font-size: 54pt; color: #ececec;
-                     transform: rotate(-28deg); z-index: -1; font-family: {{ $headingFont }}; }
+                     transform: rotate(-28deg); z-index: -1; font-family: {!! $headingFont !!}; }
         .toolbar { display: flex; gap: 8px; justify-content: flex-end; padding: 10px; font-family: system-ui, sans-serif; font-size: 13px; }
         @media print { .toolbar { display: none; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
     </style>
@@ -103,7 +106,10 @@
                             <p class="desc">{{ $section['description'] }}</p>
                         @endif
 
-                        <table class="grid">
+                        <table class="sheet-grid">
+                            {{-- Las 12 columnas de la rejilla: sin ellas, con table-layout: fixed
+                                 y solo colspans, el navegador no sabe repartir el ancho. --}}
+                            <colgroup>@for ($i = 0; $i < 12; $i++)<col style="width: 8.333%">@endfor</colgroup>
                             @foreach ($section['rows'] as $row)
                                 <tr>
                                     @foreach ($row as $cell)

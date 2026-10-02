@@ -30,7 +30,7 @@
                 x-on:click="adjust({{ $k }}, 'current', -1, 0, {{ $cap }})"
                 @include('fields._bind', ['bindKey' => false])>−</button>
 
-        <input id="f-{{ $key }}" type="number" class="pg-input w-full min-w-0 text-center font-serif text-lg font-bold"
+        <input id="f-{{ $key }}" type="number" class="pg-input min-w-14 flex-1 px-1 text-center font-serif text-lg font-bold"
                wire:model.live.blur="data.{{ $key }}.current"
                @include('fields._bind', ['bindPath' => 'current'])
                aria-label="{{ $field['label'] }} actual">
@@ -45,7 +45,7 @@
             <span class="min-w-8 text-center font-serif text-lg font-bold" title="{{ $config['max_formula'] }}"
                   x-text="comp({{ $k }}, 'max') ?? '—'">{{ $max }}</span>
         @else
-            <input type="number" min="0" class="pg-input w-16 text-center"
+            <input type="number" min="0" class="pg-input w-14 shrink-0 px-1 text-center"
                    wire:model.live.blur="data.{{ $key }}.max"
                    @include('fields._bind', ['bindPath' => 'max'])
                    aria-label="{{ $field['label'] }} máximo">
@@ -53,7 +53,7 @@
 
         @if ($config['show_temp'] ?? true)
             <span class="pl-1 text-xs text-[var(--pg-muted)]" title="Temporales">+</span>
-            <input type="number" min="0" class="pg-input w-14 text-center"
+            <input type="number" min="0" class="pg-input w-12 shrink-0 px-1 text-center"
                    wire:model.live.blur="data.{{ $key }}.temp"
                    @include('fields._bind', ['bindPath' => 'temp'])
                    title="Temporales" aria-label="{{ $field['label'] }} temporales">

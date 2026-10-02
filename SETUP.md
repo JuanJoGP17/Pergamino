@@ -1,4 +1,4 @@
-# Puesta en marcha — Fases 0 a 4
+# Puesta en marcha — Fases 0 a 5
 
 ## 1. Esqueleto de Laravel (lo ejecutas tú)
 
@@ -251,6 +251,48 @@ parcial en `resources/views/fields`.
   para ver la nueva de 5e en una base con datos, hace falta borrarla antes o
   crear la hoja en una base nueva.
 
+**Fase 5 — apariencia y exportación**
+
+- **Temas** (§6.3, `app/Domain/Theme`): un JSON con propiedades en lista
+  blanca (colores `#rrggbb`, tipografías del catálogo, números acotados) que
+  `ThemeCompiler` convierte en variables CSS con ámbito `[data-sheet="uuid"]`.
+  Nunca se acepta CSS del usuario. Toda la hoja ya usaba `var(--pg-*)`, así
+  que cambiar de tema no toca ni una vista.
+- **Siete presets** con paleta clara y oscura: Pergamino, Grimorio oscuro,
+  Cyberpunk neón, Minimal papel, Sci-fi terminal, Cómic y Máquina de escribir.
+  Cada tema elige además texturas, bordes, sombras, densidad, ancho, modo
+  claro/oscuro (o según el dispositivo) e imagen de fondo con opacidad.
+- **Cascada** preset → plantilla → mesa → hoja. Una hoja solo cambia el acento
+  y el modo (botón «Apariencia» en su cabecera). La capa de la mesa ya funciona
+  (`campaigns.theme_override`) y tendrá interfaz con las mesas, en la Fase 6.
+- **El tema se lee de la plantilla viva**, no de la versión publicada: es
+  apariencia, no estructura, y cambiarlo no obliga a publicar ni a migrar
+  hojas. La versión guarda una copia para la exportación.
+- **Editor de apariencia** en `/plantillas/{uuid}/apariencia` (botón en el
+  constructor y en el listado), con la hoja real como vista previa.
+- **Tipografías auto-alojadas**: Cinzel, EB Garamond, IM Fell English, Inter,
+  JetBrains Mono, Bebas Neue y Special Elite, de los paquetes `@fontsource`
+  (npm). Vite las empaqueta en `public/build`: ni Google Fonts ni CDN.
+- **Imprimir** (`/hojas/{uuid}/imprimir`) y **PDF** (`/hojas/{uuid}/pdf`, con
+  `?marca=1` para la marca de agua): todas las pestañas, una por página, con
+  los valores ya formateados. El PDF lo hace **dompdf** (PHP puro, sirve en
+  cualquier hosting) sin acceso a red; los retratos van incrustados. Como
+  dompdf no entiende CSS Grid ni variables CSS, la vista de impresión usa
+  tablas y los colores literales de la paleta clara del tema.
+- **JSON** versionado (`pergamino.template` y `pergamino.sheet`, versión 1):
+  exportar e importar plantillas (en el listado de plantillas) y hojas (menú
+  «Imprimir / exportar» de la hoja; importar, en el panel). Lo importado pasa
+  por los mismos saneados que lo que llega del inspector o del editor; una
+  plantilla importada es un borrador nuevo y privado. Las imágenes no viajan.
+- Las plantillas oficiales traen cada una su tema: 5e en Pergamino, FATE en
+  Minimal papel, Vampiro en Grimorio oscuro y Blades en Máquina de escribir
+  oscura.
+
+Los componentes de estilo (`.pg-input`, `.pg-btn`…) están ahora en la capa
+`components` de Tailwind: una utilidad como `w-16` puede ajustarlos. Antes,
+fuera de capa, `.pg-input { width: 100% }` ganaba siempre y algunos inputs
+estrechos de la Fase 4 se desbordaban.
+
 ### Pruebas en un navegador real
 
 Para probar la aplicación sin tocar `pergamino_db`, usa una base SQLite
@@ -270,13 +312,16 @@ return require __DIR__.'/../vendor/laravel/framework/src/Illuminate/Foundation/r
 
 ## Qué NO hay todavía (y es intencionado)
 
-- **Del constructor, lo que el plan deja para después**: importar JSON,
-  historial con diff entre versiones y migración asistida de hojas a una
-  versión nueva (§6.2, puntos 7, 8 y 10). Hoy una hoja se queda en su versión
+- **Del constructor, lo que el plan deja para después**: historial con diff
+  entre versiones y migración asistida de hojas a una versión nueva (§6.2,
+  puntos 8 y 10). Importar el formato de la aplicación antigua (§6.2.7 y §13)
+  llega con la migración de datos, en la Fase 8. Hoy una hoja se queda en su versión
   y solo ve el aviso de que hay otra más nueva.
 - **Renombrar una clave no reescribe las fórmulas que la usan**: el panel de
   validación señala cuáles se rompen.
 - **`reference`** (enlace a otra hoja): llega con las mesas.
+- **Exportar la ficha como PNG/JPG**: fuera de alcance sin navegador headless
+  en el servidor (§6.4). El PDF y «imprimir a PDF» del navegador lo cubren.
 - **Los botones de tirada muestran la expresión pero no tiran**: el motor de
   dados es la Fase 6. Una reserva de Vampiro (`{@fuerza.marked + …}d10`) ya
   se resuelve a `5d10`.

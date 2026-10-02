@@ -54,6 +54,12 @@
     --font-serif: "Cambria", "Georgia", serif;
 }
 
+/*
+ * Componentes en su capa de Tailwind: así una utilidad puede ajustarlos
+ * (`pg-input w-16`). Fuera de una capa, .pg-input { width: 100% } ganaba
+ * siempre y los inputs estrechos de una fila se desbordaban.
+ */
+@layer components {
 /* Controles de formulario: un solo sitio donde tocar el estilo de los inputs. */
 .pg-input {
     width: 100%;
@@ -100,6 +106,8 @@
     font-size: 0.875rem;
 }
 .pg-btn-danger:hover { background: var(--pg-accent); color: #fff; }
+}
+
 
 /* --- Hoja con tema (Fase 5) ---
  * App\Domain\Theme\ThemeCompiler pone las variables en [data-sheet="uuid"];
@@ -153,6 +161,7 @@
 
 /* --- Tipos de campo de rol (resources/views/fields) --- */
 
+@layer components {
 /* −/+ de recursos y contadores. */
 .pg-step {
     display: inline-flex;
@@ -198,6 +207,7 @@
 .pg-portrait-frame {
     border: 3px double var(--pg-accent);
     box-shadow: 0 0 0 3px var(--pg-surface), 0 0 0 4px var(--pg-border);
+}
 }
 
 /* Alpine: lo marcado con x-cloak no parpadea antes de que Alpine arranque. */

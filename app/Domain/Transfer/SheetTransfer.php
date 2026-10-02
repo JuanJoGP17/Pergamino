@@ -8,6 +8,7 @@ use App\Domain\Theme\Theme;
 use App\Models\Sheet;
 use App\Models\Template;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 /**
  * Exportar e importar hojas en JSON (§6.4).
@@ -71,11 +72,13 @@ final class SheetTransfer
     {
         $ref = is_array($json['template'] ?? null) ? $json['template'] : [];
 
-        $template = Template::query()
-            ->where(fn ($q) => $q->where('uuid', (string) ($ref['uuid'] ?? ''))->orWhere('slug', (string) ($ref['slug'] ?? '')))
-            ->whereNotNull('current_version_id')
-            ->orderByRaw('CASE WHEN uuid = ? THEN 0 ELSE 1 END', [(string) ($ref['uuid'] ?? '')])
-            ->first();
+        // En PostgreSQL la columna es de tipo uuid: comparar con algo que no
+        // lo sea es un error de la base, no un «no encontrado».
+        $uuid = is_string($ref['uuid'] ?? null) && Str::isUuid($ref['uuid']) ? $ref['uuid'] : null;
+        $slug = is_string($ref['slug'] ?? null) ? $ref['slug'] : null;
+
+        $template = ($uuid ? Template::where('uuid', $uuid)->whereNotNull('current_version_id')->first() : null)
+            ?? ($slug ? Template::where('slug', $slug)->whereNotNull('current_version_id')->first() : null);
 
         return $template && $user->can('view', $template) ? $template : null;
     }

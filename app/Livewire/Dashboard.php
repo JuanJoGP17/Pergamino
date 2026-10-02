@@ -8,6 +8,7 @@ use App\Domain\Transfer\TransferException;
 use App\Models\Sheet;
 use App\Models\Template;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -25,6 +26,7 @@ class Dashboard extends Component
 
     public function createSheetFrom(string $templateUuid)
     {
+        abort_unless(Str::isUuid($templateUuid), 404);
         $template = Template::where('uuid', $templateUuid)->firstOrFail();
         $this->authorize('view', $template);
 
@@ -54,9 +56,12 @@ class Dashboard extends Component
             }
 
             $json = json_decode($file->get(), true);
-            $template = $this->importTemplate !== ''
-                ? Template::where('uuid', $this->importTemplate)->first()
-                : $transfer->originalTemplate(auth()->user(), $json);
+            // La columna uuid de PostgreSQL no admite comparar con cualquier texto.
+            $template = match (true) {
+                $this->importTemplate === '' => $transfer->originalTemplate(auth()->user(), $json),
+                Str::isUuid($this->importTemplate) => Template::where('uuid', $this->importTemplate)->first(),
+                default => null,
+            };
 
             if (! $template || ! auth()->user()->can('view', $template)) {
                 throw new TransferException('No encuentro la plantilla de esa hoja: elige en qué plantilla importarla.');
@@ -80,6 +85,7 @@ class Dashboard extends Component
 
     public function deleteSheet(string $uuid): void
     {
+        abort_unless(Str::isUuid($uuid), 404);
         $sheet = Sheet::where('uuid', $uuid)->firstOrFail();
         $this->authorize('delete', $sheet);
         $sheet->delete();

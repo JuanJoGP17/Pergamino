@@ -205,3 +205,18 @@ it('importa una hoja desde el panel', function () {
         ->set('sheetFile', UploadedFile::fake()->createWithContent('h.json', $other))
         ->assertHasErrors('sheetFile');
 });
+
+it('un uuid malformado desde el navegador da 404, no un error de PostgreSQL', function () {
+    Livewire::actingAs($this->user)->test(Dashboard::class)
+        ->call('createSheetFrom', "x' OR 1=1 --")
+        ->assertNotFound();
+
+    Livewire::actingAs($this->user)->test(Dashboard::class)
+        ->call('deleteSheet', 'no-es-un-uuid')
+        ->assertNotFound();
+
+    Livewire::actingAs($this->user)->test(Dashboard::class)
+        ->set('importTemplate', 'tampoco')
+        ->set('sheetFile', UploadedFile::fake()->createWithContent('h.json', json_encode(['format' => 'pergamino.sheet', 'sheet' => []])))
+        ->assertHasErrors('sheetFile');
+});
