@@ -9,6 +9,8 @@ use App\Domain\Schema\FieldType;
 use App\Domain\Sheet\SaveSheet;
 use App\Domain\Sheet\SheetView;
 use App\Domain\Sheet\TakeRest;
+use App\Domain\Theme\SheetTheme;
+use App\Domain\Theme\Theme;
 use App\Models\Sheet;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Attributes\Layout;
@@ -43,6 +45,14 @@ class Editor extends Component
 
     public ?string $savedAt = null;
 
+    /**
+     * Apariencia propia de esta hoja (§6.3): solo el acento y el modo claro /
+     * oscuro, encima del tema de la plantilla. Vacío = el de la plantilla.
+     */
+    public ?string $sheetAccent = null;
+
+    public string $sheetMode = '';
+
     /** Imágenes recién elegidas, por clave de campo (retratos, imágenes). */
     public array $uploads = [];
 
@@ -55,6 +65,42 @@ class Editor extends Component
         $this->sheetUuid = $sheet->uuid;
         $this->data = $sheet->data ?? [];
         $this->tab = $sheet->schema()->firstTabKey() ?? '';
+        $this->sheetAccent = $sheet->theme_override['colors']['accent'] ?? null;
+        $this->sheetMode = $sheet->theme_override['mode'] ?? '';
+    }
+
+    public function updatedSheetAccent(): void
+    {
+        $this->saveSheetTheme();
+    }
+
+    public function updatedSheetMode(): void
+    {
+        $this->saveSheetTheme();
+    }
+
+    public function clearSheetTheme(): void
+    {
+        $this->sheetAccent = null;
+        $this->sheetMode = '';
+        $this->saveSheetTheme();
+    }
+
+    private function saveSheetTheme(): void
+    {
+        $sheet = $this->sheet();
+        $this->authorize('update', $sheet);
+
+        // Un solo acento para los dos modos: es «el color de mi personaje».
+        $override = Theme::sanitize([
+            'mode' => $this->sheetMode ?: null,
+            'colors' => ['accent' => $this->sheetAccent],
+            'colors_dark' => ['accent' => $this->sheetAccent],
+        ], sheetLayer: true);
+
+        $sheet->forceFill(['theme_override' => $override ?: null])->save();
+        $this->sheetAccent = $override['colors']['accent'] ?? null;
+        $this->sheetMode = $override['mode'] ?? '';
     }
 
     public function sheet(): Sheet
@@ -183,6 +229,7 @@ class Editor extends Component
             'sheet' => $sheet,
             'rests' => TakeRest::available($sheet),
             'uploadsEnabled' => true,
+            'themeCss' => SheetTheme::css(SheetTheme::forSheet($sheet), $sheet->uuid),
             ...$this->sheetView()->viewData($this->tab, $sheet->formulaErrors()),
         ]);
     }

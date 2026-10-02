@@ -1,6 +1,26 @@
 @import "tailwindcss";
 
 /*
+ * Tipografías de los temas (Fase 5), auto-alojadas: los archivos vienen de
+ * @fontsource y Vite los empaqueta. Solo el subconjunto latino (cubre el
+ * castellano) y los pesos que usan las hojas. El navegador no descarga una
+ * fuente hasta que algo la usa. Catálogo: App\Domain\Theme\Fonts.
+ */
+@import "@fontsource/cinzel/latin-400.css";
+@import "@fontsource/cinzel/latin-700.css";
+@import "@fontsource/eb-garamond/latin-400.css";
+@import "@fontsource/eb-garamond/latin-700.css";
+@import "@fontsource/eb-garamond/latin-400-italic.css";
+@import "@fontsource/im-fell-english/latin-400.css";
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/inter/latin-700.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-700.css";
+@import "@fontsource/bebas-neue/latin-400.css";
+@import "@fontsource/special-elite/latin-400.css";
+
+/*
  * Paleta "pergamino" como variables CSS.
  *
  * En la Fase 5, el editor de apariencia sobrescribe estas mismas variables por
@@ -80,6 +100,56 @@
     font-size: 0.875rem;
 }
 .pg-btn-danger:hover { background: var(--pg-accent); color: #fff; }
+
+/* --- Hoja con tema (Fase 5) ---
+ * App\Domain\Theme\ThemeCompiler pone las variables en [data-sheet="uuid"];
+ * aquí se usan. Sin tema, los valores por defecto dejan la hoja como estaba.
+ */
+.pg-sheet {
+    position: relative;
+    isolation: isolate;
+    max-width: var(--pg-max-width, none);
+    margin-inline: auto;
+    padding: var(--pg-pad, 1rem);
+    border-radius: var(--pg-radius, 0.5rem);
+    background: var(--pg-texture, none), var(--pg-bg);
+    color: var(--pg-ink);
+    font-family: var(--pg-font-body, inherit);
+    zoom: var(--pg-scale, 1);
+}
+/* Imagen de fondo propia, con su opacidad, por debajo de todo. */
+.pg-sheet::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background-image: var(--pg-bg-image, none);
+    background-size: var(--pg-bg-size, cover);
+    background-repeat: var(--pg-bg-repeat, no-repeat);
+    background-position: center;
+    opacity: var(--pg-bg-opacity, 0);
+    pointer-events: none;
+}
+.pg-sheet-section {
+    background: var(--pg-surface);
+    border: var(--pg-section-border, 1px solid var(--pg-border));
+    outline: var(--pg-section-outline, none);
+    outline-offset: -6px;
+    border-radius: var(--pg-radius, 0.5rem);
+    box-shadow: var(--pg-shadow, none);
+    padding: var(--pg-pad, 1rem);
+}
+.pg-sheet .font-serif,
+.pg-sheet h2,
+.pg-sheet h3 {
+    font-family: var(--pg-font-heading, inherit);
+}
+.pg-sheet h2,
+.pg-sheet h3 {
+    text-transform: var(--pg-heading-transform, none);
+    font-variant: var(--pg-heading-variant, normal);
+}
 
 /* --- Tipos de campo de rol (resources/views/fields) --- */
 

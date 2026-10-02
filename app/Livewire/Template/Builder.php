@@ -75,6 +75,7 @@ class Builder extends Component
 
         $this->templateUuid = $template->uuid;
         $this->tabId = $template->tabs()->value('id');
+        $this->notice = session('notice');
         $this->loadForm();
     }
 

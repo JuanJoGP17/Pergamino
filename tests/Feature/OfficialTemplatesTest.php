@@ -3,6 +3,7 @@
 use App\Domain\Schema\SchemaValidator;
 use App\Domain\Sheet\CreateSheet;
 use App\Domain\Sheet\SaveSheet;
+use App\Domain\Theme\SheetTheme;
 use App\Livewire\Sheet\Editor;
 use App\Models\Template;
 use App\Models\User;
@@ -91,4 +92,19 @@ it('Blades: el valor de un atributo es cuántas de sus acciones tienen puntos', 
         ->and($sheet->computed['carga_usada'])->toBe('1 / 5');
 
     Livewire::actingAs($this->user)->test(Editor::class, ['sheet' => $sheet])->assertSee('2d6');
+});
+
+it('cada sistema se ve distinto: su propio tema', function () {
+    foreach ([Dnd5eTemplateSeeder::class, FateTemplateSeeder::class, VampiroTemplateSeeder::class, BladesTemplateSeeder::class] as $seeder) {
+        (new $seeder)->run();
+    }
+
+    $themes = Template::whereIn('slug', ['dnd-5e', 'fate-basico', 'vampiro-v5', 'blades-in-the-dark'])
+        ->get()
+        ->mapWithKeys(fn (Template $t) => [$t->slug => SheetTheme::forTemplate($t)]);
+
+    expect($themes->map(fn ($t) => $t['preset'])->sort()->values()->all())->toBe(['grimorio', 'maquina', 'minimal', 'pergamino'])
+        ->and($themes['blades-in-the-dark']['mode'])->toBe('dark')
+        ->and($themes['vampiro-v5']['colors_dark']['accent'])->toBe('#d3203f')
+        ->and($themes->map(fn ($t) => $t['typography']['heading'])->unique())->toHaveCount(4);
 });

@@ -6,6 +6,7 @@ use App\Domain\Formula\Ast;
 use App\Domain\Formula\Formula;
 use App\Domain\Formula\Interpolator;
 use App\Domain\Sheet\FieldDerivation;
+use App\Domain\Theme\Theme;
 use App\Models\Template;
 
 /**
@@ -85,7 +86,9 @@ final class SchemaCompiler
                 'game_line' => $template->game_line,
                 'slug' => $template->slug,
             ],
-            'theme' => [],   // lo llena el editor de apariencia en la Fase 5
+            // Copia del tema al publicar, para la exportación. La hoja se pinta
+            // con el de la plantilla viva (ver App\Domain\Theme\SheetTheme).
+            'theme' => Theme::sanitize($template->theme),
 
             // Configuración que consumen mod(), prof() y lookup(). Viaja dentro
             // del esquema para que el navegador evalúe con los mismos ajustes

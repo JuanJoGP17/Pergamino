@@ -25,7 +25,7 @@ class Template extends Model
 
     protected $fillable = [
         'owner_id', 'name', 'slug', 'tagline', 'description', 'game_line',
-        'settings', 'cover_image_path', 'icon', 'visibility', 'is_official',
+        'settings', 'theme', 'cover_image_path', 'icon', 'visibility', 'is_official',
         'forked_from_id',
     ];
 
@@ -33,6 +33,7 @@ class Template extends Model
     {
         return [
             'settings' => 'array',
+            'theme' => 'array',
             'is_official' => 'boolean',
             'installs_count' => 'integer',
             'likes_count' => 'integer',

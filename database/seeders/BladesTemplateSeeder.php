@@ -32,6 +32,8 @@ class BladesTemplateSeeder extends Seeder
             'name' => 'Blades in the Dark',
             'tagline' => 'Acciones, estrés y trauma, daño por niveles y relojes',
             'game_line' => 'Blades in the Dark',
+            // Máquina de escribir en una ciudad sin sol: oscuro siempre.
+            'theme' => ['preset' => 'maquina', 'mode' => 'dark'],
             'settings' => [],
         ]);
 

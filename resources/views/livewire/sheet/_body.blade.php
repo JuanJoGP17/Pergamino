@@ -13,7 +13,13 @@
         cada pulsación con los mismos árboles. Por eso los valores derivados se
         pintan dos veces: el texto del servidor y un x-text que lo sustituye.
 --}}
-<div class="space-y-6" data-sheet="{{ $sheet->uuid }}"
+{{-- Tema (Fase 5): variables CSS con ámbito en esta hoja. Todo lo que hay
+     dentro sale de listas blancas (App\Domain\Theme\ThemeCompiler). --}}
+@if (! empty($themeCss))
+    <style>{!! $themeCss !!}</style>
+@endif
+
+<div class="pg-sheet space-y-6" data-sheet="{{ $sheet->uuid }}"
      x-data="sheetFormulas(@js($clientSchema))"
      x-on:input="onInput($event)"
      x-on:change="onInput($event)">
@@ -36,7 +42,7 @@
         <p class="text-sm text-[var(--pg-muted)]">Esta plantilla todavía no tiene campos.</p>
     @else
         @foreach ($currentTab['sections'] as $section)
-            <section class="rounded-lg border border-[var(--pg-border)] bg-[var(--pg-surface)] p-4"
+            <section class="pg-sheet-section"
                      wire:key="section-{{ $section['key'] }}"
                      @if (! empty($section['visible_ast']))
                          x-show="sectionVisible(@js($section['key']))"
@@ -64,7 +70,7 @@
                     ];
                 @endphp
 
-                <div class="grid grid-cols-12 gap-3">
+                <div class="grid grid-cols-12 gap-[var(--pg-gap,0.75rem)]">
                     @foreach ($section['field_keys'] as $key)
                         @php $field = $schema->field($key); @endphp
                         @continue(! $field)

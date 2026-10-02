@@ -18,6 +18,42 @@
             @endif
         </span>
 
+        <div class="relative" x-data="{ open: false }">
+            <button type="button" class="pg-btn-ghost py-1 text-xs" x-on:click="open = ! open">Imprimir / exportar</button>
+            <div x-show="open" x-cloak x-on:click.outside="open = false"
+                 class="absolute right-0 z-20 mt-2 w-56 space-y-1 rounded-lg border border-[var(--pg-border)] bg-[var(--pg-surface)] p-2 text-sm shadow-lg">
+                <a class="block rounded px-2 py-1 hover:bg-[var(--pg-shade)]" href="{{ route('sheets.print', $sheet) }}" target="_blank">Imprimir</a>
+                <a class="block rounded px-2 py-1 hover:bg-[var(--pg-shade)]" href="{{ route('sheets.pdf', $sheet) }}" target="_blank">PDF</a>
+                <a class="block rounded px-2 py-1 hover:bg-[var(--pg-shade)]" href="{{ route('sheets.pdf', $sheet) }}?marca=1" target="_blank">PDF con marca de agua</a>
+                <a class="block rounded px-2 py-1 hover:bg-[var(--pg-shade)]" href="{{ route('sheets.export', $sheet) }}">Exportar JSON</a>
+            </div>
+        </div>
+
+        @can('update', $sheet)
+            {{-- Apariencia de esta hoja: acento y claro/oscuro sobre el tema de la plantilla. --}}
+            <div class="relative" x-data="{ open: false }">
+                <button type="button" class="pg-btn-ghost py-1 text-xs" x-on:click="open = ! open">Apariencia</button>
+                <div x-show="open" x-cloak x-on:click.outside="open = false"
+                     class="absolute right-0 z-20 mt-2 w-64 space-y-2 rounded-lg border border-[var(--pg-border)] bg-[var(--pg-surface)] p-3 text-sm shadow-lg">
+                    <label class="flex items-center justify-between gap-2">
+                        <span>Color de acento</span>
+                        <input type="color" class="h-7 w-12 cursor-pointer rounded border border-[var(--pg-border)] p-0.5"
+                               value="{{ $sheetAccent ?? '#8b2e1f' }}" wire:model.live.change="sheetAccent">
+                    </label>
+                    <label class="block">
+                        <span class="text-xs text-[var(--pg-muted)]">Claro / oscuro</span>
+                        <select class="pg-input" wire:model.live="sheetMode">
+                            <option value="">Como la plantilla</option>
+                            <option value="auto">Según el dispositivo</option>
+                            <option value="light">Siempre claro</option>
+                            <option value="dark">Siempre oscuro</option>
+                        </select>
+                    </label>
+                    <button type="button" class="text-xs text-[var(--pg-muted)] hover:text-[var(--pg-accent)]" wire:click="clearSheetTheme">Usar el de la plantilla</button>
+                </div>
+            </div>
+        @endcan
+
         @foreach ($rests as $kind => $label)
             <button type="button" wire:click="rest('{{ $kind }}')"
                     wire:confirm="¿{{ $label }}? Se recuperan los recursos y usos que la plantilla marca."
@@ -29,6 +65,10 @@
         </span>
         <span class="text-xs text-[var(--pg-muted)]" wire:loading wire:target="save">Guardando…</span>
     </div>
+
+    @if (session('sheet_notice'))
+        <p class="rounded-md border border-[var(--pg-border)] bg-[var(--pg-surface)] px-3 py-2 text-sm" role="status">{{ session('sheet_notice') }}</p>
+    @endif
 
     @include('livewire.sheet._body')
 </div>

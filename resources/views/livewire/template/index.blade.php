@@ -12,6 +12,15 @@
                 </div>
                 <button type="submit" class="pg-btn whitespace-nowrap">Nueva plantilla</button>
             </form>
+
+            <div class="text-sm">
+                <label class="pg-btn-ghost cursor-pointer whitespace-nowrap">
+                    Importar JSON
+                    <input type="file" accept="application/json,.json" class="sr-only" wire:model="importFile">
+                </label>
+                <span wire:loading wire:target="importFile" class="text-xs text-[var(--pg-muted)]">Importando…</span>
+                @error('importFile') <p class="mt-1 text-xs text-[var(--pg-accent)]">{{ $message }}</p> @enderror
+            </div>
         </div>
 
         <div class="space-y-2">
@@ -33,6 +42,8 @@
                             · {{ $template->sheets_count }} hoja(s)
                         </p>
                     </div>
+                    <a href="{{ route('templates.export', $template) }}" class="text-xs text-[var(--pg-muted)] hover:text-[var(--pg-accent)]">Exportar JSON</a>
+                    <a href="{{ route('templates.appearance', $template) }}" wire:navigate class="pg-btn-ghost text-sm">Apariencia</a>
                     <a href="{{ route('templates.builder', $template) }}" wire:navigate class="pg-btn-ghost text-sm">Abrir el constructor</a>
                 </div>
             @empty
@@ -56,6 +67,7 @@
                         @endif
                         <p class="text-xs text-[var(--pg-muted)]">
                             {{ $template->tagline ?: $template->game_line }} · {{ $template->sheets_count }} hoja(s)
+                            · <a href="{{ route('templates.export', $template) }}" class="hover:text-[var(--pg-accent)]">Exportar JSON</a>
                         </p>
                     </div>
                 @endforeach

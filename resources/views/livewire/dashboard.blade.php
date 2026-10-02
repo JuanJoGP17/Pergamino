@@ -1,6 +1,24 @@
 <div class="space-y-10">
     <section>
-        <h1 class="mb-4 font-serif text-xl font-bold text-[var(--pg-accent)]">Mis hojas</h1>
+        <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <h1 class="font-serif text-xl font-bold text-[var(--pg-accent)]">Mis hojas</h1>
+
+            {{-- Importar una hoja exportada en JSON --}}
+            <div class="flex flex-wrap items-center gap-2 text-sm">
+                <select class="pg-input w-56 py-1 text-xs" wire:model="importTemplate" aria-label="Plantilla para importar">
+                    <option value="">La plantilla de la que salió</option>
+                    @foreach ($templates as $template)
+                        <option value="{{ $template->uuid }}">{{ $template->name }}</option>
+                    @endforeach
+                </select>
+                <label class="pg-btn-ghost cursor-pointer py-1 text-xs">
+                    Importar hoja (JSON)
+                    <input type="file" accept="application/json,.json" class="sr-only" wire:model="sheetFile">
+                </label>
+                <span wire:loading wire:target="sheetFile" class="text-xs text-[var(--pg-muted)]">Importando…</span>
+            </div>
+        </div>
+        @error('sheetFile') <p class="mb-3 text-xs text-[var(--pg-accent)]">{{ $message }}</p> @enderror
 
         @if ($sheets->isEmpty())
             <p class="rounded-lg border border-dashed border-[var(--pg-border)] p-6 text-center text-sm text-[var(--pg-muted)]">

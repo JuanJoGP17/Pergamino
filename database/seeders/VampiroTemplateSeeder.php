@@ -51,6 +51,8 @@ class VampiroTemplateSeeder extends Seeder
             'name' => 'Vampiro: La Mascarada (V5)',
             'tagline' => 'Atributos en puntos, Salud y Voluntad con daño superficial y agravado',
             'game_line' => 'Vampiro',
+            // Grimorio oscuro con acento de sangre.
+            'theme' => ['preset' => 'grimorio', 'colors' => ['accent' => '#8f1028'], 'colors_dark' => ['accent' => '#d3203f']],
             'settings' => [],
         ]);
 

@@ -51,6 +51,7 @@ class Dnd5eTemplateSeeder extends Seeder
             'name' => 'D&D 5e',
             'tagline' => 'Hoja de Dungeons & Dragons 5.ª edición',
             'game_line' => 'D&D 5e',
+            'theme' => ['preset' => 'pergamino'],
 
             // Ajustes que consumen mod(), prof() y lookup() en las fórmulas.
             // Viven en la plantilla, no en la aplicación: un sistema que no sea

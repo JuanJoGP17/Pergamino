@@ -18,12 +18,12 @@ class Campaign extends Model
 
     protected $fillable = [
         'gm_id', 'name', 'join_code', 'description', 'banner_path',
-        'default_template_id', 'settings', 'is_archived',
+        'default_template_id', 'settings', 'theme_override', 'is_archived',
     ];
 
     protected function casts(): array
     {
-        return ['settings' => 'array', 'is_archived' => 'boolean'];
+        return ['settings' => 'array', 'theme_override' => 'array', 'is_archived' => 'boolean'];
     }
 
     public function gm(): BelongsTo

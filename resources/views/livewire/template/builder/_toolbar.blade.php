@@ -28,6 +28,8 @@
         <button type="button" class="px-2 py-1.5" x-on:click="device = 'mobile'" x-bind:class="device === 'mobile' && 'bg-[var(--pg-shade)] font-semibold'">Móvil</button>
     </div>
 
+    <a href="{{ route('templates.appearance', $template) }}" wire:navigate class="pg-btn-ghost py-1.5 text-sm">Apariencia</a>
+
     <div class="relative">
         <button type="button" class="pg-btn disabled:opacity-50" x-on:click="publishing = ! publishing"
                 @disabled($errorCount > 0)

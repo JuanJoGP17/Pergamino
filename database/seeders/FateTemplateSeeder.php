@@ -45,6 +45,8 @@ class FateTemplateSeeder extends Seeder
             'name' => 'FATE Básico',
             'tagline' => 'Aspectos, escalera de habilidades, estrés y consecuencias',
             'game_line' => 'FATE',
+            // Limpio y legible: FATE es conversación, no ornamento.
+            'theme' => ['preset' => 'minimal', 'colors' => ['accent' => '#0f766e'], 'colors_dark' => ['accent' => '#2dd4bf']],
             'settings' => [],
         ]);
 

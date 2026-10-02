@@ -7,6 +7,7 @@ use App\Domain\Schema\SchemaCompilationException;
 use App\Domain\Schema\SchemaCompiler;
 use App\Domain\Sheet\SheetCalculator;
 use App\Domain\Sheet\SheetView;
+use App\Domain\Theme\SheetTheme;
 use App\Models\Sheet;
 use App\Models\Template;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -44,6 +45,7 @@ class Preview extends Component
     }
 
     #[On('template-changed')]
+    #[On('theme-changed')]
     public function refresh(): void
     {
         // Basta con volver a pintar: render() recompila el borrador.
@@ -74,9 +76,12 @@ class Preview extends Component
 
         [$computed, $errors] = (new SheetCalculator)->calculateWithErrors($schema, $data);
 
+        $sheet = $this->fakeSheet($schema, $data, $computed);
+
         return view('livewire.template.preview', [
             'error' => null,
-            'sheet' => $this->fakeSheet($schema, $data, $computed),
+            'sheet' => $sheet,
+            'themeCss' => SheetTheme::css(SheetTheme::forTemplate($this->template()), $sheet->uuid),
             ...(new SheetView($schema, $data, $computed))->viewData($this->tab, $errors),
         ]);
     }
