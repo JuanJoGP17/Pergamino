@@ -5,7 +5,8 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Dashboard;
 use App\Livewire\Sheet\Editor;
-use App\Models\Template;
+use App\Livewire\Template\Builder;
+use App\Livewire\Template\Index as TemplateIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/panel');
@@ -22,14 +23,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/hojas/{sheet}', Editor::class)->name('sheets.edit');
 
-    // Listado provisional de plantillas: el catálogo completo llega en la Fase 7.
-    Route::get('/plantillas', function () {
-        return view('templates.index', [
-            'templates' => Template::visibleTo(auth()->user())
-                ->withCount('sheets')
-                ->orderByDesc('is_official')
-                ->orderBy('name')
-                ->get(),
-        ]);
-    })->name('templates.index');
+    Route::get('/plantillas', TemplateIndex::class)->name('templates.index');
+    Route::get('/plantillas/{template}/constructor', Builder::class)->name('templates.builder');
 });

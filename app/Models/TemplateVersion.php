@@ -50,7 +50,13 @@ class TemplateVersion extends Model
 
     /**
      * El esquema como objeto. Se cachea sin caducidad porque la fila es
-     * inmutable: no hay nada que invalidar jamás.
+     * inmutable (§11).
+     *
+     * La clave no es solo el id: tras un migrate:fresh los ids se reutilizan y
+     * una caché que sobreviva (archivos, Redis) devolvería el esquema de otra
+     * plantilla. La fecha de publicación distingue una fila de otra con el
+     * mismo id, y el formato hace que un cambio de CompiledSchema::VERSION no
+     * sirva arrays con la forma vieja.
      */
     public function schema(): CompiledSchema
     {
@@ -59,7 +65,7 @@ class TemplateVersion extends Model
         }
 
         $array = Cache::rememberForever(
-            "tpl_v:{$this->id}",
+            'tpl_v:'.CompiledSchema::VERSION.":{$this->id}:".$this->published_at?->getTimestamp(),
             fn () => $this->compiled_schema,
         );
 

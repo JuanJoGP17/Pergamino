@@ -4,7 +4,7 @@ namespace App\Livewire\Sheet;
 
 use App\Domain\Schema\CompiledSchema;
 use App\Domain\Sheet\SaveSheet;
-use App\Domain\Sheet\SheetCalculator;
+use App\Domain\Sheet\SheetView;
 use App\Models\Sheet;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Attributes\Layout;
@@ -97,116 +97,27 @@ class Editor extends Component
         $sheet->forceFill(['name' => $name !== '' ? mb_substr($name, 0, 160) : 'Personaje sin nombre'])->save();
     }
 
-    /** Modificador ya calculado de un atributo, para pintarlo junto al valor. */
-    public function modifierOf(string $key): int
-    {
-        return (int) ($this->sheet()->computed[$key]['mod'] ?? 0);
-    }
-
-    /**
-     * Estado de cada campo según sus condiciones: visible_if y readonly_if.
-     *
-     * Se calcula en el componente y no en la vista para que Blade no tenga que
-     * saber nada del motor de fórmulas. Es el estado inicial; a partir de ahí el
-     * navegador lo recalcula en cada pulsación con los mismos árboles.
-     *
-     * @return array{visible: array<string,bool>, readonly: array<string,bool>, sections: array<string,bool>}
-     */
-    public function conditions(): array
+    /** Lo que necesita la vista: condiciones, tiradas y esquema para el navegador. */
+    public function sheetView(): SheetView
     {
         $sheet = $this->sheet();
-        $schema = $sheet->schema();
-        $calc = new SheetCalculator;
-        $computed = $sheet->computed ?? [];
 
-        $out = ['visible' => [], 'readonly' => [], 'sections' => []];
-
-        foreach ($schema->fields as $key => $field) {
-            $out['visible'][$key] = $calc->isVisible($field, $this->data, $computed, $schema->settings);
-            $out['readonly'][$key] = $calc->isReadonly($field, $this->data, $computed, $schema->settings);
-        }
-
-        foreach ($schema->tabs as $tab) {
-            foreach ($tab['sections'] as $section) {
-                $out['sections'][$section['key']] = $calc->isSectionVisible($section, $this->data, $computed, $schema->settings);
-            }
-        }
-
-        return $out;
+        return new SheetView($sheet->schema(), $this->data, $sheet->computed ?? []);
     }
 
-    /**
-     * Lo mínimo del esquema que necesita el recalculo en el navegador: árboles,
-     * orden y ajustes. No viaja el texto de las fórmulas ni la maquetación, que
-     * ya están pintados en el HTML.
-     */
+    /** Atajo usado por los tests: el esquema mínimo que recibe el navegador. */
     public function clientSchema(): array
     {
-        $schema = $this->schema();
-        $keep = ['type', 'config', 'ast', 'mod_ast', 'visible_ast', 'readonly_ast', 'roll'];
-
-        $fields = [];
-        foreach ($schema->fields as $key => $field) {
-            $fields[$key] = array_intersect_key($field, array_flip($keep));
-        }
-
-        $sections = [];
-        foreach ($schema->tabs as $tab) {
-            foreach ($tab['sections'] as $section) {
-                if (! empty($section['visible_ast'])) {
-                    $sections[$section['key']] = ['visible_ast' => $section['visible_ast']];
-                }
-            }
-        }
-
-        return [
-            'fields' => $fields,
-            'sections' => $sections,
-            'compute_order' => $schema->computeOrder,
-            'settings' => $schema->settings,
-        ];
-    }
-
-    /**
-     * Expresión de tirada de cada campo con sus huecos resueltos.
-     *
-     * @return array<string,?string>
-     */
-    public function rolls(): array
-    {
-        $sheet = $this->sheet();
-        $schema = $sheet->schema();
-        $calc = new SheetCalculator;
-        $computed = $sheet->computed ?? [];
-
-        $out = [];
-        foreach ($schema->fields as $key => $field) {
-            $expr = $calc->rollExpression($field, $this->data, $computed, $schema->settings);
-
-            if ($expr !== null && trim($expr) !== '') {
-                $out[$key] = $expr;
-            }
-        }
-
-        return $out;
+        return $this->sheetView()->clientSchema();
     }
 
     public function render()
     {
-        $schema = $this->schema();
-
-        $conditions = $this->conditions();
+        $sheet = $this->sheet();
 
         return view('livewire.sheet.editor', [
-            'sheet' => $this->sheet(),
-            'schema' => $schema,
-            'currentTab' => $schema->tab($this->tab) ?? $schema->visibleTabs()[0] ?? null,
-            'visible' => $conditions['visible'],
-            'readonly' => $conditions['readonly'],
-            'sectionVisible' => $conditions['sections'],
-            'rolls' => $this->rolls(),
-            'formulaErrors' => $this->sheet()->formulaErrors(),
-            'clientSchema' => $this->clientSchema(),
+            'sheet' => $sheet,
+            ...$this->sheetView()->viewData($this->tab, $sheet->formulaErrors()),
         ]);
     }
 }

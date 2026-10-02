@@ -32,11 +32,23 @@ export default function sheetFormulas(schema) {
       // Tras cada respuesta del servidor, adoptar sus valores: él manda. Si
       // rechazó un cambio (un campo de solo lectura, por ejemplo), la vista
       // vuelve a lo que de verdad quedó guardado.
-      this.$wire.$watch('data', () => this.resync())
+      //
+      // El vigilante cuelga del componente LIVEWIRE, que sobrevive a este
+      // elemento: la vista previa del constructor quita y vuelve a poner la
+      // hoja. Sin darlo de baja en destroy(), quedaría uno huérfano por cada
+      // vez, disparándose sobre un elemento que ya no existe.
+      this.unwatch = this.$wire.$watch('data', () => this.resync())
+    },
+
+    destroy() {
+      this.unwatch?.()
     },
 
     resync() {
-      this.values = JSON.parse(JSON.stringify(this.$wire.data ?? {}))
+      const data = this.$wire.data
+      if (!data || typeof data !== 'object') return
+
+      this.values = JSON.parse(JSON.stringify(data))
       this.recompute()
     },
 

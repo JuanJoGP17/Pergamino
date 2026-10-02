@@ -1,4 +1,4 @@
-# Puesta en marcha — Fases 0, 1 y 2 (§1–§5 del plan)
+# Puesta en marcha — Fases 0 a 3
 
 ## 1. Esqueleto de Laravel (lo ejecutas tú)
 
@@ -173,9 +173,44 @@ php tests/fixtures/build-formula-cases.php
 `sheets.data`, sin `->after()`, y correos y códigos de mesa normalizados para
 que las mayúsculas no creen duplicados.
 
+**Fase 3 — el constructor visual** (`/plantillas` → «Nueva plantilla»)
+
+- Pantalla de constructor (`/plantillas/{uuid}/constructor`): paleta, lienzo
+  con pestañas → secciones → rejilla de 12 columnas, e inspector.
+- Arrastrar y soltar en los tres niveles con SortableJS (directiva Alpine
+  `x-sortable`, `resources/js/builder/sortable.js`): pestañas, secciones por su
+  asa ⠿, campos dentro de su sección o hacia otra. Desde la paleta, arrastrando
+  o con un clic. Para llevar algo a otra pestaña, el inspector tiene un selector.
+- Inspector con la configuración propia de cada tipo (§4), ancho, valor por
+  defecto, fórmula, tirada, `visible_if`, `readonly_if`, `mod_formula`… Cada
+  fórmula muestra sus problemas debajo del input al salir de él.
+- Ajustes de la plantilla: `mod()`, `prof()` y tablas de `lookup()` en JSON.
+- Duplicar campo y añadir en bloque (una línea por campo) (§6.2, puntos 2 y 3).
+- Panel de validación en vivo; un clic en un aviso selecciona el campo.
+- Borrador → publicar → `template_version`, con nombre y notas de la versión.
+  Publicar se bloquea mientras haya errores.
+- Vista previa en vivo, escritorio o móvil: es la hoja real (el mismo
+  `livewire/sheet/_body` que el editor), con datos de prueba que no se guardan.
+
+Toda la lógica está en `app/Domain/Builder/TemplateEditor.php`, sin interfaz y
+con tests; el componente `App\Livewire\Template\Builder` solo traduce clics y
+arrastres a llamadas. El plan lo repartía en seis componentes Livewire; aquí es
+uno (más la vista previa) porque todos comparten la selección y la pestaña.
+
+**El formato del esquema compilado es ahora el 2** (`CompiledSchema::VERSION`).
+Las versiones publicadas son inmutables y conservan su formato:
+`CompiledSchema::upgrade()` las lee al vuelo. La caché del esquema incluye el
+formato y la fecha de publicación, no solo el id, para no servir un esquema
+ajeno cuando un `migrate:fresh` reutiliza ids.
+
 ## Qué NO hay todavía (y es intencionado)
 
-- **Constructor visual** (Fase 3). Las plantillas se crean por seeder.
+- **Del constructor, lo que el plan deja para después**: bloques prefabricados
+  (Fase 4), importar JSON, historial con diff entre versiones y migración
+  asistida de hojas a una versión nueva (§6.2, puntos 4, 7, 8 y 10). Hoy una
+  hoja se queda en su versión y solo ve el aviso de que hay otra más nueva.
+- **Renombrar una clave no reescribe las fórmulas que la usan**: el panel de
+  validación señala cuáles se rompen.
 - **Tipos de campo avanzados** (Fase 4): `repeater`, `resource`, `track`…
   Están declarados en `FieldType` y el validador ya los conoce; en la hoja se
   muestran con un aviso en vez de romper.

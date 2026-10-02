@@ -71,3 +71,14 @@
     padding: 0.45rem 0.9rem;
     font-size: 0.875rem;
 }
+
+/* Alpine: lo marcado con x-cloak no parpadea antes de que Alpine arranque. */
+[x-cloak] { display: none !important; }
+
+/* Constructor: hueco donde caerá lo que se arrastra (resources/js/builder). */
+.pg-sortable-ghost {
+    opacity: 0.35;
+    outline: 2px dashed var(--pg-accent);
+    outline-offset: -2px;
+}
+.pg-sortable-chosen { cursor: grabbing; }

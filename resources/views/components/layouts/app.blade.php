@@ -11,7 +11,7 @@
 <body class="h-full bg-[var(--pg-bg)] text-[var(--pg-ink)] antialiased">
 
 <header class="border-b border-[var(--pg-border)] bg-[var(--pg-surface)]">
-    <div class="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3">
+    <div class="mx-auto flex {{ ($wide ?? false) ? 'max-w-[1600px]' : 'max-w-6xl' }} items-center gap-6 px-4 py-3">
         <a href="{{ route('dashboard') }}" wire:navigate
            class="font-serif text-lg font-bold text-[var(--pg-accent)]">
             Mesa de Pergamino
@@ -32,7 +32,8 @@
     </div>
 </header>
 
-<main class="mx-auto max-w-6xl px-4 py-8">
+{{-- El constructor necesita todo el ancho: paleta, lienzo e inspector. --}}
+<main class="mx-auto {{ ($wide ?? false) ? 'max-w-[1600px] py-4' : 'max-w-6xl py-8' }} px-4">
     {{ $slot }}
 </main>
 
