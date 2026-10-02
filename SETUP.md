@@ -114,10 +114,9 @@ $env:DB_CONNECTION="pgsql"; $env:DB_SEARCH_PATH="testing"; vendor/bin/pest
 `fase-*` y en cada pull request: Pint, Vitest, el diferencial PHP↔JS,
 `verify-domain.php` y Pest dos veces, contra SQLite y contra PostgreSQL 16.
 
-**Versión de PHP:** el `composer.lock` actual exige **PHP 8.4.1 o superior**
-(Symfony 8), no el 8.3 del plan. Si el servidor final tuviera que ser 8.3, fija
-`"config": {"platform": {"php": "8.3.0"}}` en `composer.json` y ejecuta
-`composer update`.
+**Versión de PHP:** el proyecto se desarrolla y se prueba con **PHP 8.5**
+(8.5.9 en local, 8.5 en CI). El PHP 8.3 que cita el plan está descartado; el
+`composer.lock` actual exige además PHP 8.4.1 como mínimo (Symfony 8).
 
 Si tocas el lenguaje de fórmulas, regenera la batería antes:
 

@@ -14,8 +14,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # composer.lock exige PHP 8.4.1+ (symfony 8). Es el mínimo real hoy.
-  PHP_VERSION: '8.4'
+  # La versión con la que se desarrolla (PHP 8.5.9). El 8.3 que citaba el
+  # plan quedó descartado.
+  PHP_VERSION: '8.5'
   NODE_VERSION: '22'
 
 jobs:
