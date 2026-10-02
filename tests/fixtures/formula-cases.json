@@ -52,7 +52,15 @@
         "inteligencia": {
             "mod": -1
         },
-        "competencia": 3
+        "competencia": 3,
+        "inventario": [
+            {
+                "total": 3
+            },
+            {
+                "total": 10
+            }
+        ]
     },
     "settings": {
         "lookups": {
@@ -1332,6 +1340,161 @@
                 ]
             },
             "expect": 2
+        },
+        {
+            "group": "repeater",
+            "formula": "@inventario[*].total",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inventario",
+                "path": [
+                    "total"
+                ],
+                "idx": "*"
+            },
+            "expect": [
+                3,
+                10
+            ]
+        },
+        {
+            "group": "repeater",
+            "formula": "@inventario[1].total",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inventario",
+                "path": [
+                    "total"
+                ],
+                "idx": {
+                    "n": "num",
+                    "v": 1
+                }
+            },
+            "expect": 10
+        },
+        {
+            "group": "repeater",
+            "formula": "sum(@inventario[*].total)",
+            "phase": "evaluate",
+            "ast": {
+                "n": "call",
+                "fn": "sum",
+                "args": [
+                    {
+                        "n": "ref",
+                        "key": "inventario",
+                        "path": [
+                            "total"
+                        ],
+                        "idx": "*"
+                    }
+                ]
+            },
+            "expect": 13
+        },
+        {
+            "group": "repeater",
+            "formula": "@inventario[*].nombre",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inventario",
+                "path": [
+                    "nombre"
+                ],
+                "idx": "*"
+            },
+            "expect": [
+                "Espada",
+                "Racion"
+            ]
+        },
+        {
+            "group": "repeater",
+            "formula": "@inventario[0].nombre + \":\" + @inventario[0].total",
+            "phase": "evaluate",
+            "ast": {
+                "n": "bin",
+                "op": "+",
+                "l": {
+                    "n": "bin",
+                    "op": "+",
+                    "l": {
+                        "n": "ref",
+                        "key": "inventario",
+                        "path": [
+                            "nombre"
+                        ],
+                        "idx": {
+                            "n": "num",
+                            "v": 0
+                        }
+                    },
+                    "r": {
+                        "n": "str",
+                        "v": ":"
+                    }
+                },
+                "r": {
+                    "n": "ref",
+                    "key": "inventario",
+                    "path": [
+                        "total"
+                    ],
+                    "idx": {
+                        "n": "num",
+                        "v": 0
+                    }
+                }
+            },
+            "expect": "Espada:3"
+        },
+        {
+            "group": "repeater",
+            "formula": "@inventario[5].total",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inventario",
+                "path": [
+                    "total"
+                ],
+                "idx": {
+                    "n": "num",
+                    "v": 5
+                }
+            },
+            "expect": null
+        },
+        {
+            "group": "repeater",
+            "formula": "@inventario[@nivel - 4].total",
+            "phase": "evaluate",
+            "ast": {
+                "n": "ref",
+                "key": "inventario",
+                "path": [
+                    "total"
+                ],
+                "idx": {
+                    "n": "bin",
+                    "op": "-",
+                    "l": {
+                        "n": "ref",
+                        "key": "nivel",
+                        "path": [],
+                        "idx": null
+                    },
+                    "r": {
+                        "n": "num",
+                        "v": 4
+                    }
+                }
+            },
+            "expect": 10
         },
         {
             "group": "texto",

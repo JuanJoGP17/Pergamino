@@ -183,8 +183,8 @@ check('el orden es determinista entre ejecuciones', function () {
 
 echo "\nFieldType\n";
 
-check('los ocho básicos están implementados', fn () => eq(
-    count(FieldType::implemented()), 8
+check('todos implementados salvo reference (Fase 4)', fn () => eq(
+    count(FieldType::implemented()), count(FieldType::cases()) - 1
 ));
 
 check('heading no guarda valor', fn () => eq(

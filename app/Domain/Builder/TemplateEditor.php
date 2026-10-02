@@ -156,6 +156,81 @@ final class TemplateEditor
         return $section;
     }
 
+    /**
+     * Inserta un bloque prefabricado (§6.2, punto 4) como sección nueva al
+     * final de la pestaña.
+     *
+     * Las claves que ya existan en la plantilla se renombran (fuerza →
+     * fuerza_2), y las referencias DENTRO del bloque se reescriben para que
+     * sus fórmulas sigan apuntando a sus propios campos. Las referencias a
+     * campos de fuera del bloque (@destreza en el de combate) se dejan tal
+     * cual: si no existen, el panel de validación lo dice.
+     */
+    public function insertBlock(Template $template, int $tabId, string $block): TemplateSection
+    {
+        $def = Prefabs::get($block) ?? throw new BuilderException('Ese bloque no existe.');
+
+        return DB::transaction(function () use ($template, $tabId, $def) {
+            $section = $this->addSection($template, $tabId, $def['section']);
+
+            // Primero se reservan todas las claves: una fórmula puede apuntar
+            // a un campo del bloque que todavía no se ha creado.
+            $renames = [];
+            $reserved = [];
+            foreach ($def['fields'] as $f) {
+                $key = $this->uniqueKey($f['key'], fn (string $k) => in_array($k, self::RESERVED, true)
+                    || in_array($k, $reserved, true)
+                    || TemplateField::where('template_id', $template->id)->where('key', $k)->exists(), 'campo');
+                $reserved[] = $key;
+                $renames[$f['key']] = $key;
+            }
+
+            foreach (array_values($def['fields']) as $i => $f) {
+                $type = FieldType::from($f['type']);
+                $f = $this->rewriteReferences($f, $renames);
+
+                TemplateField::create([
+                    'template_id' => $template->id,
+                    'template_section_id' => $section->id,
+                    'key' => $renames[$def['fields'][$i]['key']],
+                    'label' => $f['label'],
+                    'type' => $type->value,
+                    'position' => $i,
+                    'col_span' => $f['col_span'] ?? FieldConfig::defaultSpan($type),
+                    'config' => FieldConfig::clean($type, $f['config'] ?? FieldConfig::defaults($type)) ?: null,
+                    'default_value' => isset($f['default_value']) ? $this->cleanDefault($type, $f['default_value']) : null,
+                    'formula' => $f['formula'] ?? null,
+                    'roll_expression' => $f['roll_expression'] ?? null,
+                ]);
+            }
+
+            $this->touch($template);
+
+            return $section->fresh();
+        });
+    }
+
+    /**
+     * Cambia @clave por @clave_nueva en todos los textos de un campo del
+     * bloque (fórmulas, tirada y las fórmulas de su configuración).
+     */
+    private function rewriteReferences(mixed $value, array $renames): mixed
+    {
+        if (is_array($value)) {
+            return array_map(fn ($v) => $this->rewriteReferences($v, $renames), $value);
+        }
+
+        if (! is_string($value) || ! str_contains($value, '@')) {
+            return $value;
+        }
+
+        return preg_replace_callback(
+            '/@([a-z_][a-z0-9_]*)/',
+            fn (array $m) => '@'.($renames[$m[1]] ?? $m[1]),
+            $value,
+        );
+    }
+
     public function updateSection(Template $template, int $sectionId, array $attrs): TemplateSection
     {
         $section = $this->section($template, $sectionId);

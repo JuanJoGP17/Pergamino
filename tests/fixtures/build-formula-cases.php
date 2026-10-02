@@ -54,6 +54,9 @@ $COMPUTED = [
     'carisma' => ['mod' => 4],
     'inteligencia' => ['mod' => -1],
     'competencia' => 3,
+    // Columnas calculadas de un repeater (Fase 4): viven en computed, fila a
+    // fila, y tienen prioridad sobre las guardadas al indexar.
+    'inventario' => [['total' => 3], ['total' => 10]],
 ];
 
 $SETTINGS = [
@@ -151,6 +154,16 @@ $case('referencias', '@inventario[9].peso', null);   // fuera de rango
 $case('referencias', '@inventario[*].peso', [3, 2]);
 $case('referencias', 'sum(@inventario[*].peso)', 5);
 $case('referencias', 'count(@inventario)', 2);
+
+// Columnas calculadas de un repeater: la celda calculada si la hay, si no la
+// guardada; la fila entera sin camino es la guardada.
+$case('repeater', '@inventario[*].total', [3, 10]);
+$case('repeater', '@inventario[1].total', 10);
+$case('repeater', 'sum(@inventario[*].total)', 13);
+$case('repeater', '@inventario[*].nombre', ['Espada', 'Racion']);
+$case('repeater', '@inventario[0].nombre + ":" + @inventario[0].total', 'Espada:3');
+$case('repeater', '@inventario[5].total', null);
+$case('repeater', '@inventario[@nivel - 4].total', 10);
 
 // -------------------------------------------------------------------- textos
 $case('texto', '"hola"', 'hola');

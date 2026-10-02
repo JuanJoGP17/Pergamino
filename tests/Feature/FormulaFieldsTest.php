@@ -207,7 +207,7 @@ it('no deja marcadores de Livewire dentro de ninguna etiqueta de la hoja de 5e',
 
     $editor = Livewire::actingAs($user)->test(Editor::class, ['sheet' => $sheet]);
 
-    foreach (['identidad', 'atributos', 'magia', 'notas'] as $tab) {
+    foreach (['identidad', 'atributos', 'equipo', 'magia', 'notas'] as $tab) {
         // Un `<!--[if BLOCK]>` a media etiqueta convierte los atributos que
         // siguen en basura; el navegador no avisa, solo deja de funcionar.
         expect($editor->call('selectTab', $tab)->html())

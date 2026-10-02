@@ -4,6 +4,7 @@ namespace App\Livewire\Template;
 
 use App\Domain\Builder\BuilderException;
 use App\Domain\Builder\FieldConfig;
+use App\Domain\Builder\Prefabs;
 use App\Domain\Builder\TemplateEditor;
 use App\Domain\Formula\Formula;
 use App\Domain\Schema\FieldFormulas;
@@ -152,6 +153,16 @@ class Builder extends Component
         });
     }
 
+    /** Bloque prefabricado (§6.2, punto 4): una sección entera de un clic. */
+    public function insertBlock(string $block): void
+    {
+        $this->mutate(function (TemplateEditor $editor, Template $template) use ($block) {
+            $section = $editor->insertBlock($template, $this->currentTabId(), $block);
+            $this->select('section', $section->id);
+            $this->notice = ['type' => 'ok', 'text' => 'Bloque «'.Prefabs::get($block)['label'].'» añadido.'];
+        });
+    }
+
     public function bulkAdd(): void
     {
         $this->mutate(function (TemplateEditor $editor, Template $template) {
@@ -297,6 +308,7 @@ class Builder extends Component
             'errorCount' => count(array_filter($issues, fn ($i) => $i['level'] === 'error')),
             'unpublished' => TemplateEditor::hasUnpublishedChanges($template),
             'palette' => collect(FieldType::implemented())->groupBy(fn (FieldType $t) => $t->group()),
+            'prefabs' => Prefabs::all(),
             'types' => FieldType::implemented(),
             'lint' => $this->selection === 'field' ? $this->lintForm($keys) : [],
             'knownKeys' => $keys,

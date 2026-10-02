@@ -79,6 +79,22 @@ it('calcula la hoja de 5e igual en el servidor y en el navegador', function () {
             'clase' => 'Mago', 'nivel' => '5', 'inteligencia' => '18', 'destreza' => '14',
             'armadura_bonus' => '1', 'escudo' => true, 'dote_alerta' => true,
             'salv_inteligencia_comp' => true, 'salv_sabiduria_comp' => true,
+            // Fase 4: tablas y lista derivada, con datos de verdad.
+            'habilidades' => array_merge($this->schema->defaultData()['habilidades'], [
+                'percepcion' => ['level' => 'pericia', 'misc' => '1'],
+                'arcanos' => ['level' => 'comp', 'misc' => 0],
+            ]),
+            'ataques' => [
+                ['arma' => 'Daga', 'atributo' => 'Destreza', 'competente' => true, 'magico' => '1', 'dano' => '1d4'],
+                ['arma' => 'Bastón', 'atributo' => 'Fuerza', 'competente' => false, 'magico' => null, 'dano' => '1d6'],
+            ],
+            'inventario' => [
+                ['objeto' => 'Raciones', 'cantidad' => '5', 'peso' => '2'],
+                ['objeto' => 'Cuerda', 'cantidad' => 1, 'peso' => 10],
+            ],
+            'monedas' => ['pc' => 12, 'pp' => 3, 'pe' => 0, 'po' => '15', 'ppt' => 1],
+            'experiencia' => 7000,
+            'pv' => ['current' => 18, 'max' => 27, 'temp' => 5],
         ]),
 
         // Guerrero de nivel 17 por hitos: sin magia, experiencia bloqueada.
@@ -120,6 +136,24 @@ it('da los números correctos de 5e, no solo los mismos en los dos lados', funct
         ->and($php['rolls']['salv_inteligencia'])->toBe('1d20 + 7')
         ->and($php['sections']['conjuros'])->toBeTrue()
         ->and($php['errors'])->toBe([]);
+
+    // Fase 4: los mismos datos que el caso 1 de la prueba de paridad.
+    $values = array_merge($values, [
+        'habilidades' => array_merge($this->schema->defaultData()['habilidades'], [
+            'percepcion' => ['level' => 'pericia', 'misc' => '1'],
+        ]),
+        'ataques' => [['arma' => 'Daga', 'atributo' => 'Destreza', 'competente' => true, 'magico' => '1']],
+        'inventario' => [['objeto' => 'Raciones', 'cantidad' => '5', 'peso' => '2'], ['objeto' => 'Cuerda', 'cantidad' => 1, 'peso' => 10]],
+        'experiencia' => 7000,
+    ]);
+    $php = computeWithPhp($this->schema, $values);
+
+    expect($php['computed']['habilidades']['percepcion']['bonus'])->toBe(7)   // SAB 0 + 3×2 + 1
+        ->and($php['computed']['percepcion_pasiva'])->toBe(17)
+        ->and($php['computed']['ataques'])->toBe([['ataque' => 6]])             // DES 2 + 3 + 1
+        ->and($php['computed']['carga'])->toBe(20)
+        ->and($php['computed']['experiencia']['level'])->toBe(5)
+        ->and($php['rolls']['dados_golpe'])->toBe('1d6 + 0');
 });
 
 it('calcula igual en los dos lados los tipos de rol de la Fase 4', function () {
