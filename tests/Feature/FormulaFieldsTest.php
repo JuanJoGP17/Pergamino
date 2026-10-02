@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Formula\Interpolator;
 use App\Domain\Schema\PublishTemplate;
 use App\Domain\Schema\SchemaCompilationException;
 use App\Domain\Schema\SchemaCompiler;
@@ -212,4 +213,24 @@ it('no deja marcadores de Livewire dentro de ninguna etiqueta de la hoja de 5e',
         expect($editor->call('selectTab', $tab)->html())
             ->not->toMatch('/<(input|select|textarea|section|div|span|button)\b[^>]*<!--/');
     }
+});
+
+it('compila un esquema que PostgreSQL acepta en jsonb: sin caracteres NUL', function () {
+    // SQLite guarda \u0000 sin quejarse; PostgreSQL lo rechaza en jsonb
+    // («\u0000 no puede ser convertido a text»). Los tests corren en SQLite,
+    // así que la comprobación tiene que ser explícita.
+    User::factory()->create();
+    (new Dnd5eTemplateSeeder)->run();
+
+    $json = json_encode(Template::where('slug', 'dnd-5e')->first()->currentVersion->compiled_schema);
+
+    expect($json)->not->toContain('\u0000')
+        ->and(str_contains($json, "\0"))->toBeFalse();
+});
+
+it('compila las plantillas de tirada en trozos de texto y huecos', function () {
+    $compiled = Interpolator::compile('{@a}d6 + {@b} {');
+
+    expect($compiled['parts'])->toBe([0, 'd6 + ', 1, ' {'])
+        ->and(Interpolator::run($compiled, ['a' => 2, 'b' => 3]))->toBe('2d6 + 3 {');
 });

@@ -19,7 +19,16 @@ final class Interpolator
     /**
      * Compila los huecos de una plantilla de tirada.
      *
-     * @return array{template:string,holes:array<int,array>}|null
+     * El resultado es una lista de trozos: texto literal (cadena) o el índice
+     * de un hueco (entero).
+     *
+     *   "1d20 + {@destreza.mod}" → parts: ["1d20 + ", 0], holes: [AST]
+     *
+     * No se usan marcadores dentro del texto: PostgreSQL rechaza el carácter
+     * NUL en jsonb, y cualquier otro marcador podría aparecer en el texto del
+     * usuario. Con trozos separados no hay nada que escapar.
+     *
+     * @return array{parts:array<int,string|int>,holes:array<int,array>}|null
      */
     public static function compile(?string $template): ?array
     {
@@ -27,23 +36,35 @@ final class Interpolator
             return null;
         }
 
+        // Con DELIM_CAPTURE, los índices pares son texto y los impares el
+        // contenido de cada hueco.
+        $pieces = preg_split(self::HOLE, $template, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+        $parts = [];
         $holes = [];
 
-        // Cada hueco se sustituye por un marcador posicional \0, \1… para no
-        // tener que volver a buscar llaves al evaluar.
-        $normalized = preg_replace_callback(self::HOLE, function (array $m) use (&$holes) {
-            $holes[] = Parser::parse($m[1]);
+        foreach ($pieces as $i => $piece) {
+            if ($i % 2 === 0) {
+                if ($piece !== '') {
+                    $parts[] = $piece;
+                }
 
-            return "\0".(count($holes) - 1)."\0";
-        }, $template);
+                continue;
+            }
 
-        return ['template' => $normalized, 'holes' => $holes];
+            $holes[] = Parser::parse($piece);
+            $parts[] = count($holes) - 1;
+        }
+
+        return ['parts' => $parts, 'holes' => $holes];
     }
 
     /**
      * Rellena los huecos ya compilados.
      *
-     * @param  array{template:string,holes:array<int,array>}|null  $compiled
+     * Gemelo: interpolate() en resources/js/formula/evaluate.js.
+     *
+     * @param  array{parts:array<int,string|int>,holes:array<int,array>}|null  $compiled
      */
     public static function run(?array $compiled, array $values, array $computed = [], array $settings = []): ?string
     {
@@ -52,27 +73,31 @@ final class Interpolator
         }
 
         $evaluator = Evaluator::make($values, $computed, $settings);
+        $out = '';
 
-        return preg_replace_callback('/\x00(\d+)\x00/', function (array $m) use ($compiled, $evaluator) {
-            $ast = $compiled['holes'][(int) $m[1]] ?? null;
+        foreach ($compiled['parts'] ?? [] as $part) {
+            if (is_string($part)) {
+                $out .= $part;
+
+                continue;
+            }
+
+            $ast = $compiled['holes'][$part] ?? null;
 
             if ($ast === null) {
-                return '';
+                continue;
             }
 
             try {
-                $value = $evaluator->evaluate($ast);
+                // Solo el número: el signo «+» ya viene en la plantilla, y
+                // pegar "+3" daría "1d20 + +3".
+                $out .= Value::toString(Value::toNumber($evaluator->evaluate($ast)));
             } catch (FormulaRuntimeException) {
-                return '0';
+                $out .= '0';
             }
+        }
 
-            $n = Value::toNumber($value);
-
-            // Un modificador positivo se pega con su signo para que la
-            // expresión resultante sea válida: "1d20 + +3" no lo sería, pero
-            // aquí el "+" ya viene en la plantilla, así que solo va el número.
-            return Value::toString($n);
-        }, $compiled['template']);
+        return $out;
     }
 
     /** @return array<int,string> */

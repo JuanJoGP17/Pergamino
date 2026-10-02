@@ -86,7 +86,7 @@ describe('condiciones y tiradas', () => {
 
   it('interpola las plantillas de tirada', () => {
     const compiled = {
-      template: '1d20 + \u00000\u0000 + \u00001\u0000',
+      parts: ['1d20 + ', 0, ' + ', 1],
       holes: [ref('destreza', ['mod']), bin('/', num(1), num(0))],
     }
 

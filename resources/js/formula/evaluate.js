@@ -288,22 +288,32 @@ function attributeModifier(raw, config, settings) {
 /**
  * Plantilla de tirada con los huecos resueltos — espejo de
  * Interpolator::run(): `1d20 + {@destreza.mod}` → `1d20 + 2`.
- * Los huecos llegan ya analizados; en el texto son marcadores \0N\0.
+ * Llega como trozos: texto literal (cadena) o índice de hueco (número), con
+ * los huecos ya analizados.
  */
 export function interpolate(compiled, values, computed, settings = {}) {
   if (!compiled) return null
   const evaluator = new Evaluator(values, computed, settings)
+  let out = ''
 
-  return compiled.template.replace(/\u0000(\d+)\u0000/g, (_, i) => {
-    const ast = compiled.holes[Number(i)]
-    if (!ast) return ''
-    try {
-      return toString(toNumber(evaluator.evaluate(ast)))
-    } catch (e) {
-      if (e instanceof FormulaRuntimeError) return '0'
-      throw e
+  for (const part of compiled.parts || []) {
+    if (typeof part === 'string') {
+      out += part
+      continue
     }
-  })
+
+    const ast = compiled.holes[part]
+    if (!ast) continue
+
+    try {
+      out += toString(toNumber(evaluator.evaluate(ast)))
+    } catch (e) {
+      if (!(e instanceof FormulaRuntimeError)) throw e
+      out += '0'
+    }
+  }
+
+  return out
 }
 
 /** Visibilidad de una sección: sin condición, siempre. */
