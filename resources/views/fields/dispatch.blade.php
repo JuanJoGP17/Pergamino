@@ -3,8 +3,8 @@
     crear su archivo aquí y añadir una línea al match — no hay que tocar el
     editor.
 
-    Un tipo declarado en FieldType pero aún sin parcial (los de la Fase 4)
-    muestra un aviso en vez de romper la hoja.
+    Un tipo declarado en FieldType pero aún sin parcial (`reference`, que
+    llega con las mesas) muestra un aviso en vez de romper la hoja.
 --}}
 @php
     $partial = 'fields.'.$field['type'];
@@ -18,4 +18,5 @@
     'isReadonly' => $isReadonly ?? false,
     'rollExpression' => $rollExpression ?? null,
     'formulaError' => $formulaError ?? null,
+    'uploadsEnabled' => $uploadsEnabled ?? false,
 ])

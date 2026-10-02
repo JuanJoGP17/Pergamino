@@ -82,6 +82,7 @@
                                 'isReadonly' => $readonly[$key] ?? false,
                                 'rollExpression' => $rolls[$key] ?? null,
                                 'formulaError' => $formulaErrors[$key] ?? null,
+                                'uploadsEnabled' => $uploadsEnabled ?? false,
                             ])
                         </div>
                     @endforeach

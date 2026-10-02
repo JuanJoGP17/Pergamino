@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\MediaController;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Dashboard;
@@ -10,6 +11,11 @@ use App\Livewire\Template\Index as TemplateIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/panel');
+
+// Imágenes subidas (retratos): la firma de la URL es la autorización. Ver
+// App\Domain\Media\MediaUrl. Fuera de `auth` para que una hoja compartida por
+// enlace (Fase 7) pueda enseñar su retrato.
+Route::get('/media/{media}', MediaController::class)->middleware('signed')->name('media.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('/entrar', Login::class)->name('login');

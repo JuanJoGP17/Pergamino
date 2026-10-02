@@ -299,3 +299,45 @@ it('la vista previa explica por qué no puede pintar un borrador con errores', f
         ->test(Preview::class, ['templateUuid' => $this->template->uuid])
         ->assertSee('Todavía no se puede previsualizar');
 });
+
+// ------------------------------------------------------ tipos de rol (Fase 4)
+
+it('ofrece todos los tipos de rol en la paleta, agrupados', function () {
+    builder()
+        ->assertSee('De rol')
+        ->assertSee('Listas y tablas')
+        ->assertSee('Imágenes')
+        ->assertSeeHtml('data-palette-type="repeater"')
+        ->assertSeeHtml('data-palette-type="portrait"')
+        ->assertDontSeeHtml('data-palette-type="reference"');
+});
+
+it('edita las columnas de una tabla como texto y señala los errores de sus fórmulas', function () {
+    $b = builder()->call('addField', 'repeater')
+        ->assertSee('Columnas: clave | nombre | tipo')
+        ->set('form.config.columns', "objeto | Objeto | texto\npeso | Peso | número\ntotal | Total | = @row.peso * @fila")
+        ->assertSee('En la columna «Total»: el campo «@fila» no existe en esta plantilla');
+
+    $field = TemplateField::find($b->get('selectedId'));
+    expect($field->config['columns'][2])->toBe(['key' => 'total', 'label' => 'Total', 'type' => 'computed', 'formula' => '@row.peso * @fila']);
+
+    // Al volver a seleccionarlo, las columnas vuelven a ser texto editable.
+    $b->call('select', 'template')->call('select', 'field', $field->id)
+        ->assertSet('form.config.columns', "objeto | Objeto | texto\npeso | Peso | número\ntotal | Total | = @row.peso * @fila");
+});
+
+it('cambia un campo a recurso con máximo por fórmula y la vista previa lo calcula', function () {
+    $b = builder()->call('addField', 'number')->set('form.key', 'nivel')->set('form.default_value', '4');
+    $b->call('addField', 'resource')
+        ->set('form.label', 'Puntos de golpe')
+        ->set('form.config.max_formula', '@nivel * 6')
+        ->set('form.config.reset_on', 'long');
+
+    $field = TemplateField::find($b->get('selectedId'));
+    expect($field->config)->toMatchArray(['max_formula' => '@nivel * 6', 'reset_on' => 'long', 'show_temp' => true]);
+
+    Livewire::actingAs($this->user)
+        ->test(Preview::class, ['templateUuid' => $this->template->uuid])
+        ->assertSee('Puntos de golpe')
+        ->assertSeeHtml('x-text="comp(\'recurso_actual_maximo\', \'max\') ?? \'—\'">24</span>');
+});

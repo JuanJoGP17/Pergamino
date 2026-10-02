@@ -2,14 +2,20 @@
 
 namespace App\Livewire\Sheet;
 
+use App\Domain\Media\ImageRejected;
+use App\Domain\Media\StoreImage;
 use App\Domain\Schema\CompiledSchema;
+use App\Domain\Schema\FieldType;
 use App\Domain\Sheet\SaveSheet;
 use App\Domain\Sheet\SheetView;
+use App\Domain\Sheet\TakeRest;
 use App\Models\Sheet;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
 
 /**
  * Editor de una hoja de personaje.
@@ -25,7 +31,7 @@ use Livewire\Component;
 #[Layout('components.layouts.app')]
 class Editor extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, WithFileUploads;
 
     #[Locked]
     public string $sheetUuid;
@@ -36,6 +42,9 @@ class Editor extends Component
     public string $tab = '';
 
     public ?string $savedAt = null;
+
+    /** Imágenes recién elegidas, por clave de campo (retratos, imágenes). */
+    public array $uploads = [];
 
     private ?Sheet $sheetCache = null;
 
@@ -88,6 +97,61 @@ class Editor extends Component
         $this->save();
     }
 
+    /**
+     * Al elegir un archivo en un campo de imagen: se valida, se reescribe y
+     * se guarda (StoreImage), y el campo pasa a apuntar al Media nuevo.
+     */
+    public function updatedUploads(mixed $file, string $key): void
+    {
+        $sheet = $this->sheet();
+        $this->authorize('update', $sheet);
+        unset($this->uploads[$key]);
+
+        $type = $this->schema()->type($key);
+
+        if (! in_array($type, [FieldType::Image, FieldType::Portrait], true) || ! $file instanceof TemporaryUploadedFile) {
+            return;
+        }
+
+        try {
+            $media = app(StoreImage::class)($file, auth()->user(), $type === FieldType::Portrait ? 'portrait' : 'image');
+        } catch (ImageRejected $e) {
+            $this->addError('uploads.'.$key, $e->getMessage());
+
+            return;
+        } finally {
+            $file->delete();
+        }
+
+        $this->data[$key] = $media->id;
+        $this->save();
+    }
+
+    public function clearImage(string $key): void
+    {
+        if (in_array($this->schema()->type($key), [FieldType::Image, FieldType::Portrait], true)) {
+            $this->data[$key] = null;
+            $this->save();
+        }
+    }
+
+    /** Descanso corto o largo: recupera lo que la plantilla marque con reset_on. */
+    public function rest(string $kind): void
+    {
+        $sheet = $this->sheet();
+        $this->authorize('update', $sheet);
+
+        if (! array_key_exists($kind, TakeRest::available($sheet))) {
+            return;
+        }
+
+        app(TakeRest::class)($sheet, $kind, auth()->user());
+
+        $this->sheetCache = $sheet->refresh();
+        $this->data = $sheet->data ?? [];
+        $this->savedAt = now()->format('H:i:s');
+    }
+
     public function rename(string $name): void
     {
         $sheet = $this->sheet();
@@ -117,6 +181,8 @@ class Editor extends Component
 
         return view('livewire.sheet.editor', [
             'sheet' => $sheet,
+            'rests' => TakeRest::available($sheet),
+            'uploadsEnabled' => true,
             ...$this->sheetView()->viewData($this->tab, $sheet->formulaErrors()),
         ]);
     }

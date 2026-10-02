@@ -208,9 +208,164 @@
                     </select>
                 </div>
                 @break
+
+            @case('multiselect')
+                @include('livewire.template.builder._input', [
+                    'name' => 'config.options', 'label' => 'Opciones, una por línea', 'textarea' => true, 'textRows' => 5,
+                    'placeholder' => "Común\nÉlfico | Élfico (escrito)",
+                ])
+                @include('livewire.template.builder._input', ['name' => 'config.max_selections', 'label' => 'Máximo de opciones marcadas (vacío = sin tope)', 'inputType' => 'number'])
+                @break
+
+            @case('tags')
+                @include('livewire.template.builder._input', [
+                    'name' => 'config.suggestions', 'label' => 'Sugerencias, una por línea', 'textarea' => true,
+                    'placeholder' => "Valiente\nCurioso",
+                ])
+                @break
+
+            @case('resource')
+                @include('livewire.template.builder._input', [
+                    'name' => 'config.max_formula', 'label' => 'Fórmula del máximo (opcional)', 'mono' => true,
+                    'placeholder' => '@nivel * 8 + @constitucion.mod',
+                    'help' => 'Vacía: el máximo se escribe en la hoja. En fórmulas: @clave.current, .max, .temp, .pct',
+                ])
+                <div class="grid grid-cols-2 gap-2">
+                    @include('livewire.template.builder._input', ['name' => 'config.bar_color', 'label' => 'Color de la barra', 'placeholder' => '#8b2e1f', 'mono' => true])
+                    @include('livewire.template.builder._rest')
+                </div>
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" wire:model.live="form.config.show_temp" class="accent-[var(--pg-accent)]"> Puntos temporales</label>
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" wire:model.live="form.config.allow_overflow" class="accent-[var(--pg-accent)]"> Permitir pasar del máximo</label>
+                @break
+
+            @case('track')
+                <div class="grid grid-cols-2 gap-2">
+                    @include('livewire.template.builder._input', ['name' => 'config.boxes', 'label' => 'Casillas', 'inputType' => 'number'])
+                    <div>
+                        <label class="pg-label" for="i-config-shape">Forma</label>
+                        <select id="i-config-shape" class="pg-input" wire:model.live="form.config.shape">
+                            <option value="box">Cuadrado</option>
+                            <option value="dot">Círculo</option>
+                            <option value="pip">Rombo</option>
+                        </select>
+                    </div>
+                </div>
+                @include('livewire.template.builder._input', [
+                    'name' => 'config.boxes_formula', 'label' => 'Casillas por fórmula (opcional, máx. 30)', 'mono' => true,
+                    'placeholder' => '@resistencia + 3',
+                ])
+                @include('livewire.template.builder._input', [
+                    'name' => 'config.states', 'label' => 'Estados de cada casilla, uno por línea', 'textarea' => true,
+                    'placeholder' => "Superficial\nAgravado",
+                    'help' => 'Pulsar una casilla la pasa al siguiente estado. En fórmulas: @clave.marked, @clave.boxes',
+                ])
+                @break
+
+            @case('clock')
+                @include('livewire.template.builder._input', ['name' => 'config.segments', 'label' => 'Segmentos (2 a 24)', 'inputType' => 'number'])
+                @break
+
+            @case('counter')
+                <div class="grid grid-cols-3 gap-2">
+                    @include('livewire.template.builder._input', ['name' => 'config.min', 'label' => 'Mín.', 'inputType' => 'number'])
+                    @include('livewire.template.builder._input', ['name' => 'config.max', 'label' => 'Máx.', 'inputType' => 'number'])
+                    @include('livewire.template.builder._input', ['name' => 'config.step', 'label' => 'Paso', 'inputType' => 'number'])
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    @include('livewire.template.builder._rest')
+                    <div>
+                        <label class="pg-label" for="i-config-reset_to">Al descansar vuelve a</label>
+                        <select id="i-config-reset_to" class="pg-input" wire:model.live="form.config.reset_to">
+                            <option value="">Su máximo</option>
+                            <option value="min">Su mínimo</option>
+                        </select>
+                    </div>
+                </div>
+                @break
+
+            @case('progress')
+                @include('livewire.template.builder._input', [
+                    'name' => 'config.thresholds', 'label' => 'Umbrales', 'mono' => true,
+                    'placeholder' => '0, 300, 900, 2700, 6500',
+                    'help' => 'Nivel = umbrales alcanzados. En fórmulas: @clave.level, .next, .pct',
+                ])
+                @break
+
+            @case('currency')
+                @include('livewire.template.builder._input', [
+                    'name' => 'config.denominations', 'label' => 'Monedas: clave | nombre | valor', 'textarea' => true, 'mono' => true, 'textRows' => 4,
+                    'placeholder' => "pc | Cobre | 1\npp | Plata | 10\npo | Oro | 100",
+                    'help' => 'El valor es cuánto vale en la moneda de valor 1. @clave.total es la suma convertida.',
+                ])
+                @break
+
+            @case('proficiency')
+            @case('derived_list')
+                @if ($fieldType === 'proficiency')
+                    @include('livewire.template.builder._input', [
+                        'name' => 'config.base', 'label' => 'Base', 'mono' => true,
+                        'placeholder' => '@destreza.mod',
+                    ])
+                @else
+                    @include('livewire.template.builder._input', [
+                        'name' => 'config.items', 'label' => 'Elementos: clave | nombre | base', 'textarea' => true, 'mono' => true, 'textRows' => 8,
+                        'placeholder' => "acrobacias | Acrobacias | @destreza.mod\nsigilo | Sigilo | @destreza.mod",
+                        'help' => 'En fórmulas: @clave.sigilo.bonus, @clave.sigilo.level',
+                    ])
+                @endif
+                @include('livewire.template.builder._input', [
+                    'name' => 'config.levels', 'label' => 'Niveles: clave | nombre | bonificador', 'textarea' => true, 'mono' => true, 'textRows' => 4,
+                    'placeholder' => "no | — | 0\ncomp | Competente | @bono_competencia\nexperto | Experto | @bono_competencia * 2",
+                    'help' => 'Total = base + bonificador del nivel + ajuste manual.',
+                ])
+                @break
+
+            @case('repeater')
+                @include('livewire.template.builder._input', [
+                    'name' => 'config.columns', 'label' => 'Columnas: clave | nombre | tipo', 'textarea' => true, 'mono' => true, 'textRows' => 6,
+                    'placeholder' => "nombre | Objeto | texto\npeso | Peso | número\ncantidad | Cant. | número\ntipo | Tipo | lista: Arma, Armadura\nequipado | Equipado | casilla\ntotal | Total | = @row.peso * @row.cantidad",
+                    'help' => 'Tipos: texto, número, casilla, lista: A, B… o «= fórmula», donde @row es la fila. Fuera: sum(@clave[*].total).',
+                ])
+                <div class="grid grid-cols-2 gap-2">
+                    @include('livewire.template.builder._input', ['name' => 'config.min_rows', 'label' => 'Filas mínimas', 'inputType' => 'number'])
+                    @include('livewire.template.builder._input', ['name' => 'config.max_rows', 'label' => 'Filas máximas', 'inputType' => 'number'])
+                </div>
+                @break
+
+            @case('image')
+                <div>
+                    <label class="pg-label" for="i-config-aspect">Proporción</label>
+                    <select id="i-config-aspect" class="pg-input" wire:model.live="form.config.aspect">
+                        <option value="free">Libre</option>
+                        <option value="square">Cuadrada</option>
+                        <option value="portrait">Vertical (3:4)</option>
+                        <option value="landscape">Apaisada (16:9)</option>
+                    </select>
+                </div>
+                @break
+
+            @case('portrait')
+                <div>
+                    <label class="pg-label" for="i-config-shape">Forma</label>
+                    <select id="i-config-shape" class="pg-input" wire:model.live="form.config.shape">
+                        <option value="rounded">Redondeada</option>
+                        <option value="circle">Círculo</option>
+                        <option value="square">Cuadrada</option>
+                    </select>
+                </div>
+                <label class="flex items-center gap-2 text-sm"><input type="checkbox" wire:model.live="form.config.frame" class="accent-[var(--pg-accent)]"> Con marco</label>
+                @break
+
+            @case('dice_button')
+                <p class="text-xs text-[var(--pg-muted)]">Escribe la tirada abajo, en «Fórmulas → Tirada». Hasta la Fase 6 el botón la muestra pero no tira.</p>
+                @break
         @endswitch
 
-        @if (! in_array($fieldType, ['heading', 'computed'], true))
+        @foreach ($lintOf('config') as $problem)
+            <p class="text-xs text-[var(--pg-accent)]">⚠ {{ $problem }}</p>
+        @endforeach
+
+        @if (in_array($fieldType, ['text', 'textarea', 'number', 'select', 'checkbox', 'attribute', 'counter', 'clock', 'progress', 'color'], true))
             @include('livewire.template.builder._input', ['name' => 'default_value', 'label' => 'Valor por defecto'])
         @endif
 

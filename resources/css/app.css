@@ -81,6 +81,55 @@
 }
 .pg-btn-danger:hover { background: var(--pg-accent); color: #fff; }
 
+/* --- Tipos de campo de rol (resources/views/fields) --- */
+
+/* −/+ de recursos y contadores. */
+.pg-step {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--pg-border);
+    background: var(--pg-surface);
+    color: var(--pg-ink);
+    font-weight: 700;
+    line-height: 1;
+}
+.pg-step:hover:not(:disabled) { border-color: var(--pg-accent); color: var(--pg-accent); }
+.pg-step:disabled { opacity: 0.4; }
+
+/* Casillas de marcas (estrés, salud). */
+.pg-track-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--pg-muted);
+    background: var(--pg-surface);
+    color: var(--pg-accent);
+}
+.pg-track-box:hover:not(:disabled) { border-color: var(--pg-accent); }
+.pg-track-box:disabled { opacity: 0.5; }
+.pg-track-on { background: var(--pg-accent); border-color: var(--pg-accent); }
+
+/* Segmentos del reloj de progreso. */
+.pg-clock-seg {
+    fill: var(--pg-surface);
+    stroke: var(--pg-muted);
+    stroke-width: 1.5;
+    cursor: pointer;
+}
+.pg-clock-seg:hover { fill: var(--pg-shade); }
+.pg-clock-on, .pg-clock-on:hover { fill: var(--pg-accent); }
+
+/* Marco del retrato. */
+.pg-portrait-frame {
+    border: 3px double var(--pg-accent);
+    box-shadow: 0 0 0 3px var(--pg-surface), 0 0 0 4px var(--pg-border);
+}
+
 /* Alpine: lo marcado con x-cloak no parpadea antes de que Alpine arranque. */
 [x-cloak] { display: none !important; }
 

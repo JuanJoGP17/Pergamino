@@ -1,6 +1,6 @@
 {{--
     Paleta: arrastra un tipo a una sección del lienzo, o haz clic para añadirlo
-    a la sección seleccionada. Los tipos de la Fase 4 aún no aparecen.
+    a la sección seleccionada.
 --}}
 <aside class="space-y-4 self-start rounded-lg border border-[var(--pg-border)] bg-[var(--pg-surface)] p-3 lg:sticky lg:top-4">
     <p class="text-xs text-[var(--pg-muted)]">Arrastra al lienzo o haz clic.</p>

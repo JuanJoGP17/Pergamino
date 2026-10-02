@@ -18,6 +18,12 @@
             @endif
         </span>
 
+        @foreach ($rests as $kind => $label)
+            <button type="button" wire:click="rest('{{ $kind }}')"
+                    wire:confirm="¿{{ $label }}? Se recuperan los recursos y usos que la plantilla marca."
+                    class="pg-btn-ghost py-1 text-xs">{{ $label }}</button>
+        @endforeach
+
         <span class="text-xs text-[var(--pg-muted)]" wire:loading.remove wire:target="save">
             @if ($savedAt) Guardado {{ $savedAt }} @endif
         </span>

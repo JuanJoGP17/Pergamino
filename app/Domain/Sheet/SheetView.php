@@ -102,7 +102,7 @@ final class SheetView
      */
     public function clientSchema(): array
     {
-        $keep = array_flip(['type', 'config', 'ast', 'mod_ast', 'visible_ast', 'readonly_ast', 'roll']);
+        $keep = array_flip(['type', 'config', 'ast', 'mod_ast', 'derived', 'visible_ast', 'readonly_ast', 'roll']);
 
         $fields = [];
         foreach ($this->schema->fields as $key => $field) {

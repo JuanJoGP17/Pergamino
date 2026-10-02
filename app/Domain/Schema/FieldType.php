@@ -69,14 +69,18 @@ enum FieldType: string
         };
     }
 
-    /** Agrupación para la paleta del constructor. */
+    /** Agrupación para la paleta del constructor, en este orden. */
     public function group(): string
     {
         return match ($this) {
             self::Heading, self::Text, self::Textarea, self::Number,
-            self::Select, self::Checkbox, self::Multiselect, self::Tags,
-            self::Color, self::Image => 'Básicos',
-            default => 'Rol',
+            self::Select, self::Multiselect, self::Checkbox, self::Tags,
+            self::Color => 'Básicos',
+            self::Attribute, self::Computed, self::Resource, self::Counter,
+            self::Track, self::Clock, self::Progress, self::Currency,
+            self::DiceButton => 'De rol',
+            self::Proficiency, self::DerivedList, self::Repeater, self::Reference => 'Listas y tablas',
+            self::Image, self::Portrait => 'Imágenes',
         };
     }
 
