@@ -5,9 +5,10 @@ use App\Models\TemplateField;
 use App\Models\TemplateSection;
 use App\Models\TemplateTab;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-uses(Tests\TestCase::class, RefreshDatabase::class)->in('Feature');
-uses(Tests\TestCase::class)->in('Unit');
+uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+uses(TestCase::class)->in('Unit');
 
 /**
  * Monta una plantilla mínima con una pestaña, una sección y los campos dados.

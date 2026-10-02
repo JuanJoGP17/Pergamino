@@ -288,7 +288,6 @@ $fails('frontera', '"sin cerrar');
 $fails('frontera', str_repeat('(', 80).'1'.str_repeat(')', 80));   // bomba de anidamiento
 $fails('frontera', 'max('.str_repeat('max(', 80).'1'.str_repeat(')', 81));
 
-
 // -------------------------------- casos adversarios entre PHP y JS
 // Cada uno de estos es un sitio donde los dos lenguajes se comportan distinto
 // por defecto. Si alguno falla, los motores han divergido.

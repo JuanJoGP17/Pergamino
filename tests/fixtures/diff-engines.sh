@@ -14,8 +14,8 @@ php  tests/fixtures/run-php.php --dump > "$tmp/php.json"
 node tests/fixtures/run-js.mjs  --dump > "$tmp/js.json"
 
 # Sin finales de línea de Windows: PHP y Node no siempre coinciden en eso.
-tr -d '' < "$tmp/php.json" > "$tmp/php.txt"
-tr -d '' < "$tmp/js.json"  > "$tmp/js.txt"
+tr -d '\r' < "$tmp/php.json" > "$tmp/php.txt"
+tr -d '\r' < "$tmp/js.json"  > "$tmp/js.txt"
 
 if diff -u "$tmp/php.txt" "$tmp/js.txt" > "$tmp/diff.txt"; then
     echo "DIFERENCIAL — los dos motores producen resultados idénticos ($(grep -c '' "$tmp/php.txt") casos)"

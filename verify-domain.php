@@ -10,10 +10,15 @@
  */
 require __DIR__.'/verify-autoload.php';
 
+use App\Domain\Formula\Formula;
+use App\Domain\Formula\Interpolator;
+use App\Domain\Schema\CompiledSchema;
 use App\Domain\Schema\DependencyGraph;
+use App\Domain\Schema\DependencyGraph as DG;
 use App\Domain\Schema\FieldType;
 use App\Domain\Schema\FormulaReferences;
 use App\Domain\Schema\SchemaCompilationException;
+use App\Domain\Sheet\SheetCalculator;
 
 $pass = 0;
 $fail = 0;
@@ -70,6 +75,7 @@ check('@self.x depende de x, no de «self»', fn () => eq(
 
 check('«self» nunca aparece como campo requerido', function () {
     $refs = FormulaReferences::extract('@self.nivel + @self.fuerza');
+
     return in_array('self', $refs, true) ? 'self se coló: '.json_encode($refs) : true;
 });
 
@@ -203,7 +209,7 @@ check('checkbox arranca en false', fn () => eq(FieldType::Checkbox->emptyValue()
 
 echo "\nSheetCalculator (modificador de atributo)\n";
 
-$calc = new App\Domain\Sheet\SheetCalculator;
+$calc = new SheetCalculator;
 
 check('16 → +3', fn () => eq($calc->attributeModifier(16), 3));
 check('10 → +0', fn () => eq($calc->attributeModifier(10), 0));
@@ -218,25 +224,20 @@ check('divisor cero no revienta', fn () => eq(
     $calc->attributeModifier(12, ['mod_divisor' => 0]), 0
 ));
 check('formatea el signo', fn () => eq(
-    App\Domain\Sheet\SheetCalculator::formatModifier(3).'/'.
-    App\Domain\Sheet\SheetCalculator::formatModifier(-1).'/'.
-    App\Domain\Sheet\SheetCalculator::formatModifier(0),
+    SheetCalculator::formatModifier(3).'/'.
+    SheetCalculator::formatModifier(-1).'/'.
+    SheetCalculator::formatModifier(0),
     '+3/-1/+0'
 ));
 
-
 echo "\nIntegración: esquema compilado -> cálculo de hoja\n";
-
-use App\Domain\Formula\Formula;
-use App\Domain\Schema\CompiledSchema;
-use App\Domain\Schema\DependencyGraph as DG;
-use App\Domain\Sheet\SheetCalculator;
 
 /**
  * Construye a mano un compiled_schema equivalente al que produciría
  * SchemaCompiler, para poder ejercitar toda la cadena sin base de datos.
  */
-function schemaOf(array $fieldSpecs, array $settings = []): CompiledSchema {
+function schemaOf(array $fieldSpecs, array $settings = []): CompiledSchema
+{
     $fields = [];
     $refs = [];
 
@@ -253,7 +254,7 @@ function schemaOf(array $fieldSpecs, array $settings = []): CompiledSchema {
             'ast' => $ast,
             'visible_ast' => Formula::compile($spec['visible_if'] ?? null),
             'readonly_ast' => Formula::compile($spec['readonly_if'] ?? null),
-            'roll' => App\Domain\Formula\Interpolator::compile($spec['roll'] ?? null),
+            'roll' => Interpolator::compile($spec['roll'] ?? null),
             'is_summary' => false,
         ];
 
@@ -278,18 +279,18 @@ function schemaOf(array $fieldSpecs, array $settings = []): CompiledSchema {
 // Una hoja de 5e con la cadena completa de dependencias:
 // nivel -> competencia -> cd_conjuros, y destreza -> ca
 $schema = schemaOf([
-    'nivel'        => ['type' => 'number'],
-    'fuerza'       => ['type' => 'attribute'],
-    'destreza'     => ['type' => 'attribute'],
-    'carisma'      => ['type' => 'attribute'],
-    'armadura'     => ['type' => 'number'],
-    'escudo'       => ['type' => 'checkbox'],
-    'competencia'  => ['type' => 'computed', 'formula' => '2 + floor((@nivel - 1) / 4)'],
-    'ca'           => ['type' => 'computed', 'formula' => '10 + @destreza.mod + @armadura + if(@escudo, 2, 0)'],
-    'cd_conjuros'  => ['type' => 'computed', 'formula' => '8 + @competencia + @carisma.mod'],
-    'iniciativa'   => ['type' => 'computed', 'formula' => '@destreza.mod'],
-    'roto'         => ['type' => 'computed', 'formula' => '10 / @cero_inexistente'],
-    'solo_magos'   => ['type' => 'text', 'visible_if' => '@nivel >= 5'],
+    'nivel' => ['type' => 'number'],
+    'fuerza' => ['type' => 'attribute'],
+    'destreza' => ['type' => 'attribute'],
+    'carisma' => ['type' => 'attribute'],
+    'armadura' => ['type' => 'number'],
+    'escudo' => ['type' => 'checkbox'],
+    'competencia' => ['type' => 'computed', 'formula' => '2 + floor((@nivel - 1) / 4)'],
+    'ca' => ['type' => 'computed', 'formula' => '10 + @destreza.mod + @armadura + if(@escudo, 2, 0)'],
+    'cd_conjuros' => ['type' => 'computed', 'formula' => '8 + @competencia + @carisma.mod'],
+    'iniciativa' => ['type' => 'computed', 'formula' => '@destreza.mod'],
+    'roto' => ['type' => 'computed', 'formula' => '10 / @cero_inexistente'],
+    'solo_magos' => ['type' => 'text', 'visible_if' => '@nivel >= 5'],
 ]);
 
 $calc = new SheetCalculator;
@@ -301,6 +302,7 @@ $data = [
 
 check('el orden topológico pone competencia antes que cd_conjuros', function () use ($schema) {
     $order = $schema->computeOrder;
+
     return array_search('competencia', $order, true) < array_search('cd_conjuros', $order, true)
         ? true : 'orden: '.implode(',', $order);
 });
@@ -329,12 +331,14 @@ check('visible_if se cumple a nivel 5', fn () => eq(
 check('visible_if no se cumple a nivel 1', function () use ($calc, $schema) {
     $low = ['nivel' => 1, 'destreza' => 10, 'carisma' => 10, 'armadura' => 0, 'escudo' => false];
     [$c] = (new SheetCalculator)->calculateWithErrors($schema, $low);
+
     return eq($calc->isVisible($schema->field('solo_magos'), $low, $c), false);
 });
 
 check('cambiar un valor propaga por toda la cadena', function () use ($calc, $schema) {
     $subir = ['nivel' => 17, 'destreza' => 20, 'carisma' => 18, 'armadura' => 0, 'escudo' => false];
     [$c] = $calc->calculateWithErrors($schema, $subir);
+
     // nivel 17 -> competencia 6; destreza 20 -> mod 5; CA 10+5+0+0 = 15
     return eq([$c['competencia'], $c['ca'], $c['cd_conjuros']], [6, 15, 18]);
 });
@@ -344,8 +348,9 @@ check('las referencias salen del AST, no de una regexp', function () {
     return eq(Formula::references(Formula::compile('if(@clase == "mago@torre", 1, 0)')), ['clase']);
 });
 
-check('la interpolación de tiradas resuelve los huecos', function () use ($calc, $schema, $data, $computed) {
-    $field = ['roll' => App\Domain\Formula\Interpolator::compile('1d20 + {@destreza.mod} + {@competencia}')];
+check('la interpolación de tiradas resuelve los huecos', function () use ($calc, $data, $computed) {
+    $field = ['roll' => Interpolator::compile('1d20 + {@destreza.mod} + {@competencia}')];
+
     return eq($calc->rollExpression($field, $data, $computed), '1d20 + 2 + 3');
 });
 
@@ -355,12 +360,12 @@ check('un ciclo de fórmulas se rechaza al construir el esquema', function () {
             'a' => ['type' => 'computed', 'formula' => '@b + 1'],
             'b' => ['type' => 'computed', 'formula' => '@a + 1'],
         ]);
+
         return 'no lanzó excepción';
-    } catch (App\Domain\Schema\SchemaCompilationException $e) {
+    } catch (SchemaCompilationException $e) {
         return str_contains($e->getMessage(), 'ciclo') ? true : $e->getMessage();
     }
 });
-
 
 echo "\nLa plantilla de D&D 5e del seeder, evaluada de verdad\n";
 
@@ -371,16 +376,16 @@ $settings5e = [
 
 // Exactamente las fórmulas que escribe Dnd5eTemplateSeeder.
 $s5 = schemaOf([
-    'nivel'            => ['type' => 'number'],
-    'clase'            => ['type' => 'text'],
-    'destreza'         => ['type' => 'attribute'],
-    'sabiduria'        => ['type' => 'attribute'],
-    'carisma'          => ['type' => 'attribute'],
-    'competencia'      => ['type' => 'computed', 'formula' => 'prof(@nivel)'],
-    'iniciativa'       => ['type' => 'computed', 'formula' => '@destreza.mod'],
-    'percepcion_pasiva'=> ['type' => 'computed', 'formula' => '10 + @sabiduria.mod'],
-    'cd_conjuros'      => ['type' => 'computed', 'formula' => '8 + @competencia + @carisma.mod'],
-    'ataque_conjuros'  => ['type' => 'computed', 'formula' => '@competencia + @carisma.mod'],
+    'nivel' => ['type' => 'number'],
+    'clase' => ['type' => 'text'],
+    'destreza' => ['type' => 'attribute'],
+    'sabiduria' => ['type' => 'attribute'],
+    'carisma' => ['type' => 'attribute'],
+    'competencia' => ['type' => 'computed', 'formula' => 'prof(@nivel)'],
+    'iniciativa' => ['type' => 'computed', 'formula' => '@destreza.mod'],
+    'percepcion_pasiva' => ['type' => 'computed', 'formula' => '10 + @sabiduria.mod'],
+    'cd_conjuros' => ['type' => 'computed', 'formula' => '8 + @competencia + @carisma.mod'],
+    'ataque_conjuros' => ['type' => 'computed', 'formula' => '@competencia + @carisma.mod'],
     'dado_golpe_clase' => ['type' => 'computed', 'formula' => 'concat("d", lookup("dados_golpe", @clase, 8))'],
 ], $settings5e);
 
@@ -397,16 +402,19 @@ check('ninguna fórmula del seeder falla', fn () => eq($e5, []));
 
 check('subir a nivel 17 propaga a competencia y CD', function () use ($calc, $s5, $bardo) {
     [$c] = $calc->calculateWithErrors($s5, ['nivel' => 17] + $bardo);
+
     return eq([$c['competencia'], $c['cd_conjuros']], [6, 18]);
 });
 
 check('cambiar de clase cambia el dado de golpe', function () use ($calc, $s5, $bardo) {
     [$c] = $calc->calculateWithErrors($s5, ['clase' => 'Mago'] + $bardo);
+
     return eq($c['dado_golpe_clase'], 'd6');
 });
 
 check('una clase fuera de la tabla usa el valor por defecto', function () use ($calc, $s5, $bardo) {
     [$c] = $calc->calculateWithErrors($s5, ['clase' => 'Artífice'] + $bardo);
+
     return eq($c['dado_golpe_clase'], 'd8');
 });
 

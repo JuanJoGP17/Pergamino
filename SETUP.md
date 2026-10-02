@@ -91,6 +91,34 @@ Son distintas y todas importan:
 - `php verify-domain.php` — 59 comprobaciones de la lógica pura, **sin Laravel
   ni base de datos**.
 
+### Los tests contra PostgreSQL
+
+Por defecto Pest usa SQLite en memoria, pero SQLite acepta cosas que
+PostgreSQL rechaza (un `\u0000` dentro de `jsonb`, por ejemplo). Para probar
+contra tu PostgreSQL **sin tocar tus datos**, usa un esquema aparte:
+
+```
+psql -U pergamino_user -d pergamino_db -c "CREATE SCHEMA IF NOT EXISTS testing;"
+```
+
+y lanza Pest con `DB_CONNECTION=pgsql` y `DB_SEARCH_PATH=testing` (los tests
+borran y recrean las tablas, pero solo las de ese esquema). En PowerShell:
+
+```
+$env:DB_CONNECTION="pgsql"; $env:DB_SEARCH_PATH="testing"; vendor/bin/pest
+```
+
+### CI
+
+`.github/workflows/ci.yml` lo ejecuta todo en cada push a `main`, `develop` o
+`fase-*` y en cada pull request: Pint, Vitest, el diferencial PHP↔JS,
+`verify-domain.php` y Pest dos veces, contra SQLite y contra PostgreSQL 16.
+
+**Versión de PHP:** el `composer.lock` actual exige **PHP 8.4.1 o superior**
+(Symfony 8), no el 8.3 del plan. Si el servidor final tuviera que ser 8.3, fija
+`"config": {"platform": {"php": "8.3.0"}}` en `composer.json` y ejecuta
+`composer update`.
+
 Si tocas el lenguaje de fórmulas, regenera la batería antes:
 
 ```

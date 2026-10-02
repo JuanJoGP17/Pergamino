@@ -1,0 +1,124 @@
+# CI mínimo (Fase 0 del plan) + la defensa contra el riesgo principal (§16):
+# que los motores de fórmulas de PHP y JavaScript se separen sin que nadie se
+# entere. Por eso la batería compartida corre aquí en los dos lenguajes.
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop, 'fase-*']
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # composer.lock exige PHP 8.4.1+ (symfony 8). Es el mínimo real hoy.
+  PHP_VERSION: '8.4'
+  NODE_VERSION: '22'
+
+jobs:
+  calidad:
+    name: Estilo, motores de fórmulas y Pest (SQLite)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, intl, bcmath, pdo_sqlite, pdo_pgsql, gd, zip
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Dependencias
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
+          npm ci
+
+      - name: Entorno
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Pint
+        run: vendor/bin/pint --test
+
+      # Las vistas usan @vite: sin manifiesto, los tests que pintan HTML fallan.
+      - name: Assets
+        run: npm run build
+
+      - name: Motor de fórmulas — JavaScript (Vitest)
+        run: npm run test:js
+
+      - name: Motor de fórmulas — PHP ↔ JS diferencial
+        run: bash tests/fixtures/diff-engines.sh
+
+      - name: Dominio puro, sin Laravel
+        run: php verify-domain.php
+
+      - name: Pest (SQLite en memoria)
+        run: vendor/bin/pest
+
+  postgres:
+    name: Pest contra PostgreSQL
+    runs-on: ubuntu-latest
+
+    # SQLite acepta cosas que PostgreSQL rechaza (\u0000 en jsonb, mayúsculas
+    # en comparaciones…). La aplicación corre en PostgreSQL: se prueba en él.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: pergamino
+          POSTGRES_PASSWORD: pergamino
+          POSTGRES_DB: pergamino_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U pergamino"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: pergamino_test
+      DB_USERNAME: pergamino
+      DB_PASSWORD: pergamino
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, intl, bcmath, pdo_pgsql, gd, zip
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Dependencias
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
+          npm ci
+
+      - name: Entorno
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          npm run build
+
+      # Las variables del job tienen prioridad sobre las <env> de phpunit.xml.
+      - name: Pest (PostgreSQL 16)
+        run: vendor/bin/pest
