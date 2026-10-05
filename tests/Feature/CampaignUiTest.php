@@ -190,3 +190,17 @@ it('las notas se escriben en markdown seguro y las privadas solo las ve el DJ', 
     Livewire::actingAs($this->player)->test(Show::class, ['campaign' => $this->campaign])
         ->assertDontSee('posadero');
 });
+
+it('dentro de una mesa, la bandeja tira en ella por defecto', function () {
+    Livewire::actingAs($this->player)->test(Show::class, ['campaign' => $this->campaign])
+        ->assertDispatched('campaign-opened', uuid: $this->campaign->uuid);
+
+    Livewire::actingAs($this->player)->test(DiceTray::class)
+        ->dispatch('campaign-opened', uuid: $this->campaign->uuid)
+        ->assertSet('campaign', $this->campaign->uuid)
+        // Una mesa ajena (o algo que no es un uuid) no cambia nada.
+        ->dispatch('campaign-opened', uuid: app(Campaigns::class)->create(User::factory()->create(), 'Ajena')->uuid)
+        ->assertSet('campaign', $this->campaign->uuid)
+        ->dispatch('campaign-opened', uuid: 'no-es-un-uuid')
+        ->assertSet('campaign', $this->campaign->uuid);
+});

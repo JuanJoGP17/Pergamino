@@ -53,6 +53,19 @@ class DiceTray extends Component
         $this->showRoll(RollView::from($roll));
     }
 
+    /** Al entrar en la vista de una mesa, tirar en ella (si se puede). */
+    #[On('campaign-opened')]
+    public function useCampaign(string $uuid): void
+    {
+        $user = auth()->user();
+        $campaign = Str::isUuid($uuid) ? Campaign::where('uuid', $uuid)->first() : null;
+
+        if ($campaign && in_array($campaign->roleOf($user), ['gm', 'player'], true)) {
+            $this->campaign = $uuid;
+            $this->private = false;
+        }
+    }
+
     #[On('dice-rolled')]
     public function showRoll(array $roll): void
     {

@@ -59,6 +59,9 @@ class Show extends Component
         $this->authorize('view', $campaign);
         $this->campaignUuid = $campaign->uuid;
         $this->loadSettings($campaign);
+
+        // Dentro de una mesa, la bandeja de dados tira en ella por defecto.
+        $this->dispatch('campaign-opened', uuid: $campaign->uuid);
     }
 
     public function campaign(): Campaign

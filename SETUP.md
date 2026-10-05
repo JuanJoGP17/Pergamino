@@ -1,4 +1,4 @@
-# Puesta en marcha — Fases 0 a 5
+# Puesta en marcha — Fases 0 a 6
 
 ## 1. Esqueleto de Laravel (lo ejecutas tú)
 
@@ -293,6 +293,40 @@ Los componentes de estilo (`.pg-input`, `.pg-btn`…) están ahora en la capa
 fuera de capa, `.pg-input { width: 100% }` ganaba siempre y algunos inputs
 estrechos de la Fase 4 se desbordaban.
 
+**Fase 6 — dados y mesas**
+
+- **Motor de dados** (§7, `app/Domain/Dice`): se tira en el servidor con
+  `random_int()`, nunca en el navegador. Notación: `4d6kh3`, `4d6dl1`,
+  `2d20kl1`, `3d6!`, `1d6!>=5`, `2d6r1`, `1d20ro<3`, `5d10>=7` (éxitos),
+  `4dF`, `1d20cs19` / `cf2`, `d%` y aritmética con paréntesis (la división
+  redondea hacia abajo). Ventaja y desventaja son el modo de la tirada:
+  convierten el primer `1d20` en `2d20kh1` / `2d20kl1`. Límites: 100 dados por
+  grupo, 1000 por tirada contando explosiones y relanzados.
+- **Cada tirada se guarda** en `dice_rolls` (con mesa, en su registro; sin
+  ella, en el historial propio). 30 tiradas por minuto y usuario.
+- **Botones de tirada de los campos**: tiran de verdad. La expresión la
+  resuelve el servidor con los datos de la hoja; del navegador solo llega qué
+  campo. Mayúsculas + clic = ventaja, Alt + clic = desventaja. La cabecera de
+  la hoja elige en qué mesa se tira.
+- **Bandeja de dados** (🎲 abajo a la derecha, en todas las páginas): tirar a
+  mano, con ventaja o desventaja, en una mesa o sin ella, en secreto si eres
+  el DJ, y el historial propio. Dentro de una mesa, tira en ella.
+- **Mesas** (`/mesas`, §8): crear, unirse con el código o con el enlace
+  `/mesas/unirse/{código}`, roles DJ / jugador / espectador, plantilla
+  sugerida para crear la hoja de un clic.
+- **Vista de mesa**: tarjetas resumen con los campos marcados «en el
+  resumen», iniciativa (orden, turno, rondas; la lleva el DJ y puede tirar la
+  de las hojas), registro de tiradas con filtro por persona, notas en markdown
+  seguro (las del DJ pueden ser privadas), personas y ajustes. Lo que cambia
+  mientras se juega se repinta solo cada pocos segundos (componentes hijos con
+  `wire:poll`), así que funciona en cualquier hosting, sin WebSockets.
+- **Cuánto se ve de cada hoja**: completa (los demás la abren en solo
+  lectura), solo resumen (ven la tarjeta, no la hoja) u oculta (solo el DJ).
+  El DJ puede editar las hojas de su mesa salvo que lo desactive en ajustes.
+- La capa de mesa del tema (§6.3) se elige en los ajustes de la mesa.
+- Una URL con un uuid malformado (`/hojas/abc`) da 404: en PostgreSQL la
+  columna es de tipo uuid y la consulta fallaba con un 500.
+
 ### Pruebas en un navegador real
 
 Para probar la aplicación sin tocar `pergamino_db`, usa una base SQLite
@@ -319,13 +353,14 @@ return require __DIR__.'/../vendor/laravel/framework/src/Illuminate/Foundation/r
   y solo ve el aviso de que hay otra más nueva.
 - **Renombrar una clave no reescribe las fórmulas que la usan**: el panel de
   validación señala cuáles se rompen.
-- **`reference`** (enlace a otra hoja): llega con las mesas.
 - **Exportar la ficha como PNG/JPG**: fuera de alcance sin navegador headless
   en el servidor (§6.4). El PDF y «imprimir a PDF» del navegador lo cubren.
-- **Los botones de tirada muestran la expresión pero no tiran**: el motor de
-  dados es la Fase 6. Una reserva de Vampiro (`{@fuerza.marked + …}d10`) ya
-  se resuelve a `5d10`.
-- **Dados y mesas** (Fase 6). Las tablas ya existen.
+- **`reference`** sigue sin implementar: con las mesas ya hechas, es lo
+  siguiente natural, pero el plan lo deja en el catálogo de tipos sin fase.
+- **Tiempo real con WebSockets**: el plan lo descarta mientras el hosting no
+  tenga procesos persistentes (§8, §15.4); el polling cubre el caso de uso.
+- **Poda de tiradas antiguas** (>90 días, §11) desde el scheduler: llega con
+  el despliegue (Fase 8).
 
 ## Dos detalles de diseño que conviene no perder
 
