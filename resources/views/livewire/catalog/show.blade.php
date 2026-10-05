@@ -24,7 +24,7 @@
                 @endif
             </p>
             <p class="mt-2 flex gap-4 text-sm text-[var(--pg-muted)]">
-                <span title="Personas que la usan">⬇ {{ $template->installs_count }} la usan</span>
+                <span title="Personas que la usan">{{ $template->installs_count }} {{ $template->installs_count === 1 ? 'persona la usa' : 'personas la usan' }}</span>
                 <span>♥ {{ $template->likes_count }}</span>
                 @if ($forks)<span>⑂ {{ $forks }} versión(es) de la comunidad</span>@endif
             </p>

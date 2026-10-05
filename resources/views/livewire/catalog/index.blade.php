@@ -48,7 +48,7 @@
                         <span class="mt-1 flex-1 text-sm text-[var(--pg-muted)]">{{ $template->tagline ?: 'Sin descripción.' }}</span>
                         <span class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--pg-muted)]">
                             <span class="rounded bg-[var(--pg-shade)] px-1.5 py-0.5">{{ $template->game_line ?: 'Casero' }}</span>
-                            <span title="Personas que la usan">⬇ {{ $template->installs_count }}</span>
+                            <span title="Personas que la usan">{{ $template->installs_count }} {{ $template->installs_count === 1 ? 'uso' : 'usos' }}</span>
                             <span title="Me gusta">♥ {{ $template->likes_count }}</span>
                             <span>de {{ $template->owner?->displayName() }}</span>
                             @if ($template->forkedFrom)

@@ -1,4 +1,4 @@
-# Puesta en marcha — Fases 0 a 6
+# Puesta en marcha — Fases 0 a 7
 
 ## 1. Esqueleto de Laravel (lo ejecutas tú)
 
@@ -326,6 +326,36 @@ estrechos de la Fase 4 se desbordaban.
 - La capa de mesa del tema (§6.3) se elige en los ajustes de la mesa.
 - Una URL con un uuid malformado (`/hojas/abc`) da 404: en PostgreSQL la
   columna es de tipo uuid y la consulta fallaba con un 500.
+
+**Fase 7 — catálogo y compartición**
+
+- **Catálogo** (`/catalogo`): las plantillas públicas y publicadas, con
+  búsqueda sin distinguir mayúsculas (nombre, lema, línea y descripción),
+  filtro por línea de juego y orden por uso, me gusta, novedad o nombre. Los
+  filtros van en la URL. Una plantilla «oculta» no sale en el catálogo pero
+  su ficha se abre con el enlace.
+- **Ficha** (`/catalogo/{slug}`): vista previa de una hoja nueva con los
+  colores de su tema, novedades de la versión y acciones: crear una hoja,
+  **clonar** (copia privada de la versión publicada, nunca del borrador del
+  autor; guarda `forked_from_id`), me gusta, exportar JSON y reportar.
+- **Instalaciones**: la primera hoja de cada persona con una plantilla ajena.
+- **Reportes** (`template_reports`, uno por persona y plantilla) y aviso de
+  derechos al hacer pública una plantilla (§16 del plan). La revisión de los
+  reportes no tiene pantalla todavía: se miran en la base de datos.
+- **Compartir una hoja** (botón «Compartir» de la hoja, solo su dueño):
+  - con una persona, por su correo, para ver o para editar;
+  - con un enlace (`/compartida/{token}`, 32 bytes aleatorios), que puede
+    caducar a 1, 7 o 30 días. El de **lectura** se ve sin entrar, en la vista
+    de impresión, con PDF. El de **edición** pide entrar y se convierte en un
+    permiso de esa persona, que se puede quitar.
+- Quien puede ver una hoja pero no editarla la abre con todo desactivado.
+- **Plantillas oficiales como datos** (§14: «construidas con el constructor,
+  no en código»): `database/seeders/official/*.json`, en el formato que
+  exporta el constructor, instaladas por `OfficialTemplateSeeder`. Para
+  cambiar una: importarla, editarla en el constructor, exportarla y dejar el
+  JSON. Son D&D 5e, **Pathfinder 1e**, **Genérico**, FATE Básico, Vampiro y
+  Blades. Las que ya existen en una base no se tocan; las nuevas aparecen con
+  `php artisan db:seed`.
 
 ### Pruebas en un navegador real
 
