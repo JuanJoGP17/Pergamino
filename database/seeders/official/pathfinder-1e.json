@@ -1,0 +1,1261 @@
+{
+    "format": "pergamino.template",
+    "format_version": 1,
+    "template": {
+        "name": "Pathfinder 1e",
+        "tagline": "Hoja de Pathfinder, primera edición: ataque base, salvaciones, BMC/DMC y 35 habilidades",
+        "description": null,
+        "game_line": "Pathfinder 1e",
+        "settings": {
+            "mod_base": 10,
+            "mod_divisor": 2,
+            "prof_base": 2,
+            "prof_step": 4
+        },
+        "theme": {
+            "preset": "pergamino",
+            "colors": {
+                "accent": "#6b3a12"
+            },
+            "colors_dark": {
+                "accent": "#e0a25a"
+            }
+        },
+        "version_label": "1.0"
+    },
+    "tabs": [
+        {
+            "key": "general",
+            "label": "Personaje",
+            "sections": [
+                {
+                    "key": "el_personaje",
+                    "label": "El personaje",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "retrato",
+                            "label": "Retrato",
+                            "type": "portrait",
+                            "col_span": 3,
+                            "config": {
+                                "shape": "rounded",
+                                "frame": true
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "nombre_personaje",
+                            "label": "Nombre",
+                            "type": "text",
+                            "col_span": 5,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "clase",
+                            "label": "Clase",
+                            "type": "select",
+                            "col_span": 4,
+                            "config": {
+                                "allow_empty": true,
+                                "options": [
+                                    {
+                                        "value": "Bárbaro",
+                                        "label": "Bárbaro"
+                                    },
+                                    {
+                                        "value": "Bardo",
+                                        "label": "Bardo"
+                                    },
+                                    {
+                                        "value": "Clérigo",
+                                        "label": "Clérigo"
+                                    },
+                                    {
+                                        "value": "Druida",
+                                        "label": "Druida"
+                                    },
+                                    {
+                                        "value": "Explorador",
+                                        "label": "Explorador"
+                                    },
+                                    {
+                                        "value": "Guerrero",
+                                        "label": "Guerrero"
+                                    },
+                                    {
+                                        "value": "Hechicero",
+                                        "label": "Hechicero"
+                                    },
+                                    {
+                                        "value": "Mago",
+                                        "label": "Mago"
+                                    },
+                                    {
+                                        "value": "Monje",
+                                        "label": "Monje"
+                                    },
+                                    {
+                                        "value": "Paladín",
+                                        "label": "Paladín"
+                                    },
+                                    {
+                                        "value": "Pícaro",
+                                        "label": "Pícaro"
+                                    },
+                                    {
+                                        "value": "Alquimista",
+                                        "label": "Alquimista"
+                                    },
+                                    {
+                                        "value": "Brujo",
+                                        "label": "Brujo"
+                                    },
+                                    {
+                                        "value": "Caballero",
+                                        "label": "Caballero"
+                                    },
+                                    {
+                                        "value": "Inquisidor",
+                                        "label": "Inquisidor"
+                                    },
+                                    {
+                                        "value": "Invocador",
+                                        "label": "Invocador"
+                                    },
+                                    {
+                                        "value": "Magus",
+                                        "label": "Magus"
+                                    },
+                                    {
+                                        "value": "Oráculo",
+                                        "label": "Oráculo"
+                                    },
+                                    {
+                                        "value": "Pistolero",
+                                        "label": "Pistolero"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "nivel",
+                            "label": "Nivel",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": {
+                                "min": 1,
+                                "max": 20
+                            },
+                            "default_value": 1,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "raza",
+                            "label": "Raza",
+                            "type": "text",
+                            "col_span": 3,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "alineamiento",
+                            "label": "Alineamiento",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "deidad",
+                            "label": "Deidad",
+                            "type": "text",
+                            "col_span": 3,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "tamano",
+                            "label": "Tamaño",
+                            "type": "select",
+                            "col_span": 3,
+                            "config": {
+                                "allow_empty": false,
+                                "options": [
+                                    {
+                                        "value": "Pequeño",
+                                        "label": "Pequeño"
+                                    },
+                                    {
+                                        "value": "Mediano",
+                                        "label": "Mediano"
+                                    },
+                                    {
+                                        "value": "Grande",
+                                        "label": "Grande"
+                                    }
+                                ]
+                            },
+                            "default_value": "Mediano",
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "experiencia",
+                            "label": "Experiencia",
+                            "type": "progress",
+                            "col_span": 6,
+                            "config": {
+                                "thresholds": [
+                                    0,
+                                    2000,
+                                    5000,
+                                    9000,
+                                    15000,
+                                    23000,
+                                    35000,
+                                    51000,
+                                    75000,
+                                    105000,
+                                    155000,
+                                    220000,
+                                    315000,
+                                    445000,
+                                    635000,
+                                    890000,
+                                    1300000,
+                                    1800000,
+                                    2550000,
+                                    3600000
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "atributos_y_combate",
+            "label": "Atributos y combate",
+            "sections": [
+                {
+                    "key": "atributos",
+                    "label": "Atributos",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "fuerza",
+                            "label": "Fuerza",
+                            "type": "attribute",
+                            "col_span": 2,
+                            "config": {
+                                "min": 1,
+                                "max": 30,
+                                "show_mod": true
+                            },
+                            "default_value": 10,
+                            "formula": null,
+                            "roll_expression": "1d20 + {@fuerza.mod}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "destreza",
+                            "label": "Destreza",
+                            "type": "attribute",
+                            "col_span": 2,
+                            "config": {
+                                "min": 1,
+                                "max": 30,
+                                "show_mod": true
+                            },
+                            "default_value": 10,
+                            "formula": null,
+                            "roll_expression": "1d20 + {@destreza.mod}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "constitucion",
+                            "label": "Constitución",
+                            "type": "attribute",
+                            "col_span": 2,
+                            "config": {
+                                "min": 1,
+                                "max": 30,
+                                "show_mod": true
+                            },
+                            "default_value": 10,
+                            "formula": null,
+                            "roll_expression": "1d20 + {@constitucion.mod}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "inteligencia",
+                            "label": "Inteligencia",
+                            "type": "attribute",
+                            "col_span": 2,
+                            "config": {
+                                "min": 1,
+                                "max": 30,
+                                "show_mod": true
+                            },
+                            "default_value": 10,
+                            "formula": null,
+                            "roll_expression": "1d20 + {@inteligencia.mod}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "sabiduria",
+                            "label": "Sabiduría",
+                            "type": "attribute",
+                            "col_span": 2,
+                            "config": {
+                                "min": 1,
+                                "max": 30,
+                                "show_mod": true
+                            },
+                            "default_value": 10,
+                            "formula": null,
+                            "roll_expression": "1d20 + {@sabiduria.mod}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "carisma",
+                            "label": "Carisma",
+                            "type": "attribute",
+                            "col_span": 2,
+                            "config": {
+                                "min": 1,
+                                "max": 30,
+                                "show_mod": true
+                            },
+                            "default_value": 10,
+                            "formula": null,
+                            "roll_expression": "1d20 + {@carisma.mod}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "defensa",
+                    "label": "Defensa",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "pg",
+                            "label": "Puntos de golpe",
+                            "type": "resource",
+                            "col_span": 6,
+                            "config": {
+                                "show_temp": true,
+                                "allow_overflow": false,
+                                "reset_on": "long"
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "ca_armadura",
+                            "label": "Armadura",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "ca_escudo",
+                            "label": "Escudo",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "ca_natural",
+                            "label": "Natural",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "ca_desvio",
+                            "label": "Desvío",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "ca",
+                            "label": "CA",
+                            "type": "computed",
+                            "col_span": 2,
+                            "config": {
+                                "format": "int"
+                            },
+                            "default_value": null,
+                            "formula": "10 + @ca_armadura + @ca_escudo + @destreza.mod + @ca_natural + @ca_desvio + switch(@tamano, \"Pequeño\", 1, \"Grande\", -1, 0)",
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "ca_toque",
+                            "label": "Toque",
+                            "type": "computed",
+                            "col_span": 2,
+                            "config": {
+                                "format": "int"
+                            },
+                            "default_value": null,
+                            "formula": "10 + @destreza.mod + @ca_desvio + switch(@tamano, \"Pequeño\", 1, \"Grande\", -1, 0)",
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "ca_desprevenido",
+                            "label": "Desprevenido",
+                            "type": "computed",
+                            "col_span": 2,
+                            "config": {
+                                "format": "int"
+                            },
+                            "default_value": null,
+                            "formula": "10 + @ca_armadura + @ca_escudo + @ca_natural + @ca_desvio + switch(@tamano, \"Pequeño\", 1, \"Grande\", -1, 0)",
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "velocidad",
+                            "label": "Velocidad",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": {
+                                "suffix": "pies"
+                            },
+                            "default_value": 30,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "ataque_y_salvaciones",
+                    "label": "Ataque y salvaciones",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "ataque_base",
+                            "label": "Ataque base",
+                            "type": "number",
+                            "col_span": 3,
+                            "config": {
+                                "min": 0
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "iniciativa",
+                            "label": "Iniciativa",
+                            "type": "computed",
+                            "col_span": 3,
+                            "config": {
+                                "format": "mod"
+                            },
+                            "default_value": null,
+                            "formula": "@destreza.mod + @iniciativa_misc",
+                            "roll_expression": "1d20 + {@iniciativa}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "iniciativa_misc",
+                            "label": "Iniciativa (otros)",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "bmc",
+                            "label": "BMC",
+                            "type": "computed",
+                            "col_span": 2,
+                            "config": {
+                                "format": "mod"
+                            },
+                            "default_value": null,
+                            "formula": "@ataque_base + @fuerza.mod - switch(@tamano, \"Pequeño\", 1, \"Grande\", -1, 0)",
+                            "roll_expression": "1d20 + {@bmc}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "dmc",
+                            "label": "DMC",
+                            "type": "computed",
+                            "col_span": 2,
+                            "config": {
+                                "format": "int"
+                            },
+                            "default_value": null,
+                            "formula": "10 + @ataque_base + @fuerza.mod + @destreza.mod - switch(@tamano, \"Pequeño\", 1, \"Grande\", -1, 0)",
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "salv_fortaleza_base",
+                            "label": "Fortaleza (base)",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "salv_fortaleza",
+                            "label": "Fortaleza",
+                            "type": "computed",
+                            "col_span": 2,
+                            "config": {
+                                "format": "mod"
+                            },
+                            "default_value": null,
+                            "formula": "@salv_fortaleza_base + @constitucion.mod",
+                            "roll_expression": "1d20 + {@salv_fortaleza}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "salv_reflejos_base",
+                            "label": "Reflejos (base)",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "salv_reflejos",
+                            "label": "Reflejos",
+                            "type": "computed",
+                            "col_span": 2,
+                            "config": {
+                                "format": "mod"
+                            },
+                            "default_value": null,
+                            "formula": "@salv_reflejos_base + @destreza.mod",
+                            "roll_expression": "1d20 + {@salv_reflejos}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "salv_voluntad_base",
+                            "label": "Voluntad (base)",
+                            "type": "number",
+                            "col_span": 2,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "salv_voluntad",
+                            "label": "Voluntad",
+                            "type": "computed",
+                            "col_span": 2,
+                            "config": {
+                                "format": "mod"
+                            },
+                            "default_value": null,
+                            "formula": "@salv_voluntad_base + @sabiduria.mod",
+                            "roll_expression": "1d20 + {@salv_voluntad}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "ataques",
+                    "label": "Ataques",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "ataques",
+                            "label": "Ataques",
+                            "type": "repeater",
+                            "col_span": 12,
+                            "config": {
+                                "columns": [
+                                    {
+                                        "key": "arma",
+                                        "label": "Arma",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "atributo",
+                                        "label": "Atributo",
+                                        "type": "select",
+                                        "options": [
+                                            "Fuerza",
+                                            "Destreza"
+                                        ]
+                                    },
+                                    {
+                                        "key": "otros",
+                                        "label": "Otros",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "key": "dano",
+                                        "label": "Daño",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "critico",
+                                        "label": "Crítico",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "ataque",
+                                        "label": "Ataque",
+                                        "type": "computed",
+                                        "formula": "@ataque_base + if(@row.atributo == \"Destreza\", @destreza.mod, @fuerza.mod) + @row.otros"
+                                    }
+                                ],
+                                "max_rows": 20
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "habilidades",
+            "label": "Habilidades",
+            "sections": [
+                {
+                    "key": "habilidades",
+                    "label": "Habilidades",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "habilidades",
+                            "label": "Habilidades",
+                            "type": "derived_list",
+                            "col_span": 6,
+                            "config": {
+                                "items": [
+                                    {
+                                        "key": "acrobacias",
+                                        "label": "Acrobacias",
+                                        "base": "@destreza.mod"
+                                    },
+                                    {
+                                        "key": "artesania",
+                                        "label": "Artesanía",
+                                        "base": "@inteligencia.mod"
+                                    },
+                                    {
+                                        "key": "averiguar_intenciones",
+                                        "label": "Averiguar intenciones",
+                                        "base": "@sabiduria.mod"
+                                    },
+                                    {
+                                        "key": "diplomacia",
+                                        "label": "Diplomacia",
+                                        "base": "@carisma.mod"
+                                    },
+                                    {
+                                        "key": "disfrazarse",
+                                        "label": "Disfrazarse",
+                                        "base": "@carisma.mod"
+                                    },
+                                    {
+                                        "key": "enganar",
+                                        "label": "Engañar",
+                                        "base": "@carisma.mod"
+                                    },
+                                    {
+                                        "key": "escapismo",
+                                        "label": "Escapismo",
+                                        "base": "@destreza.mod"
+                                    },
+                                    {
+                                        "key": "interpretar",
+                                        "label": "Interpretar",
+                                        "base": "@carisma.mod"
+                                    },
+                                    {
+                                        "key": "intimidar",
+                                        "label": "Intimidar",
+                                        "base": "@carisma.mod"
+                                    },
+                                    {
+                                        "key": "juego_de_manos",
+                                        "label": "Juego de manos",
+                                        "base": "@destreza.mod"
+                                    },
+                                    {
+                                        "key": "inutilizar",
+                                        "label": "Inutilizar mecanismo",
+                                        "base": "@destreza.mod"
+                                    },
+                                    {
+                                        "key": "linguistica",
+                                        "label": "Lingüística",
+                                        "base": "@inteligencia.mod"
+                                    },
+                                    {
+                                        "key": "montar",
+                                        "label": "Montar",
+                                        "base": "@destreza.mod"
+                                    },
+                                    {
+                                        "key": "nadar",
+                                        "label": "Nadar",
+                                        "base": "@fuerza.mod"
+                                    },
+                                    {
+                                        "key": "percepcion",
+                                        "label": "Percepción",
+                                        "base": "@sabiduria.mod"
+                                    },
+                                    {
+                                        "key": "profesion",
+                                        "label": "Profesión",
+                                        "base": "@sabiduria.mod"
+                                    },
+                                    {
+                                        "key": "saber_arcano",
+                                        "label": "Saber (arcano)",
+                                        "base": "@inteligencia.mod"
+                                    },
+                                    {
+                                        "key": "saber_mazmorras",
+                                        "label": "Saber (mazmorras)",
+                                        "base": "@inteligencia.mod"
+                                    },
+                                    {
+                                        "key": "saber_local",
+                                        "label": "Saber (local)",
+                                        "base": "@inteligencia.mod"
+                                    },
+                                    {
+                                        "key": "saber_naturaleza",
+                                        "label": "Saber (naturaleza)",
+                                        "base": "@inteligencia.mod"
+                                    },
+                                    {
+                                        "key": "saber_religion",
+                                        "label": "Saber (religión)",
+                                        "base": "@inteligencia.mod"
+                                    },
+                                    {
+                                        "key": "sanar",
+                                        "label": "Sanar",
+                                        "base": "@sabiduria.mod"
+                                    },
+                                    {
+                                        "key": "sigilo",
+                                        "label": "Sigilo",
+                                        "base": "@destreza.mod"
+                                    },
+                                    {
+                                        "key": "supervivencia",
+                                        "label": "Supervivencia",
+                                        "base": "@sabiduria.mod"
+                                    },
+                                    {
+                                        "key": "tasacion",
+                                        "label": "Tasación",
+                                        "base": "@inteligencia.mod"
+                                    },
+                                    {
+                                        "key": "trato_animales",
+                                        "label": "Trato con animales",
+                                        "base": "@carisma.mod"
+                                    },
+                                    {
+                                        "key": "trepar",
+                                        "label": "Trepar",
+                                        "base": "@fuerza.mod"
+                                    },
+                                    {
+                                        "key": "usar_objeto_magico",
+                                        "label": "Usar objeto mágico",
+                                        "base": "@carisma.mod"
+                                    },
+                                    {
+                                        "key": "volar",
+                                        "label": "Volar",
+                                        "base": "@destreza.mod"
+                                    },
+                                    {
+                                        "key": "conocimiento_conjuros",
+                                        "label": "Conocimiento de conjuros",
+                                        "base": "@inteligencia.mod"
+                                    }
+                                ],
+                                "levels": [
+                                    {
+                                        "key": "no",
+                                        "label": "—",
+                                        "bonus": "0"
+                                    },
+                                    {
+                                        "key": "clase",
+                                        "label": "De clase",
+                                        "bonus": "3"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": "Ajuste = rangos y otros bonos. «De clase» suma +3 (si tienes al menos un rango).",
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "equipo_y_magia",
+            "label": "Equipo y magia",
+            "sections": [
+                {
+                    "key": "equipo",
+                    "label": "Equipo",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "inventario",
+                            "label": "Inventario",
+                            "type": "repeater",
+                            "col_span": 12,
+                            "config": {
+                                "columns": [
+                                    {
+                                        "key": "objeto",
+                                        "label": "Objeto",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "cantidad",
+                                        "label": "Cant.",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "key": "peso",
+                                        "label": "Peso",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "key": "total",
+                                        "label": "Peso total",
+                                        "type": "computed",
+                                        "formula": "@row.peso * @row.cantidad"
+                                    }
+                                ],
+                                "max_rows": 100
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "carga",
+                            "label": "Carga",
+                            "type": "computed",
+                            "col_span": 3,
+                            "config": [],
+                            "default_value": null,
+                            "formula": "sum(@inventario[*].total)",
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "bolsa",
+                            "label": "Monedas",
+                            "type": "currency",
+                            "col_span": 9,
+                            "config": {
+                                "denominations": [
+                                    {
+                                        "key": "pc",
+                                        "label": "Cobre",
+                                        "rate": 1
+                                    },
+                                    {
+                                        "key": "pp",
+                                        "label": "Plata",
+                                        "rate": 10
+                                    },
+                                    {
+                                        "key": "pe",
+                                        "label": "Electro",
+                                        "rate": 50
+                                    },
+                                    {
+                                        "key": "po",
+                                        "label": "Oro",
+                                        "rate": 100
+                                    },
+                                    {
+                                        "key": "ppt",
+                                        "label": "Platino",
+                                        "rate": 1000
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "conjuros",
+                    "label": "Conjuros",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "conjuros",
+                            "label": "Conjuros",
+                            "type": "repeater",
+                            "col_span": 12,
+                            "config": {
+                                "columns": [
+                                    {
+                                        "key": "nivel",
+                                        "label": "Nivel",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "key": "nombre",
+                                        "label": "Conjuro",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "escuela",
+                                        "label": "Escuela",
+                                        "type": "select",
+                                        "options": [
+                                            "Abjuración",
+                                            "Adivinación",
+                                            "Conjuración",
+                                            "Encantamiento",
+                                            "Evocación",
+                                            "Ilusión",
+                                            "Nigromancia",
+                                            "Transmutación"
+                                        ]
+                                    },
+                                    {
+                                        "key": "preparado",
+                                        "label": "Preparado",
+                                        "type": "checkbox"
+                                    }
+                                ],
+                                "max_rows": 100
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "conjuros_preparados",
+                            "label": "Preparados",
+                            "type": "computed",
+                            "col_span": 3,
+                            "config": [],
+                            "default_value": null,
+                            "formula": "sum(@conjuros[*].preparado)",
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "dotes_y_rasgos",
+                    "label": "Dotes y rasgos",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "dotes",
+                            "label": "Dotes",
+                            "type": "tags",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "rasgos",
+                            "label": "Rasgos de clase y raza",
+                            "type": "textarea",
+                            "col_span": 12,
+                            "config": {
+                                "rows": 6
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

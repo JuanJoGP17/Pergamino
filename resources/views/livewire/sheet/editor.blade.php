@@ -9,6 +9,7 @@
         <input type="text"
                value="{{ $sheet->name }}"
                wire:change="rename($event.target.value)"
+               @disabled(! $canEdit)
                class="flex-1 min-w-64 border-0 border-b border-transparent bg-transparent px-0 font-serif text-2xl font-bold text-[var(--pg-accent)] focus:border-[var(--pg-border)] focus:outline-none">
 
         <span class="text-xs text-[var(--pg-muted)]">
@@ -66,7 +67,15 @@
             </div>
         @endcan
 
-        @foreach ($rests as $kind => $label)
+        @if (! $canEdit)
+            <span class="rounded bg-[var(--pg-shade)] px-2 py-0.5 text-xs text-[var(--pg-muted)]">Solo lectura</span>
+        @endif
+
+        @can('share', $sheet)
+            @include('livewire.sheet._share')
+        @endcan
+
+        @foreach ($canEdit ? $rests : [] as $kind => $label)
             <button type="button" wire:click="rest('{{ $kind }}')"
                     wire:confirm="¿{{ $label }}? Se recuperan los recursos y usos que la plantilla marca."
                     class="pg-btn-ghost py-1 text-xs">{{ $label }}</button>

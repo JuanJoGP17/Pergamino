@@ -1,0 +1,917 @@
+{
+    "format": "pergamino.template",
+    "format_version": 1,
+    "template": {
+        "name": "Vampiro: La Mascarada (V5)",
+        "tagline": "Atributos en puntos, Salud y Voluntad con daño superficial y agravado",
+        "description": null,
+        "game_line": "Vampiro",
+        "settings": [],
+        "theme": {
+            "preset": "grimorio",
+            "colors": {
+                "accent": "#8f1028"
+            },
+            "colors_dark": {
+                "accent": "#d3203f"
+            }
+        },
+        "version_label": "1.0"
+    },
+    "tabs": [
+        {
+            "key": "personaje",
+            "label": "Personaje",
+            "sections": [
+                {
+                    "key": "identidad",
+                    "label": "Identidad",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "retrato",
+                            "label": "Retrato",
+                            "type": "portrait",
+                            "col_span": 3,
+                            "config": {
+                                "shape": "square",
+                                "frame": true
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "nombre_personaje",
+                            "label": "Nombre",
+                            "type": "text",
+                            "col_span": 5,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "clan",
+                            "label": "Clan",
+                            "type": "select",
+                            "col_span": 4,
+                            "config": {
+                                "allow_empty": true,
+                                "options": [
+                                    {
+                                        "value": "Brujah",
+                                        "label": "Brujah"
+                                    },
+                                    {
+                                        "value": "Gangrel",
+                                        "label": "Gangrel"
+                                    },
+                                    {
+                                        "value": "Malkavian",
+                                        "label": "Malkavian"
+                                    },
+                                    {
+                                        "value": "Nosferatu",
+                                        "label": "Nosferatu"
+                                    },
+                                    {
+                                        "value": "Toreador",
+                                        "label": "Toreador"
+                                    },
+                                    {
+                                        "value": "Tremere",
+                                        "label": "Tremere"
+                                    },
+                                    {
+                                        "value": "Ventrue",
+                                        "label": "Ventrue"
+                                    },
+                                    {
+                                        "value": "Banu Haqim",
+                                        "label": "Banu Haqim"
+                                    },
+                                    {
+                                        "value": "Hecata",
+                                        "label": "Hecata"
+                                    },
+                                    {
+                                        "value": "Lasombra",
+                                        "label": "Lasombra"
+                                    },
+                                    {
+                                        "value": "Ministerio",
+                                        "label": "Ministerio"
+                                    },
+                                    {
+                                        "value": "Ravnos",
+                                        "label": "Ravnos"
+                                    },
+                                    {
+                                        "value": "Salubri",
+                                        "label": "Salubri"
+                                    },
+                                    {
+                                        "value": "Tzimisce",
+                                        "label": "Tzimisce"
+                                    },
+                                    {
+                                        "value": "Caitiff",
+                                        "label": "Caitiff"
+                                    },
+                                    {
+                                        "value": "Sangre débil",
+                                        "label": "Sangre débil"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "generacion",
+                            "label": "Generación",
+                            "type": "number",
+                            "col_span": 3,
+                            "config": {
+                                "min": 4,
+                                "max": 16
+                            },
+                            "default_value": 13,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "depredador",
+                            "label": "Tipo de depredador",
+                            "type": "text",
+                            "col_span": 3,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "ambicion",
+                            "label": "Ambición",
+                            "type": "text",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "deseo",
+                            "label": "Deseo",
+                            "type": "text",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "atributos",
+                    "label": "Atributos",
+                    "description": null,
+                    "columns": 3,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "grupo_0",
+                            "label": "Físicos",
+                            "type": "heading",
+                            "col_span": 12,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "fuerza",
+                            "label": "Fuerza",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Punto"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "destreza",
+                            "label": "Destreza",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Punto"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "resistencia",
+                            "label": "Resistencia",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Punto"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "grupo_4",
+                            "label": "Sociales",
+                            "type": "heading",
+                            "col_span": 12,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "carisma",
+                            "label": "Carisma",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Punto"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "manipulacion",
+                            "label": "Manipulación",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Punto"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "compostura",
+                            "label": "Compostura",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Punto"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "grupo_8",
+                            "label": "Mentales",
+                            "type": "heading",
+                            "col_span": 12,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "inteligencia",
+                            "label": "Inteligencia",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Punto"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "astucia",
+                            "label": "Astucia",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Punto"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "resolucion",
+                            "label": "Resolución",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Punto"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "habilidades",
+                    "label": "Habilidades",
+                    "description": null,
+                    "columns": 1,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "habilidades",
+                            "label": "Habilidades",
+                            "type": "derived_list",
+                            "col_span": 8,
+                            "config": {
+                                "items": [
+                                    {
+                                        "key": "armas_cc",
+                                        "label": "Armas cuerpo a cuerpo"
+                                    },
+                                    {
+                                        "key": "atletismo",
+                                        "label": "Atletismo"
+                                    },
+                                    {
+                                        "key": "conducir",
+                                        "label": "Conducir"
+                                    },
+                                    {
+                                        "key": "armas_fuego",
+                                        "label": "Armas de fuego"
+                                    },
+                                    {
+                                        "key": "latrocinio",
+                                        "label": "Latrocinio"
+                                    },
+                                    {
+                                        "key": "pelea",
+                                        "label": "Pelea"
+                                    },
+                                    {
+                                        "key": "oficios",
+                                        "label": "Oficios"
+                                    },
+                                    {
+                                        "key": "sigilo",
+                                        "label": "Sigilo"
+                                    },
+                                    {
+                                        "key": "supervivencia",
+                                        "label": "Supervivencia"
+                                    },
+                                    {
+                                        "key": "callejeo",
+                                        "label": "Callejeo"
+                                    },
+                                    {
+                                        "key": "etiqueta",
+                                        "label": "Etiqueta"
+                                    },
+                                    {
+                                        "key": "interpretacion",
+                                        "label": "Interpretación"
+                                    },
+                                    {
+                                        "key": "intimidacion",
+                                        "label": "Intimidación"
+                                    },
+                                    {
+                                        "key": "liderazgo",
+                                        "label": "Liderazgo"
+                                    },
+                                    {
+                                        "key": "perspicacia",
+                                        "label": "Perspicacia"
+                                    },
+                                    {
+                                        "key": "persuasion",
+                                        "label": "Persuasión"
+                                    },
+                                    {
+                                        "key": "subterfugio",
+                                        "label": "Subterfugio"
+                                    },
+                                    {
+                                        "key": "trato_animales",
+                                        "label": "Trato con animales"
+                                    },
+                                    {
+                                        "key": "academicismo",
+                                        "label": "Academicismo"
+                                    },
+                                    {
+                                        "key": "ciencia",
+                                        "label": "Ciencia"
+                                    },
+                                    {
+                                        "key": "consciencia",
+                                        "label": "Consciencia"
+                                    },
+                                    {
+                                        "key": "finanzas",
+                                        "label": "Finanzas"
+                                    },
+                                    {
+                                        "key": "investigacion",
+                                        "label": "Investigación"
+                                    },
+                                    {
+                                        "key": "medicina",
+                                        "label": "Medicina"
+                                    },
+                                    {
+                                        "key": "ocultismo",
+                                        "label": "Ocultismo"
+                                    },
+                                    {
+                                        "key": "politica",
+                                        "label": "Política"
+                                    },
+                                    {
+                                        "key": "tecnologia",
+                                        "label": "Tecnología"
+                                    }
+                                ],
+                                "levels": [
+                                    {
+                                        "key": "p0",
+                                        "label": "—",
+                                        "bonus": "0"
+                                    },
+                                    {
+                                        "key": "p1",
+                                        "label": "•",
+                                        "bonus": "1"
+                                    },
+                                    {
+                                        "key": "p2",
+                                        "label": "••",
+                                        "bonus": "2"
+                                    },
+                                    {
+                                        "key": "p3",
+                                        "label": "•••",
+                                        "bonus": "3"
+                                    },
+                                    {
+                                        "key": "p4",
+                                        "label": "••••",
+                                        "bonus": "4"
+                                    },
+                                    {
+                                        "key": "p5",
+                                        "label": "•••••",
+                                        "bonus": "5"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "reserva_pelea",
+                            "label": "Pelea (Fuerza + Pelea)",
+                            "type": "dice_button",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": "{@fuerza.marked + @habilidades.pelea.bonus}d10",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "reserva_sigilo",
+                            "label": "Sigilo (Destreza + Sigilo)",
+                            "type": "dice_button",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": "{@destreza.marked + @habilidades.sigilo.bonus}d10",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "condicion",
+            "label": "Salud y sangre",
+            "sections": [
+                {
+                    "key": "salud",
+                    "label": "Salud y Voluntad",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "salud",
+                            "label": "Salud",
+                            "type": "track",
+                            "col_span": 6,
+                            "config": {
+                                "boxes": 5,
+                                "boxes_formula": "@resistencia.marked + 3",
+                                "shape": "box",
+                                "states": [
+                                    "Superficial",
+                                    "Agravado"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "voluntad",
+                            "label": "Voluntad",
+                            "type": "track",
+                            "col_span": 6,
+                            "config": {
+                                "boxes": 5,
+                                "boxes_formula": "@compostura.marked + @resolucion.marked",
+                                "shape": "box",
+                                "states": [
+                                    "Superficial",
+                                    "Agravado"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "deteriorado",
+                            "label": "Estado",
+                            "type": "computed",
+                            "col_span": 12,
+                            "config": [],
+                            "default_value": null,
+                            "formula": "if(@salud.marked >= @salud.boxes, \"Deteriorado: −2 dados en tiradas físicas\", \"\")",
+                            "roll_expression": null,
+                            "visible_if": "@salud.marked >= @salud.boxes",
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "sangre",
+                    "label": "La Bestia",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "hambre",
+                            "label": "Hambre",
+                            "type": "track",
+                            "col_span": 6,
+                            "config": {
+                                "boxes": 5,
+                                "shape": "dot",
+                                "states": [
+                                    "Hambre"
+                                ]
+                            },
+                            "default_value": [
+                                1
+                            ],
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "humanidad",
+                            "label": "Humanidad",
+                            "type": "counter",
+                            "col_span": 3,
+                            "config": {
+                                "min": 0,
+                                "max": 10,
+                                "step": 1
+                            },
+                            "default_value": 7,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "potencia_sangre",
+                            "label": "Potencia de sangre",
+                            "type": "counter",
+                            "col_span": 3,
+                            "config": {
+                                "min": 0,
+                                "max": 10,
+                                "step": 1
+                            },
+                            "default_value": 1,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "manchas",
+                            "label": "Manchas",
+                            "type": "track",
+                            "col_span": 12,
+                            "config": {
+                                "boxes": 10,
+                                "shape": "pip",
+                                "states": [
+                                    "Mancha"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "disciplinas",
+                    "label": "Disciplinas",
+                    "description": null,
+                    "columns": 1,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "disciplinas",
+                            "label": "Disciplinas",
+                            "type": "repeater",
+                            "col_span": 12,
+                            "config": {
+                                "columns": [
+                                    {
+                                        "key": "disciplina",
+                                        "label": "Disciplina",
+                                        "type": "select",
+                                        "options": [
+                                            "Animalismo",
+                                            "Auspex",
+                                            "Celeridad",
+                                            "Dominación",
+                                            "Fortaleza",
+                                            "Hechicería de Sangre",
+                                            "Ofuscación",
+                                            "Oblivion",
+                                            "Potencia",
+                                            "Presencia",
+                                            "Protean",
+                                            "Alquimia de Sangre Débil"
+                                        ]
+                                    },
+                                    {
+                                        "key": "nivel",
+                                        "label": "Nivel",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "key": "poderes",
+                                        "label": "Poderes",
+                                        "type": "text"
+                                    }
+                                ],
+                                "max_rows": 12
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "experiencia",
+                            "label": "Experiencia",
+                            "type": "resource",
+                            "col_span": 6,
+                            "config": {
+                                "show_temp": false,
+                                "allow_overflow": false
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": "Actual = sin gastar; máximo = total ganado.",
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

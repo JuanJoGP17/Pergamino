@@ -2,6 +2,7 @@
 
 namespace App\Domain\Sheet;
 
+use App\Domain\Catalog\Catalog;
 use App\Models\Sheet;
 use App\Models\Template;
 use App\Models\User;
@@ -25,6 +26,9 @@ final class CreateSheet
         $version = $template->currentVersion;
         $schema = $version->schema();
         $data = $schema->defaultData();
+
+        // Usar una plantilla ajena cuenta como instalación (Fase 7).
+        app(Catalog::class)->recordInstall($owner, $template);
 
         return Sheet::create([
             'owner_id' => $owner->id,

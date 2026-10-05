@@ -34,6 +34,12 @@ class SheetPrintController extends Controller
     {
         Gate::authorize('view', $sheet);
 
+        return $this->renderPdf($sheet, $this->viewData($request, $sheet, pdf: true));
+    }
+
+    /** Lo usa también el enlace compartido (SharedSheetController). */
+    public function renderPdf(Sheet $sheet, array $viewData): Response
+    {
         $options = new Options;
         $options->setIsRemoteEnabled(false);
         $options->setIsPhpEnabled(false);
@@ -42,7 +48,7 @@ class SheetPrintController extends Controller
         $options->setChroot(base_path());
 
         $dompdf = new Dompdf($options);
-        $dompdf->loadHtml(view('print.sheet', $this->viewData($request, $sheet, pdf: true))->render(), 'UTF-8');
+        $dompdf->loadHtml(view('print.sheet', $viewData)->render(), 'UTF-8');
         $dompdf->setPaper('A4');
         $dompdf->render();
 
@@ -54,7 +60,7 @@ class SheetPrintController extends Controller
         ]);
     }
 
-    private function viewData(Request $request, Sheet $sheet, bool $pdf): array
+    public function viewData(Request $request, Sheet $sheet, bool $pdf): array
     {
         $sheet->loadMissing(['version', 'template']);
 

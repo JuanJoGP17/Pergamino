@@ -10,6 +10,7 @@ use App\Models\User;
 use Database\Seeders\BladesTemplateSeeder;
 use Database\Seeders\Dnd5eTemplateSeeder;
 use Database\Seeders\FateTemplateSeeder;
+use Database\Seeders\OfficialTemplateSeeder;
 use Database\Seeders\VampiroTemplateSeeder;
 use Livewire\Livewire;
 
@@ -27,10 +28,13 @@ dataset('sistemas', [
     'FATE' => [FateTemplateSeeder::class, 'fate-basico'],
     'Vampiro' => [VampiroTemplateSeeder::class, 'vampiro-v5'],
     'Blades' => [BladesTemplateSeeder::class, 'blades-in-the-dark'],
+    // Fase 7: las que pide el plan para el catálogo, ya como datos.
+    'Pathfinder 1e' => [null, 'pathfinder-1e'],
+    'Genérico' => [null, 'generico'],
 ]);
 
-it('publica la plantilla sin errores ni avisos y pinta todas sus pestañas', function (string $seeder, string $slug) {
-    (new $seeder)->run();
+it('publica la plantilla sin errores ni avisos y pinta todas sus pestañas', function (?string $seeder, string $slug) {
+    $seeder ? (new $seeder)->run() : (new OfficialTemplateSeeder)->install($slug);
     $template = Template::where('slug', $slug)->sole();
 
     expect($template->isPublished())->toBeTrue()
@@ -107,4 +111,22 @@ it('cada sistema se ve distinto: su propio tema', function () {
         ->and($themes['blades-in-the-dark']['mode'])->toBe('dark')
         ->and($themes['vampiro-v5']['colors_dark']['accent'])->toBe('#d3203f')
         ->and($themes->map(fn ($t) => $t['typography']['heading'])->unique())->toHaveCount(4);
+});
+
+it('Pathfinder: CA, toque, BMC y DMC con el tamaño', function () {
+    (new OfficialTemplateSeeder)->install('pathfinder-1e');
+    $sheet = app(CreateSheet::class)(Template::where('slug', 'pathfinder-1e')->sole(), $this->user);
+
+    app(SaveSheet::class)($sheet, [
+        'destreza' => 14, 'fuerza' => 16, 'tamano' => 'Pequeño', 'ataque_base' => 3,
+        'ca_armadura' => 4, 'ca_escudo' => 1, 'salv_reflejos_base' => 2,
+    ], $this->user);
+    $c = $sheet->fresh()->computed;
+
+    expect($c['ca'])->toBe(18)                  // 10 + 4 + 1 + 2 (DES) + 1 (pequeño)
+        ->and($c['ca_toque'])->toBe(13)
+        ->and($c['ca_desprevenido'])->toBe(16)
+        ->and($c['bmc'])->toBe(5)               // 3 + 3 (FUE) − 1
+        ->and($c['dmc'])->toBe(17)              // 10 + 3 + 3 + 2 − 1
+        ->and($c['salv_reflejos'])->toBe(4);
 });

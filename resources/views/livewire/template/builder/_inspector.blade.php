@@ -27,6 +27,14 @@
                 <option value="unlisted">Oculta: quien tenga el enlace</option>
                 <option value="public">Pública: en el catálogo</option>
             </select>
+            @if (($form['visibility'] ?? '') === 'public')
+                {{-- §16 del plan: contenido con derechos en el catálogo público. --}}
+                <p class="mt-1 rounded border border-[var(--pg-border)] bg-[var(--pg-shade)] p-2 text-[0.7rem] text-[var(--pg-muted)]" data-copyright-notice>
+                    Al publicarla en el catálogo, cualquiera podrá usarla y clonarla. Una plantilla define la
+                    <strong>estructura</strong> de la hoja: no copies reglas ni textos de manuales con derechos.
+                    El resto de usuarios puede reportarla.
+                </p>
+            @endif
         </div>
 
         <fieldset class="space-y-2 border-t border-[var(--pg-border)] pt-3">

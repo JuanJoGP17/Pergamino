@@ -1,0 +1,436 @@
+{
+    "format": "pergamino.template",
+    "format_version": 1,
+    "template": {
+        "name": "FATE Básico",
+        "tagline": "Aspectos, escalera de habilidades, estrés y consecuencias",
+        "description": null,
+        "game_line": "FATE",
+        "settings": [],
+        "theme": {
+            "preset": "minimal",
+            "colors": {
+                "accent": "#0f766e"
+            },
+            "colors_dark": {
+                "accent": "#2dd4bf"
+            }
+        },
+        "version_label": "1.0"
+    },
+    "tabs": [
+        {
+            "key": "personaje",
+            "label": "Personaje",
+            "sections": [
+                {
+                    "key": "aspectos",
+                    "label": "Aspectos",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "nombre_personaje",
+                            "label": "Nombre",
+                            "type": "text",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "retrato",
+                            "label": "Retrato",
+                            "type": "portrait",
+                            "col_span": 6,
+                            "config": {
+                                "shape": "circle",
+                                "frame": true
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "concepto",
+                            "label": "Concepto principal",
+                            "type": "text",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "complicacion",
+                            "label": "Complicación",
+                            "type": "text",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "aspectos",
+                            "label": "Otros aspectos",
+                            "type": "tags",
+                            "col_span": 12,
+                            "config": {
+                                "suggestions": []
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": "Escribe cada aspecto y pulsa Enter.",
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "habilidades",
+                    "label": "Habilidades",
+                    "description": null,
+                    "columns": 1,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "habilidades",
+                            "label": "Habilidades",
+                            "type": "derived_list",
+                            "col_span": 8,
+                            "config": {
+                                "items": [
+                                    {
+                                        "key": "atletismo",
+                                        "label": "Atletismo"
+                                    },
+                                    {
+                                        "key": "robo",
+                                        "label": "Robo"
+                                    },
+                                    {
+                                        "key": "contactos",
+                                        "label": "Contactos"
+                                    },
+                                    {
+                                        "key": "artesania",
+                                        "label": "Artesanía"
+                                    },
+                                    {
+                                        "key": "enganar",
+                                        "label": "Engañar"
+                                    },
+                                    {
+                                        "key": "conducir",
+                                        "label": "Conducir"
+                                    },
+                                    {
+                                        "key": "empatia",
+                                        "label": "Empatía"
+                                    },
+                                    {
+                                        "key": "pelear",
+                                        "label": "Pelear"
+                                    },
+                                    {
+                                        "key": "investigar",
+                                        "label": "Investigar"
+                                    },
+                                    {
+                                        "key": "saber",
+                                        "label": "Saber"
+                                    },
+                                    {
+                                        "key": "percepcion",
+                                        "label": "Percepción"
+                                    },
+                                    {
+                                        "key": "fisico",
+                                        "label": "Físico"
+                                    },
+                                    {
+                                        "key": "provocar",
+                                        "label": "Provocar"
+                                    },
+                                    {
+                                        "key": "empatizar",
+                                        "label": "Simpatía"
+                                    },
+                                    {
+                                        "key": "recursos",
+                                        "label": "Recursos"
+                                    },
+                                    {
+                                        "key": "disparar",
+                                        "label": "Disparar"
+                                    },
+                                    {
+                                        "key": "sigilo",
+                                        "label": "Sigilo"
+                                    },
+                                    {
+                                        "key": "voluntad",
+                                        "label": "Voluntad"
+                                    }
+                                ],
+                                "levels": [
+                                    {
+                                        "key": "mediocre",
+                                        "label": "Mediocre",
+                                        "bonus": "0"
+                                    },
+                                    {
+                                        "key": "normal",
+                                        "label": "Normal (+1)",
+                                        "bonus": "1"
+                                    },
+                                    {
+                                        "key": "bueno",
+                                        "label": "Bueno (+2)",
+                                        "bonus": "2"
+                                    },
+                                    {
+                                        "key": "grande",
+                                        "label": "Grande (+3)",
+                                        "bonus": "3"
+                                    },
+                                    {
+                                        "key": "excelente",
+                                        "label": "Excelente (+4)",
+                                        "bonus": "4"
+                                    },
+                                    {
+                                        "key": "soberbio",
+                                        "label": "Soberbio (+5)",
+                                        "bonus": "5"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": "La pirámide: una Grande, dos Buenas, tres Normales.",
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "tirada",
+                            "label": "Tirar Atletismo",
+                            "type": "dice_button",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": "4dF + {@habilidades.atletismo.bonus}",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "estres",
+                    "label": "Estrés y consecuencias",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "estres_fisico",
+                            "label": "Estrés físico",
+                            "type": "track",
+                            "col_span": 6,
+                            "config": {
+                                "boxes": 5,
+                                "boxes_formula": "2 + if(@habilidades.fisico.bonus >= 1, 1, 0) + if(@habilidades.fisico.bonus >= 3, 1, 0)",
+                                "shape": "box",
+                                "states": [
+                                    "Marcada"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "estres_mental",
+                            "label": "Estrés mental",
+                            "type": "track",
+                            "col_span": 6,
+                            "config": {
+                                "boxes": 5,
+                                "boxes_formula": "2 + if(@habilidades.voluntad.bonus >= 1, 1, 0) + if(@habilidades.voluntad.bonus >= 3, 1, 0)",
+                                "shape": "box",
+                                "states": [
+                                    "Marcada"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "consecuencia_leve",
+                            "label": "Leve (2)",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "consecuencia_moderada",
+                            "label": "Moderada (4)",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "consecuencia_grave",
+                            "label": "Grave (6)",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "proezas",
+                    "label": "Proezas y destino",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "proezas",
+                            "label": "Proezas",
+                            "type": "repeater",
+                            "col_span": 12,
+                            "config": {
+                                "columns": [
+                                    {
+                                        "key": "nombre",
+                                        "label": "Proeza",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "efecto",
+                                        "label": "Efecto",
+                                        "type": "text"
+                                    }
+                                ],
+                                "max_rows": 10
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "recuperacion",
+                            "label": "Recuperación",
+                            "type": "number",
+                            "col_span": 4,
+                            "config": {
+                                "min": 1
+                            },
+                            "default_value": 3,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "puntos_destino",
+                            "label": "Puntos de destino",
+                            "type": "counter",
+                            "col_span": 4,
+                            "config": {
+                                "min": 0,
+                                "max": 10,
+                                "step": 1
+                            },
+                            "default_value": 3,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": "Al empezar la sesión, súbelos hasta tu recuperación.",
+                            "is_summary": true,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

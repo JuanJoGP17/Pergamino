@@ -93,6 +93,59 @@ final class TemplateTransfer
     }
 
     /**
+     * Lo mismo que export(), pero de la versión PUBLICADA y no del borrador.
+     * Es lo que se copia al clonar desde el catálogo: lo que todo el mundo ve,
+     * no los cambios a medias que el autor aún no ha publicado.
+     */
+    public function exportPublished(Template $template): array
+    {
+        $version = $template->currentVersion ?? throw new TransferException('Esa plantilla no tiene ninguna versión publicada.');
+        $schema = $version->schema();
+
+        $field = fn (string $key) => ($f = $schema->field($key)) === null ? null : [
+            'key' => $f['key'],
+            'label' => $f['label'],
+            'type' => $f['type'],
+            'col_span' => (int) $f['col_span'],
+            'config' => $f['config'] ?? [],
+            'default_value' => $f['default_value'] ?? null,
+            'formula' => $f['formula'] ?? null,
+            'roll_expression' => $f['roll_expression'] ?? null,
+            'visible_if' => $f['visible_if'] ?? null,
+            'readonly_if' => $f['readonly_if'] ?? null,
+            'help_text' => $f['help_text'] ?? null,
+            'is_summary' => (bool) ($f['is_summary'] ?? false),
+            'is_required' => (bool) ($f['is_required'] ?? false),
+        ];
+
+        return [
+            'format' => self::FORMAT,
+            'format_version' => self::VERSION,
+            'exported_at' => now()->toIso8601String(),
+            'template' => [
+                'name' => $template->name,
+                'tagline' => $template->tagline,
+                'description' => $template->description,
+                'game_line' => $template->game_line,
+                'settings' => $schema->settings,
+                'theme' => $this->portableTheme($template->theme),
+            ],
+            'tabs' => array_map(fn (array $tab) => [
+                'key' => $tab['key'],
+                'label' => $tab['label'],
+                'sections' => array_map(fn (array $s) => [
+                    'key' => $s['key'],
+                    'label' => $s['label'],
+                    'description' => $s['description'] ?? null,
+                    'columns' => (int) ($s['columns'] ?? 2),
+                    'visible_if' => $s['visible_if'] ?? null,
+                    'fields' => array_values(array_filter(array_map($field, $s['field_keys']))),
+                ], $tab['sections']),
+            ], $schema->tabs),
+        ];
+    }
+
+    /**
      * @return array{0: Template, 1: array<int,string>} la plantilla y avisos
      *
      * @throws TransferException si el archivo no es una plantilla de Pergamino

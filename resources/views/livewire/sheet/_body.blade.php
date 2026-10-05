@@ -41,6 +41,11 @@
     @if (! $currentTab)
         <p class="text-sm text-[var(--pg-muted)]">Esta plantilla todavía no tiene campos.</p>
     @else
+        {{-- Quien puede ver la hoja pero no editarla (una hoja compartida
+             «completa» en una mesa, un enlace de lectura…) la ve con todos los
+             controles desactivados: un fieldset desactivado apaga todo lo que
+             lleva dentro, inputs y botones. El servidor lo impone igual. --}}
+        <fieldset class="m-0 min-w-0 space-y-6 border-0 p-0" @disabled(! ($canEdit ?? true))>
         @foreach ($currentTab['sections'] as $section)
             <section class="pg-sheet-section"
                      wire:key="section-{{ $section['key'] }}"
@@ -95,5 +100,6 @@
                 </div>
             </section>
         @endforeach
+        </fieldset>
     @endif
 </div>

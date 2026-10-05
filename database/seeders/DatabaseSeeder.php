@@ -19,13 +19,8 @@ class DatabaseSeeder extends Seeder
             $this->command?->info('Usuario de prueba: dj@pergamino.local / pergamino');
         }
 
-        // Plantillas oficiales: una por sistema que el catálogo de campos debe
-        // poder expresar (entregable de la Fase 4).
-        $this->call([
-            Dnd5eTemplateSeeder::class,
-            FateTemplateSeeder::class,
-            VampiroTemplateSeeder::class,
-            BladesTemplateSeeder::class,
-        ]);
+        // Plantillas oficiales: datos en database/seeders/official/, con el
+        // formato que exporta el constructor (Fase 7).
+        $this->call(OfficialTemplateSeeder::class);
     }
 }

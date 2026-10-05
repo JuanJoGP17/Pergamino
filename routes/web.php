@@ -4,11 +4,14 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\JoinCampaignController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\SharedSheetController;
 use App\Http\Controllers\SheetPrintController;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Campaign\Index as CampaignIndex;
 use App\Livewire\Campaign\Show as CampaignShow;
+use App\Livewire\Catalog\Index as CatalogIndex;
+use App\Livewire\Catalog\Show as CatalogShow;
 use App\Livewire\Dashboard;
 use App\Livewire\Sheet\Editor;
 use App\Livewire\Template\Appearance;
@@ -22,6 +25,12 @@ Route::redirect('/', '/panel');
 // App\Domain\Media\MediaUrl. Fuera de `auth` para que una hoja compartida por
 // enlace (Fase 7) pueda enseñar su retrato.
 Route::get('/media/{media}', MediaController::class)->middleware('signed')->name('media.show');
+
+// Hoja compartida por enlace (Fase 7): el token es la autorización. Fuera de
+// `auth` porque un enlace de lectura se ve sin entrar; uno de edición pide
+// entrar desde el propio controlador.
+Route::get('/compartida/{token}', [SharedSheetController::class, 'show'])->middleware('throttle:60,1')->name('shared.show');
+Route::get('/compartida/{token}/pdf', [SharedSheetController::class, 'pdf'])->middleware('throttle:20,1')->name('shared.pdf');
 
 Route::middleware('guest')->group(function () {
     Route::get('/entrar', Login::class)->name('login');
@@ -37,6 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/hojas/{sheet}/imprimir', [SheetPrintController::class, 'show'])->name('sheets.print');
     Route::get('/hojas/{sheet}/pdf', [SheetPrintController::class, 'pdf'])->name('sheets.pdf');
     Route::get('/hojas/{sheet}/exportar', [ExportController::class, 'sheet'])->name('sheets.export');
+
+    // Catálogo (Fase 7).
+    Route::get('/catalogo', CatalogIndex::class)->name('catalog.index');
+    Route::get('/catalogo/{slug}', CatalogShow::class)->name('catalog.show');
 
     // Mesas (Fase 6). «unirse» va antes que {campaign} para no confundirse.
     Route::get('/mesas', CampaignIndex::class)->name('campaigns.index');

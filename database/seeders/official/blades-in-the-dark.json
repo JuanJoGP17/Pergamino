@@ -1,0 +1,889 @@
+{
+    "format": "pergamino.template",
+    "format_version": 1,
+    "template": {
+        "name": "Blades in the Dark",
+        "tagline": "Acciones, estrés y trauma, daño por niveles y relojes",
+        "description": null,
+        "game_line": "Blades in the Dark",
+        "settings": [],
+        "theme": {
+            "preset": "maquina",
+            "mode": "dark"
+        },
+        "version_label": "1.0"
+    },
+    "tabs": [
+        {
+            "key": "canalla",
+            "label": "Canalla",
+            "sections": [
+                {
+                    "key": "identidad",
+                    "label": "Identidad",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "nombre_personaje",
+                            "label": "Nombre",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "alias",
+                            "label": "Alias",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "arquetipo",
+                            "label": "Arquetipo",
+                            "type": "select",
+                            "col_span": 4,
+                            "config": {
+                                "allow_empty": true,
+                                "options": [
+                                    {
+                                        "value": "Asesino",
+                                        "label": "Asesino"
+                                    },
+                                    {
+                                        "value": "Matón",
+                                        "label": "Matón"
+                                    },
+                                    {
+                                        "value": "Sabueso",
+                                        "label": "Sabueso"
+                                    },
+                                    {
+                                        "value": "Charlatán",
+                                        "label": "Charlatán"
+                                    },
+                                    {
+                                        "value": "Araña",
+                                        "label": "Araña"
+                                    },
+                                    {
+                                        "value": "Sombra",
+                                        "label": "Sombra"
+                                    },
+                                    {
+                                        "value": "Susurro",
+                                        "label": "Susurro"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "herencia",
+                            "label": "Herencia",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "trasfondo",
+                            "label": "Trasfondo",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "vicio",
+                            "label": "Vicio",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "acciones",
+                    "label": "Acciones",
+                    "description": null,
+                    "columns": 3,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "perspicacia",
+                            "label": "Perspicacia",
+                            "type": "derived_list",
+                            "col_span": 4,
+                            "config": {
+                                "items": [
+                                    {
+                                        "key": "cazar",
+                                        "label": "Cazar"
+                                    },
+                                    {
+                                        "key": "estudiar",
+                                        "label": "Estudiar"
+                                    },
+                                    {
+                                        "key": "examinar",
+                                        "label": "Examinar"
+                                    },
+                                    {
+                                        "key": "trastear",
+                                        "label": "Trastear"
+                                    }
+                                ],
+                                "levels": [
+                                    {
+                                        "key": "p0",
+                                        "label": "—",
+                                        "bonus": "0"
+                                    },
+                                    {
+                                        "key": "p1",
+                                        "label": "•",
+                                        "bonus": "1"
+                                    },
+                                    {
+                                        "key": "p2",
+                                        "label": "••",
+                                        "bonus": "2"
+                                    },
+                                    {
+                                        "key": "p3",
+                                        "label": "•••",
+                                        "bonus": "3"
+                                    },
+                                    {
+                                        "key": "p4",
+                                        "label": "••••",
+                                        "bonus": "4"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "proeza",
+                            "label": "Proeza",
+                            "type": "derived_list",
+                            "col_span": 4,
+                            "config": {
+                                "items": [
+                                    {
+                                        "key": "sutileza",
+                                        "label": "Sutileza"
+                                    },
+                                    {
+                                        "key": "merodear",
+                                        "label": "Merodear"
+                                    },
+                                    {
+                                        "key": "escaramuza",
+                                        "label": "Escaramuza"
+                                    },
+                                    {
+                                        "key": "destrozar",
+                                        "label": "Destrozar"
+                                    }
+                                ],
+                                "levels": [
+                                    {
+                                        "key": "p0",
+                                        "label": "—",
+                                        "bonus": "0"
+                                    },
+                                    {
+                                        "key": "p1",
+                                        "label": "•",
+                                        "bonus": "1"
+                                    },
+                                    {
+                                        "key": "p2",
+                                        "label": "••",
+                                        "bonus": "2"
+                                    },
+                                    {
+                                        "key": "p3",
+                                        "label": "•••",
+                                        "bonus": "3"
+                                    },
+                                    {
+                                        "key": "p4",
+                                        "label": "••••",
+                                        "bonus": "4"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "determinacion",
+                            "label": "Determinación",
+                            "type": "derived_list",
+                            "col_span": 4,
+                            "config": {
+                                "items": [
+                                    {
+                                        "key": "sintonizar",
+                                        "label": "Sintonizar"
+                                    },
+                                    {
+                                        "key": "ordenar",
+                                        "label": "Ordenar"
+                                    },
+                                    {
+                                        "key": "codearse",
+                                        "label": "Codearse"
+                                    },
+                                    {
+                                        "key": "persuadir",
+                                        "label": "Persuadir"
+                                    }
+                                ],
+                                "levels": [
+                                    {
+                                        "key": "p0",
+                                        "label": "—",
+                                        "bonus": "0"
+                                    },
+                                    {
+                                        "key": "p1",
+                                        "label": "•",
+                                        "bonus": "1"
+                                    },
+                                    {
+                                        "key": "p2",
+                                        "label": "••",
+                                        "bonus": "2"
+                                    },
+                                    {
+                                        "key": "p3",
+                                        "label": "•••",
+                                        "bonus": "3"
+                                    },
+                                    {
+                                        "key": "p4",
+                                        "label": "••••",
+                                        "bonus": "4"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "valor_perspicacia",
+                            "label": "Perspicacia (resistir)",
+                            "type": "computed",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": "if(@perspicacia.cazar.bonus > 0, 1, 0) + if(@perspicacia.estudiar.bonus > 0, 1, 0) + if(@perspicacia.examinar.bonus > 0, 1, 0) + if(@perspicacia.trastear.bonus > 0, 1, 0)",
+                            "roll_expression": "{@valor_perspicacia}d6",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "valor_proeza",
+                            "label": "Proeza (resistir)",
+                            "type": "computed",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": "if(@proeza.sutileza.bonus > 0, 1, 0) + if(@proeza.merodear.bonus > 0, 1, 0) + if(@proeza.escaramuza.bonus > 0, 1, 0) + if(@proeza.destrozar.bonus > 0, 1, 0)",
+                            "roll_expression": "{@valor_proeza}d6",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "valor_determinacion",
+                            "label": "Determinación (resistir)",
+                            "type": "computed",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": "if(@determinacion.sintonizar.bonus > 0, 1, 0) + if(@determinacion.ordenar.bonus > 0, 1, 0) + if(@determinacion.codearse.bonus > 0, 1, 0) + if(@determinacion.persuadir.bonus > 0, 1, 0)",
+                            "roll_expression": "{@valor_determinacion}d6",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "tirada",
+                            "label": "Estudiar",
+                            "type": "dice_button",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": "{@perspicacia.estudiar.bonus}d6",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "estres",
+                    "label": "Estrés y trauma",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "estres",
+                            "label": "Estrés",
+                            "type": "track",
+                            "col_span": 8,
+                            "config": {
+                                "boxes": 9,
+                                "shape": "box",
+                                "states": [
+                                    "Marcada"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "trauma",
+                            "label": "Trauma",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 4,
+                                "shape": "dot",
+                                "states": [
+                                    "Marcada"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "traumas",
+                            "label": "Traumas",
+                            "type": "multiselect",
+                            "col_span": 12,
+                            "config": {
+                                "options": [
+                                    {
+                                        "value": "Frío",
+                                        "label": "Frío"
+                                    },
+                                    {
+                                        "value": "Atormentado",
+                                        "label": "Atormentado"
+                                    },
+                                    {
+                                        "value": "Obsesivo",
+                                        "label": "Obsesivo"
+                                    },
+                                    {
+                                        "value": "Paranoico",
+                                        "label": "Paranoico"
+                                    },
+                                    {
+                                        "value": "Temerario",
+                                        "label": "Temerario"
+                                    },
+                                    {
+                                        "value": "Blando",
+                                        "label": "Blando"
+                                    },
+                                    {
+                                        "value": "Inestable",
+                                        "label": "Inestable"
+                                    },
+                                    {
+                                        "value": "Despiadado",
+                                        "label": "Despiadado"
+                                    }
+                                ],
+                                "max_selections": 4
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "dano",
+                    "label": "Daño",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "dano_3",
+                            "label": "Nivel 3 — necesita ayuda",
+                            "type": "text",
+                            "col_span": 9,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "sanacion",
+                            "label": "Sanación",
+                            "type": "clock",
+                            "col_span": 3,
+                            "config": {
+                                "segments": 4
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "dano_2a",
+                            "label": "Nivel 2 — −1d",
+                            "type": "text",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "dano_2b",
+                            "label": "Nivel 2 — −1d",
+                            "type": "text",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "dano_1a",
+                            "label": "Nivel 1 — efecto reducido",
+                            "type": "text",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "dano_1b",
+                            "label": "Nivel 1 — efecto reducido",
+                            "type": "text",
+                            "col_span": 6,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "armadura",
+                            "label": "Armadura",
+                            "type": "multiselect",
+                            "col_span": 12,
+                            "config": {
+                                "options": [
+                                    {
+                                        "value": "armadura",
+                                        "label": "Armadura"
+                                    },
+                                    {
+                                        "value": "pesada",
+                                        "label": "Pesada"
+                                    },
+                                    {
+                                        "value": "especial",
+                                        "label": "Especial"
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "equipo",
+            "label": "Equipo y avance",
+            "sections": [
+                {
+                    "key": "carga",
+                    "label": "Carga y equipo",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "carga",
+                            "label": "Carga",
+                            "type": "select",
+                            "col_span": 4,
+                            "config": {
+                                "allow_empty": false,
+                                "options": [
+                                    {
+                                        "value": "3",
+                                        "label": "Ligera (3)"
+                                    },
+                                    {
+                                        "value": "5",
+                                        "label": "Normal (5)"
+                                    },
+                                    {
+                                        "value": "6",
+                                        "label": "Pesada (6)"
+                                    }
+                                ]
+                            },
+                            "default_value": "5",
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "objetos",
+                            "label": "Objetos",
+                            "type": "repeater",
+                            "col_span": 12,
+                            "config": {
+                                "columns": [
+                                    {
+                                        "key": "objeto",
+                                        "label": "Objeto",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "carga",
+                                        "label": "Carga",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "key": "llevado",
+                                        "label": "Llevado",
+                                        "type": "checkbox"
+                                    },
+                                    {
+                                        "key": "usada",
+                                        "label": "Usada",
+                                        "type": "computed",
+                                        "formula": "if(@row.llevado, @row.carga, 0)"
+                                    }
+                                ],
+                                "max_rows": 20
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "carga_usada",
+                            "label": "Carga usada",
+                            "type": "computed",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": "concat(sum(@objetos[*].usada), \" / \", @carga)",
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "avance",
+                    "label": "Avance y dinero",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "xp_arquetipo",
+                            "label": "Experiencia de arquetipo",
+                            "type": "track",
+                            "col_span": 12,
+                            "config": {
+                                "boxes": 8,
+                                "shape": "box",
+                                "states": [
+                                    "Marcada"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "xp_perspicacia",
+                            "label": "Experiencia de Perspicacia",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 6,
+                                "shape": "box",
+                                "states": [
+                                    "Marcada"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "xp_proeza",
+                            "label": "Experiencia de Proeza",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 6,
+                                "shape": "box",
+                                "states": [
+                                    "Marcada"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "xp_determinacion",
+                            "label": "Experiencia de Determinación",
+                            "type": "track",
+                            "col_span": 4,
+                            "config": {
+                                "boxes": 6,
+                                "shape": "box",
+                                "states": [
+                                    "Marcada"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "monedas",
+                            "label": "Monedas",
+                            "type": "counter",
+                            "col_span": 4,
+                            "config": {
+                                "min": 0,
+                                "max": 4,
+                                "step": 1
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "alijo",
+                            "label": "Alijo",
+                            "type": "counter",
+                            "col_span": 4,
+                            "config": {
+                                "min": 0,
+                                "max": 40,
+                                "step": 1
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "reloj_largo",
+                            "label": "Proyecto a largo plazo",
+                            "type": "clock",
+                            "col_span": 4,
+                            "config": {
+                                "segments": 8
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,441 @@
+{
+    "format": "pergamino.template",
+    "format_version": 1,
+    "template": {
+        "name": "Genérico",
+        "tagline": "Para cualquier juego casero: tres atributos, habilidades libres, salud, estrés y equipo",
+        "description": null,
+        "game_line": "Genérico",
+        "settings": {
+            "mod_base": 10,
+            "mod_divisor": 2,
+            "prof_base": 2,
+            "prof_step": 4
+        },
+        "theme": {
+            "preset": "minimal"
+        },
+        "version_label": "1.0"
+    },
+    "tabs": [
+        {
+            "key": "general",
+            "label": "Personaje",
+            "sections": [
+                {
+                    "key": "principal",
+                    "label": "Quién es",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "retrato",
+                            "label": "Retrato",
+                            "type": "portrait",
+                            "col_span": 3,
+                            "config": {
+                                "shape": "rounded",
+                                "frame": true
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "nombre_personaje",
+                            "label": "Nombre",
+                            "type": "text",
+                            "col_span": 5,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "concepto",
+                            "label": "Concepto",
+                            "type": "text",
+                            "col_span": 4,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "rasgos",
+                            "label": "Rasgos",
+                            "type": "tags",
+                            "col_span": 12,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "atributos",
+                    "label": "Atributos",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "fisico",
+                            "label": "Físico",
+                            "type": "number",
+                            "col_span": 3,
+                            "config": {
+                                "min": 1,
+                                "max": 5
+                            },
+                            "default_value": 2,
+                            "formula": null,
+                            "roll_expression": "{@fisico}d6",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "mental",
+                            "label": "Mental",
+                            "type": "number",
+                            "col_span": 3,
+                            "config": {
+                                "min": 1,
+                                "max": 5
+                            },
+                            "default_value": 2,
+                            "formula": null,
+                            "roll_expression": "{@mental}d6",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "social",
+                            "label": "Social",
+                            "type": "number",
+                            "col_span": 3,
+                            "config": {
+                                "min": 1,
+                                "max": 5
+                            },
+                            "default_value": 2,
+                            "formula": null,
+                            "roll_expression": "{@social}d6",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "tirada_libre",
+                            "label": "Tirada libre",
+                            "type": "dice_button",
+                            "col_span": 3,
+                            "config": [],
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": "2d6",
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "habilidades",
+                    "label": "Habilidades",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "habilidades",
+                            "label": "Habilidades",
+                            "type": "repeater",
+                            "col_span": 12,
+                            "config": {
+                                "columns": [
+                                    {
+                                        "key": "habilidad",
+                                        "label": "Habilidad",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "atributo",
+                                        "label": "Atributo",
+                                        "type": "select",
+                                        "options": [
+                                            "Físico",
+                                            "Mental",
+                                            "Social"
+                                        ]
+                                    },
+                                    {
+                                        "key": "nivel",
+                                        "label": "Nivel",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "key": "reserva",
+                                        "label": "Dados",
+                                        "type": "computed",
+                                        "formula": "switch(@row.atributo, \"Físico\", @fisico, \"Mental\", @mental, \"Social\", @social, 0) + @row.nivel"
+                                    }
+                                ],
+                                "max_rows": 30
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "estado",
+                    "label": "Estado",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "salud",
+                            "label": "Salud",
+                            "type": "resource",
+                            "col_span": 6,
+                            "config": {
+                                "show_temp": false,
+                                "allow_overflow": false,
+                                "max_formula": "@fisico * 2 + 4"
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "estres",
+                            "label": "Estrés",
+                            "type": "track",
+                            "col_span": 6,
+                            "config": {
+                                "boxes": 5,
+                                "boxes_formula": "@mental + 3",
+                                "shape": "box",
+                                "states": [
+                                    "Marcada"
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": true,
+                            "is_required": false
+                        },
+                        {
+                            "key": "suerte",
+                            "label": "Puntos de suerte",
+                            "type": "counter",
+                            "col_span": 4,
+                            "config": {
+                                "min": 0,
+                                "max": 5,
+                                "step": 1,
+                                "reset_on": "long"
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "equipo_y_notas",
+            "label": "Equipo y notas",
+            "sections": [
+                {
+                    "key": "equipo",
+                    "label": "Equipo",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "inventario",
+                            "label": "Inventario",
+                            "type": "repeater",
+                            "col_span": 12,
+                            "config": {
+                                "columns": [
+                                    {
+                                        "key": "objeto",
+                                        "label": "Objeto",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "cantidad",
+                                        "label": "Cant.",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "key": "peso",
+                                        "label": "Peso",
+                                        "type": "number"
+                                    },
+                                    {
+                                        "key": "total",
+                                        "label": "Peso total",
+                                        "type": "computed",
+                                        "formula": "@row.peso * @row.cantidad"
+                                    }
+                                ],
+                                "max_rows": 100
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "carga",
+                            "label": "Carga",
+                            "type": "computed",
+                            "col_span": 3,
+                            "config": [],
+                            "default_value": null,
+                            "formula": "sum(@inventario[*].total)",
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        },
+                        {
+                            "key": "bolsa",
+                            "label": "Monedas",
+                            "type": "currency",
+                            "col_span": 9,
+                            "config": {
+                                "denominations": [
+                                    {
+                                        "key": "pc",
+                                        "label": "Cobre",
+                                        "rate": 1
+                                    },
+                                    {
+                                        "key": "pp",
+                                        "label": "Plata",
+                                        "rate": 10
+                                    },
+                                    {
+                                        "key": "pe",
+                                        "label": "Electro",
+                                        "rate": 50
+                                    },
+                                    {
+                                        "key": "po",
+                                        "label": "Oro",
+                                        "rate": 100
+                                    },
+                                    {
+                                        "key": "ppt",
+                                        "label": "Platino",
+                                        "rate": 1000
+                                    }
+                                ]
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                },
+                {
+                    "key": "notas",
+                    "label": "Notas",
+                    "description": null,
+                    "columns": 2,
+                    "visible_if": null,
+                    "fields": [
+                        {
+                            "key": "historia",
+                            "label": "Historia",
+                            "type": "textarea",
+                            "col_span": 12,
+                            "config": {
+                                "rows": 6
+                            },
+                            "default_value": null,
+                            "formula": null,
+                            "roll_expression": null,
+                            "visible_if": null,
+                            "readonly_if": null,
+                            "help_text": null,
+                            "is_summary": false,
+                            "is_required": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -20,6 +20,7 @@
         <nav class="flex items-center gap-4 text-sm">
             <a href="{{ route('dashboard') }}" wire:navigate class="hover:text-[var(--pg-accent)]">Mis hojas</a>
             <a href="{{ route('campaigns.index') }}" wire:navigate class="hover:text-[var(--pg-accent)]">Mesas</a>
+            <a href="{{ route('catalog.index') }}" wire:navigate class="hover:text-[var(--pg-accent)]">Catálogo</a>
             <a href="{{ route('templates.index') }}" wire:navigate class="hover:text-[var(--pg-accent)]">Plantillas</a>
         </nav>
 

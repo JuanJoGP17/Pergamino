@@ -9,7 +9,7 @@
         la paleta CLARA del tema (el papel es blanco).
 
     Variables: $sheet, $tabs (SheetPrinter), $theme (tema efectivo), $pdf,
-    $watermark (texto o null).
+    $watermark (texto o null) y $sharedToken (si se abre con un enlace).
 --}}
 @php
     $c = $theme['colors'];
@@ -77,8 +77,14 @@
 <body>
     @unless ($pdf)
         <div class="toolbar">
-            <a href="{{ route('sheets.edit', $sheet) }}" class="pg-btn-ghost">← Volver a la hoja</a>
-            <a href="{{ route('sheets.pdf', $sheet) }}{{ $watermark ? '?marca=1' : '' }}" class="pg-btn-ghost">Descargar PDF</a>
+            @if ($sharedToken ?? null)
+                {{-- Abierta con un enlace de solo lectura (Fase 7). --}}
+                <span style="margin-right: auto; align-self: center; color: #777">Hoja compartida · solo lectura</span>
+                <a href="{{ route('shared.pdf', $sharedToken) }}" class="pg-btn-ghost">Descargar PDF</a>
+            @else
+                <a href="{{ route('sheets.edit', $sheet) }}" class="pg-btn-ghost">← Volver a la hoja</a>
+                <a href="{{ route('sheets.pdf', $sheet) }}{{ $watermark ? '?marca=1' : '' }}" class="pg-btn-ghost">Descargar PDF</a>
+            @endif
             <button type="button" class="pg-btn" onclick="window.print()">Imprimir</button>
         </div>
     @endunless

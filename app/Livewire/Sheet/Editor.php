@@ -10,6 +10,8 @@ use App\Domain\Media\StoreImage;
 use App\Domain\Schema\CompiledSchema;
 use App\Domain\Schema\FieldType;
 use App\Domain\Sheet\SaveSheet;
+use App\Domain\Sheet\SharingException;
+use App\Domain\Sheet\SheetSharing;
 use App\Domain\Sheet\SheetView;
 use App\Domain\Sheet\TakeRest;
 use App\Domain\Theme\SheetTheme;
@@ -230,6 +232,46 @@ class Editor extends Component
         return $sheet->campaigns()->get()->filter(fn ($c) => in_array($c->roleOf($user), ['gm', 'player'], true))->values();
     }
 
+    // ------------------------------------------------------------ compartir
+
+    /** Compartir (Fase 7): con quién y con qué permiso. */
+    public string $shareEmail = '';
+
+    public string $shareAbility = 'view';
+
+    public string $linkAbility = 'view';
+
+    public string $linkDays = '';
+
+    public function createShareLink(): void
+    {
+        $this->share(fn (SheetSharing $s, Sheet $sheet) => $s->createLink($sheet, auth()->user(), $this->linkAbility, is_numeric($this->linkDays) ? (int) $this->linkDays : null));
+    }
+
+    public function shareWithUser(): void
+    {
+        $this->share(function (SheetSharing $s, Sheet $sheet) {
+            $s->shareWith($sheet, auth()->user(), $this->shareEmail, $this->shareAbility);
+            $this->shareEmail = '';
+        });
+    }
+
+    public function revokeShare(int $id): void
+    {
+        $this->share(fn (SheetSharing $s, Sheet $sheet) => $s->revoke($sheet, auth()->user(), $id));
+    }
+
+    private function share(callable $operation): void
+    {
+        $this->notice = null;
+
+        try {
+            $operation(app(SheetSharing::class), $this->sheet());
+        } catch (SharingException $e) {
+            $this->notice = $e->getMessage();
+        }
+    }
+
     /** Descanso corto o largo: recupera lo que la plantilla marque con reset_on. */
     public function rest(string $kind): void
     {
@@ -278,6 +320,8 @@ class Editor extends Component
             'sheet' => $sheet,
             'rests' => TakeRest::available($sheet),
             'campaigns' => $this->rollCampaigns($sheet),
+            'canEdit' => auth()->user()->can('update', $sheet),
+            'shares' => auth()->user()->can('share', $sheet) ? $sheet->shares()->with('user:id,name,email')->latest()->get() : collect(),
             'uploadsEnabled' => true,
             // Cascada plantilla → mesa → hoja: la mesa que tenga tema propio.
             'themeCss' => SheetTheme::css(SheetTheme::forSheet($sheet, $sheet->campaigns()->whereNotNull('theme_override')->first()), $sheet->uuid),
