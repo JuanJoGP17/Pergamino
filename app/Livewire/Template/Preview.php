@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Template;
 
+use App\Domain\Dice\DiceException;
+use App\Domain\Dice\DiceRoller;
+use App\Domain\Dice\RollView;
 use App\Domain\Schema\CompiledSchema;
 use App\Domain\Schema\SchemaCompilationException;
 use App\Domain\Schema\SchemaCompiler;
@@ -54,6 +57,33 @@ class Preview extends Component
     public function selectTab(string $key): void
     {
         $this->tab = $key;
+    }
+
+    /**
+     * En la vista previa también se tira, para probar las fórmulas de las
+     * tiradas, pero no se guarda nada: es una hoja de mentira.
+     */
+    public function rollField(string $key, string $mode = 'normal'): void
+    {
+        $template = $this->template();
+        $this->authorize('update', $template);
+
+        try {
+            $schema = (new SchemaCompiler)->compile($template);
+            $data = array_intersect_key($this->data, $schema->defaultData()) + $schema->defaultData();
+            $computed = (new SheetCalculator)->calculate($schema, $data);
+            $expression = (new SheetView($schema, $data, $computed))->rolls()[$key] ?? null;
+
+            if (! $expression) {
+                return;
+            }
+
+            $result = (new DiceRoller)->roll($expression, $mode);
+        } catch (SchemaCompilationException|DiceException) {
+            return;
+        }
+
+        $this->dispatch('dice-rolled', roll: RollView::make($result, 'Vista previa · '.($schema->field($key)['label'] ?? $key)));
     }
 
     public function resetData(): void

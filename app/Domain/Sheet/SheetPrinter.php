@@ -27,6 +27,38 @@ final class SheetPrinter
     public function __construct(private Sheet $sheet) {}
 
     /**
+     * Tarjeta resumen de la mesa (§8): los campos marcados «en el resumen»,
+     * ya formateados, en el orden de la plantilla. Lo oculto por visible_if
+     * no sale. Las tablas y listas largas no caben en una tarjeta: se saltan.
+     *
+     * @return array<int,array{key:string, label:string, kind:string}>
+     */
+    public function summary(): array
+    {
+        $schema = $this->sheet->schema();
+        $data = $this->sheet->data ?? [];
+        $computed = $this->sheet->computed ?? [];
+        $visible = (new SheetView($schema, $data, $computed))->conditions()['visible'];
+        $out = [];
+
+        foreach ($schema->summaryFields as $key) {
+            $field = $schema->field($key);
+
+            if (! $field || ! ($visible[$key] ?? true)) {
+                continue;
+            }
+
+            $value = $this->value($field, $data[$key] ?? null, $computed[$key] ?? null, false);
+
+            if (in_array($value['kind'], ['text', 'boxes'], true)) {
+                $out[] = ['key' => $key, 'label' => $field['label'], ...$value];
+            }
+        }
+
+        return $out;
+    }
+
+    /**
      * @return array<int,array{label:string, sections: array<int,array{label:?string, description:?string, rows: array}>}>
      */
     public function tabs(bool $embedImages = false): array

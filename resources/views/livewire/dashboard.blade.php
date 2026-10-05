@@ -48,6 +48,28 @@
     </section>
 
     <section>
+        <div class="mb-4 flex items-baseline justify-between">
+            <h2 class="font-serif text-lg font-bold text-[var(--pg-accent)]">Mis mesas</h2>
+            <a href="{{ route('campaigns.index') }}" wire:navigate class="text-sm text-[var(--pg-muted)] hover:text-[var(--pg-accent)]">Crear o unirse →</a>
+        </div>
+        @if ($campaigns->isEmpty())
+            <p class="text-sm text-[var(--pg-muted)]">Todavía no estás en ninguna mesa.</p>
+        @else
+            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($campaigns as $campaign)
+                    <a href="{{ route('campaigns.show', $campaign) }}" wire:navigate wire:key="dash-campaign-{{ $campaign->id }}"
+                       class="rounded-lg border border-[var(--pg-border)] bg-[var(--pg-surface)] p-4 hover:border-[var(--pg-accent)]">
+                        <span class="font-serif font-bold text-[var(--pg-accent)]">{{ $campaign->name }}</span>
+                        <span class="block text-xs text-[var(--pg-muted)]">
+                            {{ ['gm' => 'Diriges', 'player' => 'Juegas', 'spectator' => 'Miras'][$campaign->pivot->role] ?? '' }} · {{ $campaign->sheets_count }} hoja(s)
+                        </span>
+                    </a>
+                @endforeach
+            </div>
+        @endif
+    </section>
+
+    <section>
         <h2 class="mb-4 font-serif text-lg font-bold text-[var(--pg-accent)]">Crear una hoja</h2>
 
         @if ($templates->isEmpty())

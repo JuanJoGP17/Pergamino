@@ -84,11 +84,11 @@ class SheetPolicy
                 continue;
             }
 
-            if ($campaign->pivot?->share_level === 'hidden' && $role !== 'gm') {
-                continue;
+            // El DJ ve todas las hojas de su mesa. Los demás solo abren las
+            // compartidas «completas»: con «resumen» ven la tarjeta, no la hoja.
+            if ($role === 'gm' || $campaign->pivot?->share_level === 'full') {
+                return true;
             }
-
-            return true;
         }
 
         return false;

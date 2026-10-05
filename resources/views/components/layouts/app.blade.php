@@ -19,6 +19,7 @@
 
         <nav class="flex items-center gap-4 text-sm">
             <a href="{{ route('dashboard') }}" wire:navigate class="hover:text-[var(--pg-accent)]">Mis hojas</a>
+            <a href="{{ route('campaigns.index') }}" wire:navigate class="hover:text-[var(--pg-accent)]">Mesas</a>
             <a href="{{ route('templates.index') }}" wire:navigate class="hover:text-[var(--pg-accent)]">Plantillas</a>
         </nav>
 
@@ -36,6 +37,11 @@
 <main class="mx-auto {{ ($wide ?? false) ? 'max-w-[1600px] py-4' : 'max-w-6xl py-8' }} px-4">
     {{ $slot }}
 </main>
+
+{{-- Bandeja de dados (Fase 6): en todas las páginas, para quien ha entrado. --}}
+@auth
+    <livewire:dice-tray />
+@endauth
 
 @livewireScriptConfig
 </body>

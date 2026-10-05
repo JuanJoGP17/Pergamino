@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\JoinCampaignController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\SheetPrintController;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
+use App\Livewire\Campaign\Index as CampaignIndex;
+use App\Livewire\Campaign\Show as CampaignShow;
 use App\Livewire\Dashboard;
 use App\Livewire\Sheet\Editor;
 use App\Livewire\Template\Appearance;
@@ -34,6 +37,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/hojas/{sheet}/imprimir', [SheetPrintController::class, 'show'])->name('sheets.print');
     Route::get('/hojas/{sheet}/pdf', [SheetPrintController::class, 'pdf'])->name('sheets.pdf');
     Route::get('/hojas/{sheet}/exportar', [ExportController::class, 'sheet'])->name('sheets.export');
+
+    // Mesas (Fase 6). «unirse» va antes que {campaign} para no confundirse.
+    Route::get('/mesas', CampaignIndex::class)->name('campaigns.index');
+    Route::get('/mesas/unirse/{code}', JoinCampaignController::class)->name('campaigns.join');
+    Route::get('/mesas/{campaign}', CampaignShow::class)->name('campaigns.show');
 
     Route::get('/plantillas', TemplateIndex::class)->name('templates.index');
     Route::get('/plantillas/{template}/constructor', Builder::class)->name('templates.builder');

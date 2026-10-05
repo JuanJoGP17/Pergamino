@@ -18,6 +18,18 @@
             @endif
         </span>
 
+        @if ($campaigns->isNotEmpty())
+            <label class="flex items-center gap-1 text-xs text-[var(--pg-muted)]">
+                Tirar en
+                <select class="pg-input w-auto py-1 text-xs" wire:model.live="rollCampaign">
+                    <option value="">Sin mesa</option>
+                    @foreach ($campaigns as $c)
+                        <option value="{{ $c->uuid }}">{{ $c->name }}</option>
+                    @endforeach
+                </select>
+            </label>
+        @endif
+
         <div class="relative" x-data="{ open: false }">
             <button type="button" class="pg-btn-ghost py-1 text-xs" x-on:click="open = ! open">Imprimir / exportar</button>
             <div x-show="open" x-cloak x-on:click.outside="open = false"
@@ -65,6 +77,10 @@
         </span>
         <span class="text-xs text-[var(--pg-muted)]" wire:loading wire:target="save">Guardando…</span>
     </div>
+
+    @if ($notice)
+        <p class="rounded-md border border-[var(--pg-accent)] bg-[var(--pg-surface)] px-3 py-2 text-sm text-[var(--pg-accent)]" role="alert">{{ $notice }}</p>
+    @endif
 
     @if (session('sheet_notice'))
         <p class="rounded-md border border-[var(--pg-border)] bg-[var(--pg-surface)] px-3 py-2 text-sm" role="status">{{ session('sheet_notice') }}</p>

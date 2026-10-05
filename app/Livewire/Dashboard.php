@@ -102,6 +102,7 @@ class Dashboard extends Component
                 ->latest('updated_at')
                 ->take(24)
                 ->get(),
+            'campaigns' => $user->campaigns()->withCount('sheets')->orderByDesc('campaigns.updated_at')->take(6)->get(),
             'templates' => Template::visibleTo($user)
                 ->whereNotNull('current_version_id')
                 ->withCount('sheets')

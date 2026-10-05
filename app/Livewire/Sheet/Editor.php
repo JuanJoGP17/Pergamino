@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Sheet;
 
+use App\Domain\Dice\DiceException;
+use App\Domain\Dice\RollDice;
+use App\Domain\Dice\RollView;
 use App\Domain\Media\ImageRejected;
 use App\Domain\Media\StoreImage;
 use App\Domain\Schema\CompiledSchema;
@@ -53,6 +56,12 @@ class Editor extends Component
 
     public string $sheetMode = '';
 
+    /** uuid de la mesa donde van las tiradas de esta hoja ('' = sin mesa). */
+    public string $rollCampaign = '';
+
+    /** Aviso pasajero (una tirada que no se pudo hacer…). */
+    public ?string $notice = null;
+
     /** Imágenes recién elegidas, por clave de campo (retratos, imágenes). */
     public array $uploads = [];
 
@@ -65,6 +74,7 @@ class Editor extends Component
         $this->sheetUuid = $sheet->uuid;
         $this->data = $sheet->data ?? [];
         $this->tab = $sheet->schema()->firstTabKey() ?? '';
+        $this->rollCampaign = $this->rollCampaigns($sheet)->first()?->uuid ?? '';
         $this->sheetAccent = $sheet->theme_override['colors']['accent'] ?? null;
         $this->sheetMode = $sheet->theme_override['mode'] ?? '';
     }
@@ -181,6 +191,45 @@ class Editor extends Component
         }
     }
 
+    /**
+     * Tirar la tirada de un campo. La expresión la resuelve el servidor con
+     * los datos de la hoja; lo único que llega del navegador es qué campo y
+     * con qué modo. Va a la mesa elegida, si la hay, y a la bandeja de dados.
+     */
+    public function rollField(string $key, string $mode = 'normal'): void
+    {
+        $sheet = $this->sheet();
+        $this->authorize('update', $sheet);
+        $this->notice = null;
+
+        $expression = $this->sheetView()->rolls()[$key] ?? null;
+        $field = $this->schema()->field($key);
+
+        if (! $expression || ! $field) {
+            return;
+        }
+
+        $campaign = $this->rollCampaigns($sheet)->firstWhere('uuid', $this->rollCampaign);
+
+        try {
+            $roll = app(RollDice::class)(auth()->user(), $expression, "{$sheet->name} · {$field['label']}", $mode, $sheet, $campaign);
+        } catch (DiceException $e) {
+            $this->notice = $e->getMessage();
+
+            return;
+        }
+
+        $this->dispatch('dice-rolled', roll: RollView::from($roll));
+    }
+
+    /** Mesas de esta hoja en las que quien edita puede tirar. */
+    private function rollCampaigns(Sheet $sheet)
+    {
+        $user = auth()->user();
+
+        return $sheet->campaigns()->get()->filter(fn ($c) => in_array($c->roleOf($user), ['gm', 'player'], true))->values();
+    }
+
     /** Descanso corto o largo: recupera lo que la plantilla marque con reset_on. */
     public function rest(string $kind): void
     {
@@ -228,8 +277,10 @@ class Editor extends Component
         return view('livewire.sheet.editor', [
             'sheet' => $sheet,
             'rests' => TakeRest::available($sheet),
+            'campaigns' => $this->rollCampaigns($sheet),
             'uploadsEnabled' => true,
-            'themeCss' => SheetTheme::css(SheetTheme::forSheet($sheet), $sheet->uuid),
+            // Cascada plantilla → mesa → hoja: la mesa que tenga tema propio.
+            'themeCss' => SheetTheme::css(SheetTheme::forSheet($sheet, $sheet->campaigns()->whereNotNull('theme_override')->first()), $sheet->uuid),
             ...$this->sheetView()->viewData($this->tab, $sheet->formulaErrors()),
         ]);
     }
